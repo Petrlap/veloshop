@@ -1,0 +1,98 @@
+.buyCorrectly h2 {
+  font-weight: 500;
+  font-size: 30px;
+  line-height: 33px;
+  text-transform: uppercase;
+  color: #1d1a1a;
+  margin-bottom: 40px;
+}
+.buyCorrectly h2 span {
+  color: #f34723;
+}
+.buyCorrectly h3 {
+  font-weight: 500;
+  font-size: 30px;
+  line-height: 33px;
+  color: #fff;
+  margin-bottom: 10px;
+}
+.correctly {
+  display: flex;
+  gap: 20px;
+}
+.correctlyBox {
+  width: calc(50% - 10px);
+  background-image: url("../../assets/bg.webp");
+  border-radius: 24px;
+  padding: 40px;
+}
+.correctlyBox p {
+  max-width: 480px;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 110%;
+  color: #737272;
+  margin-bottom: 10px;
+}
+.correctlyBox p a {
+  color: #f34723;
+}
+.correctlyBox > span {
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 100%;
+  color: #dddddd;
+}
+.correctlyBox li {
+  list-style: disc;
+  margin: 0 0 5px 15px;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 100%;
+  color: #dcdcdc;
+}
+.linksBlock {
+  display: flex;
+  align-items: center;
+  gap: 50px;
+}
+.linksBlock button {
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 20px;
+  color: #fff;
+  border-radius: 12px;
+  padding: 17px 31px;
+  border: 1px solid #ffffff;
+  margin: 40px 0;
+}
+.linksBlock a {
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 20px;
+  color: #1d93d2;
+}
+@media (max-width: 600px) {
+  .buyCorrectly {
+    padding: 20px;
+  }
+  .correctly {
+    flex-direction: column;
+  }
+  .correctlyBox {
+    width: 100%;
+    padding: 20px;
+  }
+  .linksBlock {
+    flex-direction: column-reverse;
+    gap: 10px;
+    margin-top: 20px;
+  }
+  .linksBlock button {
+    margin: 10px 0;
+  }
+  .buyCorrectly h2 {
+    font-size: 22px;
+    margin-bottom: 20px;
+  }
+}

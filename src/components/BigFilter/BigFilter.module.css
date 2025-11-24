@@ -1,0 +1,460 @@
+.container {
+  padding: 20px 0;
+  font-family: system-ui, -apple-system, sans-serif;
+  background: #fff;
+}
+
+.filterRow {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  margin-bottom: 25px;
+  align-items: start;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #e6e6e6;
+}
+
+.filterGroup {
+  border-radius: 6px;
+  padding: 16px;
+}
+
+.filterTitle {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 12px;
+  color: #1f2937;
+}
+
+.filterSubtitle {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 10px;
+  color: #374151;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* Стоимость */
+.priceRange {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.priceInputs {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.priceInput {
+  border: 1px solid #d1d5db;
+  padding: 6px 10px;
+  border-radius: 4px;
+  width: 100px;
+  background: white;
+  font-size: 0.9rem;
+}
+
+.priceQuick {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.priceBtn {
+  padding: 6px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  background: white;
+  cursor: pointer;
+  font-size: 0.85rem;
+  transition: all 0.2s;
+}
+
+.priceBtn:hover {
+  background: #f3f4f6;
+}
+
+/* Колонки */
+.typeColumns,
+.brandColumns {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+}
+
+.brandColumns {
+  grid-template-columns: repeat(4, 1fr);
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.checkboxLabel {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  padding: 2px 0;
+}
+
+.checkboxLabel input[type="checkbox"] {
+  margin: 0;
+}
+
+/* Ростовая */
+.description {
+  color: #6b7280;
+  font-size: 0.85rem;
+  margin-bottom: 10px;
+  line-height: 1.4;
+}
+
+.wheelSizes {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.note {
+  color: #9ca3af;
+  font-size: 0.8rem;
+  line-height: 1.4;
+}
+
+/* Двойные фильтры */
+.doubleFilter {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+  margin-bottom: 15px;
+}
+
+.filterSection {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Диаметр колес и тип обода */
+.wheelDiameter {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.checkboxColumn {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.rimType {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+/* Вилка */
+.forkTypes {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+/* Вес */
+.weightRange {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.rangeInputs {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  justify-content: center;
+}
+
+.rangeInput {
+  border: 1px solid #d1d5db;
+  padding: 6px 10px;
+  border-radius: 4px;
+  width: 80px;
+  background: white;
+  font-size: 0.85rem;
+  text-align: center;
+}
+
+.rangeSlider {
+  position: relative;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  margin: 0 8px;
+}
+
+.sliderTrack {
+  position: absolute;
+  width: 100%;
+  height: 4px;
+  background: linear-gradient(
+    to right,
+    #e5e7eb 0%,
+    #e5e7eb var(--min-percent),
+    #f34723 var(--min-percent),
+    #f34723 var(--max-percent),
+    #e5e7eb var(--max-percent),
+    #e5e7eb 100%
+  );
+  border-radius: 2px;
+  pointer-events: none;
+}
+
+.slider {
+  position: absolute;
+  width: 100%;
+  height: 4px;
+  background: #e5e7eb;
+  border-radius: 2px;
+  outline: none;
+}
+
+.slider {
+  position: absolute;
+  width: 100%;
+  height: 0;
+  outline: none;
+  pointer-events: none;
+  z-index: 2;
+  -webkit-appearance: none;
+  background: transparent;
+}
+
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  pointer-events: all;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #f34723;
+  cursor: pointer;
+  border: 2px solid #fff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+.slider::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #f34723;
+  cursor: pointer;
+  border: 2px solid #fff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+  pointer-events: all;
+}
+
+.slider::-webkit-slider-track {
+  -webkit-appearance: none;
+  background: transparent;
+}
+
+.slider::-moz-range-track {
+  background: transparent;
+  border: none;
+}
+
+/* Цвет */
+.colorGrid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 8px;
+}
+
+.colorCircle {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 2px solid #e5e7eb;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.colorCircle:hover {
+  transform: scale(1.1);
+  border-color: #f34723;
+}
+
+/* Модельный год */
+.yearGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+/* Тормоза и материалы */
+.brakesGrid,
+.materialGrid {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+/* Оборудование - широкая группа */
+.equipmentGroup {
+  grid-column: 1 / 3;
+  border-radius: 6px;
+  padding: 16px;
+}
+
+.storesGroup {
+  border-radius: 6px;
+  padding: 16px;
+}
+
+.equipmentContent {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.equipmentLevel {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+}
+
+.equipmentBrands {
+  border-top: 1px solid #e5e7eb;
+  padding-top: 15px;
+}
+
+.equipmentBrands .brandColumns {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 15px;
+}
+
+/* Магазины */
+.citySelector {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+  font-size: 0.9rem;
+}
+
+.citySelect {
+  border: 1px solid #d1d5db;
+  padding: 4px 8px;
+  border-radius: 4px;
+  background: white;
+  font-size: 0.85rem;
+}
+
+.shopsList {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.showButton {
+  border-radius: 8px;
+  background: #f34723;
+  font-size: 18px;
+  text-transform: uppercase;
+  color: #fff;
+  padding: 13px 61px;
+}
+
+.showButton:hover {
+  background-color: #ff6a3c;
+}
+
+/* Адаптивность */
+@media (max-width: 1200px) {
+  .filterRow {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .equipmentGroup {
+    grid-column: 1;
+  }
+
+  .brandColumns {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .equipmentBrands .brandColumns {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 15px;
+  }
+
+  .typeColumns,
+  .brandColumns {
+    grid-template-columns: 1fr;
+  }
+
+  .doubleFilter {
+    grid-template-columns: 1fr;
+  }
+
+  .wheelSizes {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .wheelDiameter,
+  .forkTypes {
+    grid-template-columns: 1fr;
+  }
+
+  .equipmentBrands .brandColumns {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .colorGrid {
+    grid-template-columns: repeat(8, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .priceQuick {
+    justify-content: center;
+  }
+
+  .priceBtn {
+    flex: 1;
+    min-width: 45%;
+    text-align: center;
+  }
+
+  .yearGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .equipmentBrands .brandColumns {
+    grid-template-columns: 1fr;
+  }
+
+  .equipmentLevel {
+    grid-template-columns: 1fr;
+  }
+
+  .colorGrid {
+    grid-template-columns: repeat(5, 1fr);
+  }
+}

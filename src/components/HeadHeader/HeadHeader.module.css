@@ -1,0 +1,80 @@
+.headHeader {
+  background: #000;
+  padding: 20px 0;
+}
+.headHeaderCont {
+  display: flex;
+  justify-content: space-between;
+}
+.logoLink,
+.logoLink img {
+  display: inline-block;
+  width: 170px;
+  height: 35px;
+  margin-right: 25px;
+}
+.link {
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 100%;
+  color: #c4c4c4;
+  position: relative;
+}
+.link.active {
+  color: #fff !important;
+}
+.link.active::after {
+  content: "";
+  position: absolute;
+  bottom: 15px;
+  right: -7px;
+  transform: translateX(-50%);
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: #2cb742;
+}
+nav {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+.numberBlock a {
+  font-weight: 400;
+  font-size: 22px;
+  line-height: 30px;
+  color: #fff;
+}
+.numberBlock p {
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 20px;
+  color: #d9d9d9;
+}
+.buttonsBlock {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+.buttonsBlock button:first-child {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  color: #fff;
+}
+.buttonsBlock button:first-child svg {
+  position: relative;
+  bottom: 2px;
+}
+.buttonsBlock button:last-child {
+  color: #fff;
+  border-radius: 6px;
+  padding: 8px 10px;
+  border: 1px solid #ffffff;
+}
+@media (max-width: 600px) {
+  .headHeader {
+    display: none;
+  }
+}

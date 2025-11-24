@@ -1,0 +1,325 @@
+.quiz h2 {
+  font-weight: 500;
+  font-size: 30px;
+  line-height: 100%;
+  color: #1c1e20;
+  text-transform: uppercase;
+}
+.quiz h2 span {
+  color: #f34723 !important;
+}
+.quizBottom {
+  display: flex;
+  gap: 30px;
+  margin-bottom: 80px;
+}
+.quizBottom p {
+  max-width: 228px;
+  font-weight: 400;
+  font-size: 16px;
+  color: #7c7c7c;
+}
+.quizBottom .textBlock {
+  width: calc(40% - 30px);
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+.quizBottom .imageBox {
+  width: 60%;
+  display: flex;
+  gap: 20px;
+}
+.quizBottom .imageBox img {
+  width: 50%;
+  border-radius: 24px;
+  height: 280px;
+}
+.quizBottom button {
+  width: fit-content;
+  border-radius: 12px;
+  padding: 16px 19px;
+  border: 2px solid #f34723;
+  box-shadow: 0px 3px 5px 0px #ff7d1e1f;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 20px;
+  color: #f34723;
+  text-align: center;
+}
+.quizHead {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 50px;
+}
+.quizHead h2,
+.quizHead a {
+  white-space: nowrap;
+}
+.quizHead h2 {
+  font-weight: 500;
+  font-size: 30px;
+  line-height: 110%;
+  text-transform: uppercase;
+  color: #232730;
+}
+.quizHead h2 span {
+  color: #f34723;
+}
+.quizHead a {
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 100%;
+  color: #1d93d2;
+}
+.quizWrapper {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 80px;
+}
+.quizCard {
+  width: 100%;
+  background: #1c1c1c;
+  color: #fff;
+  padding: 60px;
+  border-radius: 24px;
+}
+.quizCard hr {
+  position: relative;
+  width: calc(100% + 120px);
+  left: -60px;
+  color: #696969;
+}
+.quizHeader {
+  margin-bottom: 24px;
+}
+.title {
+  font-weight: 400;
+  font-size: 28px;
+  line-height: 130%;
+  color: #ffffff;
+  background: none;
+  background-color: #1c1c1c;
+}
+.quizMiddle {
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+  margin-bottom: 40px;
+}
+.slides {
+  display: flex;
+  width: 100%;
+  transition: transform 0.5s ease;
+}
+.slide {
+  width: 100%;
+  flex-shrink: 0;
+  padding: 12px;
+  box-sizing: border-box;
+}
+.cardsRow {
+  display: flex;
+  gap: 16px;
+  justify-content: space-between;
+}
+.card {
+  width: 22%;
+  padding-bottom: 22%;
+  position: relative;
+  border-radius: 16px;
+  cursor: pointer;
+  transition: 0.3s;
+  text-align: center;
+}
+.card > * {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  top: auto;
+}
+.cardThumb {
+  width: 100%;
+  height: calc(100% - 30px);
+  background: linear-gradient(135deg, #444, #555);
+  border-radius: 12px;
+  margin-bottom: 12px;
+  bottom: 30px;
+}
+.cardTitle {
+  font-size: 20px;
+  line-height: 160%;
+  color: #fff;
+  text-align: left;
+}
+.optionsRow {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  max-width: 300px;
+}
+.optionBtn {
+  padding: 12px 16px;
+  background: #2b2b2b;
+  border-radius: 12px;
+  text-align: left;
+  font-size: 15px;
+  cursor: pointer;
+  transition: 0.25s;
+  border: none;
+  color: #fff;
+}
+.optionBtn:hover {
+  background: #3a3a3a;
+}
+.featuresGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  max-width: 350px;
+}
+.featureItem {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  cursor: pointer;
+}
+.featureItem input {
+  width: 16px;
+  height: 16px;
+}
+.progressWrap {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+  width: 100%;
+  height: 28px;
+  margin-top: 50px;
+}
+.progressLine {
+  position: relative;
+  width: 70%;
+  height: 4px;
+  background: #444;
+  border-radius: 4px;
+}
+.progressFill {
+  position: absolute;
+  height: 4px;
+  background: #ff6a00;
+  border-radius: 4px;
+  transition: width 0.5s ease;
+}
+.bikeIcon {
+  min-width: 24px;
+  position: absolute;
+  top: -35px;
+  transform: translateX(-50%);
+  color: #ff6a00;
+  transition: left 0.5s ease;
+}
+.controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.btn {
+  padding: 10px 16px;
+  border-radius: 12px;
+  border: none;
+  color: #fff;
+  cursor: pointer;
+  transition: 0.25s;
+}
+.btn:hover:not(:disabled) {
+  color: #3a3a3a;
+}
+.btn:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+.btnPrimary {
+  border-radius: 12px;
+  padding: 16px 27px;
+  border: 2px solid #c9c9c9;
+  color: #c9c9c9;
+  font-size: 16px;
+  line-height: 20px;
+}
+.btnPrimary:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+.progressText {
+  font-size: 20px;
+  line-height: 160%;
+  color: #fff;
+}
+.progressText span {
+  color: #929090;
+}
+
+@media (max-width: 600px) {
+  .quiz {
+    margin: 0 20px;
+  }
+  .quizHead h2,
+  .quizHead a {
+    white-space: wrap;
+  }
+  .quizHead h2 {
+    font-size: 22px;
+  }
+  .quizCard {
+    padding: 20px;
+  }
+  .quizCard hr {
+    left: -20px;
+    width: calc(100% + 40px);
+  }
+  .progressText {
+    display: none;
+  }
+  .progressLine {
+    width: 100%;
+    min-height: 4px;
+  }
+  .progressWrap {
+    flex-direction: column;
+    gap: 20px;
+    height: auto;
+  }
+  .cardsRow {
+    flex-wrap: wrap;
+  }
+  .card {
+    width: 47%;
+    padding-bottom: 47%;
+  }
+  .cardTitle {
+    font-size: 16px;
+    bottom: 5px;
+  }
+  .title {
+    font-size: 20px;
+  }
+  .quizBottom {
+    flex-direction: column;
+  }
+  .quizBottom .imageBox img {
+    width: calc(50% - 10px);
+    height: 200px;
+  }
+  .textBlock,
+  .imageBox {
+    width: 100% !important;
+    gap: 20px !important;
+  }
+  .quiz h2 {
+    font-size: 22px;
+  }
+}

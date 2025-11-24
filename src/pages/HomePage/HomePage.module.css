@@ -1,0 +1,116 @@
+.cardsLine {
+  display: flex;
+  gap: 20px;
+  margin-top: 20px;
+}
+.cardsHead {
+  display: flex;
+  align-items: flex-end;
+}
+.cardsHead > div {
+  width: 100%;
+  border-bottom: 1px solid #e6e6e6;
+  margin: 0 20px 5px 20px;
+}
+.cardsHead h2,
+.cardsHead a {
+  white-space: nowrap;
+}
+.cardsHead a,
+.cardsLineCont > a {
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 20px;
+  color: #1d93d2;
+}
+.cardsLineCont {
+  margin: 80px 0;
+}
+.cardsLineCont h2 {
+  font-weight: 500;
+  font-size: 30px;
+  line-height: 100%;
+  color: #1c1e20;
+}
+.cardsLineCont h2 span {
+  color: #f34723 !important;
+}
+.cardsLineCont > a {
+  display: none;
+}
+.filter .cardsHead {
+  justify-content: space-between;
+}
+.filter .cardsHead h2 {
+  font-weight: 400;
+  font-size: 24px;
+  line-height: 33px;
+}
+.filter .cardsHead button {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 14px;
+  line-height: 20px;
+  color: #1d93d2;
+}
+.filter {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  z-index: 1;
+  padding: 50px 0;
+  margin: 50px 0;
+}
+.filter:before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: calc((100% - 100vw) / 2);
+  width: 100vw;
+  height: 100%;
+  background: #fff;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  z-index: -1;
+}
+@media (max-width: 600px) {
+  .cardsLineCont {
+    padding: 0 20px;
+  }
+  .cardsLineCont h2 {
+    font-size: 22px;
+  }
+  .cardsHead > div,
+  .cardsHead a {
+    display: none;
+  }
+  .cardsLineCont > a {
+    display: flex;
+    float: right;
+    margin-top: 20px;
+  }
+  .cardsLine {
+    display: flex;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .cardsLine::-webkit-scrollbar {
+    display: none;
+  }
+  .cardsHead {
+    margin: 0 20px;
+    align-items: baseline;
+  }
+  .cardsHead h2 {
+    font-size: 22px !important;
+    width: 50%;
+    text-wrap: wrap;
+  }
+  .filter .cardsHead button {
+    text-align: end;
+  }
+}

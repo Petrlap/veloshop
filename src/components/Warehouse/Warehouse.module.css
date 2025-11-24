@@ -1,0 +1,154 @@
+.warehouse {
+  display: flex;
+  gap: 50px;
+}
+.textBlock {
+  width: 40%;
+}
+.textBlock h2 {
+  font-weight: 500;
+  font-size: 30px;
+  line-height: 100%;
+  text-transform: uppercase;
+  color: #1d1a1a;
+  margin-bottom: 30px;
+}
+.textBlock h2 span {
+  color: #f34723;
+}
+.textBlock p {
+  max-width: 340px;
+  font-weight: 400;
+  font-size: 24px;
+  line-height: 100%;
+  color: #7c7c7c;
+}
+.warehouses {
+  width: 60%;
+  padding: 40px 0;
+  overflow: hidden;
+}
+.head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 15px;
+  position: relative;
+}
+.head h3 {
+  font-weight: 500;
+  font-size: 24px;
+  line-height: 100%;
+  text-transform: uppercase;
+  color: #1d1a1a;
+  white-space: nowrap;
+}
+.warehouses > a {
+  font-weight: 500;
+  font-size: 20px;
+  line-height: 100%;
+  color: #1d93d2;
+  white-space: nowrap;
+  float: right;
+  margin-top: 20px;
+}
+.buttons {
+  display: flex;
+  gap: 10px;
+  margin-left: 20px;
+  position: relative;
+  bottom: -5px;
+}
+.navBtn {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 2px solid #f34723;
+  background: #fff;
+  color: #f34723;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: 0.3s;
+}
+.navBtn:hover:not(.disabled) {
+  border-color: #df3917;
+  color: #df3917;
+}
+.disabled {
+  border-color: #999999;
+  color: #999999;
+  cursor: default;
+}
+.slider {
+  overflow: hidden;
+  width: 100%;
+}
+.track {
+  display: flex;
+  gap: 20px;
+  transition: transform 0.4s ease;
+}
+.slide {
+  flex: 0 0 calc(25% - (60px / 4));
+  box-sizing: border-box;
+}
+.slide img {
+  width: 100%;
+  height: 154px;
+  object-fit: cover;
+  border-radius: 24px;
+}
+.playBtn {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+}
+.playBtn:before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 20px;
+  height: 20px;
+  background: #fff;
+  transform: translate(-50%, -50%);
+  z-index: -1;
+}
+@media (max-width: 600px) {
+  .textBlock h2 {
+    font-size: 22px;
+  }
+  .warehouse {
+    flex-direction: column;
+    gap: 0;
+    padding: 20px;
+  }
+  .textBlock,
+  .warehouses {
+    width: 100%;
+  }
+  .warehouses {
+    padding: 10px 0 20px 0;
+  }
+  .head h3 {
+    font-size: 14px;
+    white-space: initial;
+  }
+  .textBlock p {
+    max-width: 100%;
+    font-size: 18px;
+  }
+  .slider {
+    width: calc(100% + 20px);
+  }
+  .slide {
+    flex: 0 0 calc(50% - 20px);
+  }
+  .warehouses > a {
+    font-size: 18px;
+  }
+}

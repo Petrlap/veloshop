@@ -1,0 +1,135 @@
+.card {
+  width: calc((100% - 100px) / 6);
+  height: max-content;
+  border-radius: 24px;
+  background: #ffffff;
+  padding: 12px 11px 20px 11px;
+}
+.imageBlock {
+  height: 135px;
+  border-radius: 18px;
+  position: relative;
+}
+.image {
+  width: 100%;
+  height: 100%;
+  border-radius: 18px;
+}
+.hitLabel,
+.saleLabel {
+  position: absolute;
+  color: #f3f5f6;
+  text-transform: uppercase;
+  top: 8px;
+  left: 8px;
+  border-radius: 4px;
+  padding: 5px 4px 3px 4px;
+  background: #000000;
+  font-weight: 400;
+  font-size: 8.5px;
+  line-height: 100%;
+}
+.saleLabel {
+  background: #2cb742;
+}
+.section {
+  font-weight: 400;
+  font-size: 10.5px;
+  line-height: 15px;
+  color: #9f9f9f;
+}
+.status {
+  display: flex;
+  gap: 3px;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 15px;
+  color: #9f9f9f;
+}
+.statuses {
+  display: flex;
+  justify-content: space-between;
+  margin: 10px 0;
+}
+.title {
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 20px;
+  color: #333;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 100%;
+  display: block;
+}
+.card button {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  gap: 5px;
+  border: 2px solid #f34723;
+  border-radius: 12px;
+  padding: 13px 20px;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 20px;
+  color: #f34723;
+}
+.pricePerMonth {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-weight: 400;
+  font-size: 13px;
+  line-height: 20px;
+  color: #939393;
+  margin: 10px 0;
+}
+.pricePerMonth svg {
+  position: relative;
+  bottom: 1px;
+}
+.price {
+  font-weight: 400;
+  font-size: 24px;
+  line-height: 25px;
+  color: #1c1e20;
+  margin-top: 10px;
+}
+.price span {
+  font-weight: 800 !important;
+}
+.oldPrice {
+  font-weight: 800;
+  font-size: 12px;
+  line-height: 100%;
+  color: #858585;
+  text-decoration: line-through;
+  position: relative;
+  bottom: 3px;
+}
+.oldPriceLine {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  position: relative;
+}
+.oldPriceLine .price {
+  font-size: 18px !important;
+  line-height: 20px !important;
+}
+.discount {
+  font-weight: 400;
+  font-size: 10px;
+  line-height: 12px;
+  padding: 6px 10px 4px 10px;
+  color: #fff;
+  background: #12c647;
+  border-radius: 20px;
+}
+@media (max-width: 600px) {
+  .card {
+    width: calc(50% - 10px);
+  }
+}

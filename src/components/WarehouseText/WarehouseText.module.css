@@ -1,0 +1,103 @@
+.buyCorrectly {
+  margin: 80px 0;
+}
+.buyCorrectly h2 {
+  font-weight: 500;
+  font-size: 30px;
+  line-height: 33px;
+  text-transform: uppercase;
+  color: #1d1a1a;
+  margin-bottom: 40px;
+}
+.correctly {
+  display: flex;
+  gap: 20px;
+}
+.correctlyBox {
+  width: calc(50% - 10px);
+  background: #c4b7b7;
+  border-radius: 24px;
+  padding: 40px;
+}
+.correctlyBox p {
+  max-width: 480px;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 110%;
+  color: #737272;
+  margin-bottom: 10px;
+}
+.correctlyBox p a {
+  color: #f34723;
+}
+.correctlyBox li {
+  list-style: disc;
+  margin: 0 0 5px 15px;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 20px;
+  color: #545454;
+}
+.correctlyBox li a {
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 20px;
+  text-decoration: underline;
+  color: #1d93d2;
+}
+.correctlyBox li:hover {
+  color: #f34723;
+}
+.rightText {
+  font-size: 16px !important;
+  line-height: 120% !important;
+  color: #545454 !important;
+}
+.rightText a {
+  color: #1d93d2 !important;
+}
+.linksBlock {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 30px 0 0 0;
+}
+.linksBlock button {
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 20px;
+  color: #f34723;
+  border-radius: 12px;
+  padding: 17px 32px;
+  border: 1px solid #f34723;
+}
+.linksBlock a {
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 115%;
+  color: #1d93d2;
+}
+.linksBlock img {
+  width: 125px;
+  height: 25px;
+}
+@media (max-width: 600px) {
+  .buyCorrectly {
+    padding: 20px;
+  }
+  .correctly {
+    flex-direction: column;
+  }
+  .correctlyBox {
+    width: 100%;
+    padding: 20px;
+  }
+  .linksBlock {
+    flex-direction: column-reverse;
+    gap: 10px;
+  }
+  .buyCorrectly h2 {
+    font-size: 22px;
+    margin-bottom: 20px;
+  }
+}

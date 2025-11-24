@@ -1,0 +1,203 @@
+.sales {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  z-index: 1;
+  padding: 50px 0;
+}
+.sales:before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: calc((100% - 100vw) / 2);
+  width: 100vw;
+  height: 100%;
+  background: #fff;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  z-index: -1;
+}
+.salesCont {
+  display: flex;
+}
+.textBlock {
+  width: 35%;
+}
+.sales h2 {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 30px;
+}
+.sales h2 span {
+  font-weight: 500;
+  font-size: 30px;
+  line-height: 100%;
+  text-transform: uppercase;
+  color: #f34723;
+}
+.textBlock p {
+  font-weight: 400;
+  font-size: 24px;
+  line-height: 100%;
+  color: #7c7c7c;
+  margin-top: 50px;
+}
+.salesBox {
+  width: 65%;
+  padding: 40px 0;
+  overflow: hidden;
+}
+.head {
+  height: 430px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+}
+.sales a {
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 100%;
+  color: #1d93d2;
+  white-space: nowrap;
+  float: right;
+  margin-top: 20px;
+  text-transform: none;
+}
+.navBtn {
+  width: 60px;
+  color: #d3d3d3;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: 0.3s;
+}
+.navBtn svg {
+  width: 60px;
+  height: 60px;
+}
+.navBtn:hover:not(.disabled) {
+  border-color: #df3917;
+  color: #df3917;
+}
+.disabled {
+  border-color: #999999;
+  color: #999999;
+  cursor: default;
+}
+.slider {
+  overflow: hidden;
+  width: 100%;
+}
+.track {
+  display: flex;
+  gap: 20px;
+  --gap: 20px;
+  transition: transform 0.4s ease;
+}
+.slide.active {
+  opacity: 1;
+  z-index: 2;
+}
+.slide {
+  flex: 0 0 calc((100% / 3) - (40px / 3));
+  box-sizing: border-box;
+}
+.slide img {
+  width: 100%;
+  height: 154px;
+  object-fit: cover;
+  border-radius: 24px;
+}
+.playBtn {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+}
+.playBtn:before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 20px;
+  height: 20px;
+  background: #fff;
+  transform: translate(-50%, -50%);
+  z-index: -1;
+}
+.leftBackground {
+  width: 395px;
+  height: 520px;
+  border-radius: 60px;
+  background: #f3f5f6;
+}
+.slideCounter {
+  position: absolute;
+  right: 70px;
+  bottom: -150px;
+}
+.slideCounter .activeS,
+.slideCounter .line {
+  font-weight: 500;
+  font-size: 60px;
+  line-height: 100%;
+}
+.disableS {
+  font-weight: 400;
+  font-size: 30px;
+  line-height: 100%;
+  color: #b5b5b5;
+}
+@media (max-width: 600px) {
+  .sales h2 span {
+    font-size: 22px;
+  }
+  .sales {
+    flex-direction: column;
+    gap: 0;
+    padding: 20px 20px 40px 20px;
+    margin-bottom: 50px;
+  }
+  .textBlock,
+  .salesBox {
+    width: 100%;
+  }
+  .salesBox {
+    padding: 10px 0 20px 0;
+  }
+  .textBlock p {
+    font-size: 18px;
+  }
+  .slider {
+    width: 100%;
+  }
+  .slide {
+    flex: 0 0 100%;
+  }
+  .sales a {
+    font-size: 16px;
+  }
+  .salesCont {
+    flex-direction: column;
+  }
+  .leftBackground {
+    width: 100%;
+  }
+  .head {
+    height: 250px;
+    padding-bottom: 50px;
+  }
+  .slideCounter {
+    right: 50px;
+    bottom: -30px;
+  }
+  .slideCounter .activeS,
+  .slideCounter .line {
+    font-size: 50px;
+  }
+}

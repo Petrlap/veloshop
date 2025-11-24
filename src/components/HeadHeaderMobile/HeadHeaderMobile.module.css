@@ -1,0 +1,21 @@
+.headHeaderMob {
+  display: none;
+}
+@media (max-width: 600px) {
+  .headHeaderMob {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 31px 20px;
+    background: #000000;
+  }
+  .buttonsBlock {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+  }
+  .logoLink img {
+    width: 95px;
+    height: 20px;
+  }
+}

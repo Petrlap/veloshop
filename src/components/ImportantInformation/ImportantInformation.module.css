@@ -1,0 +1,111 @@
+.importantInformation {
+  margin: 50px 0 100px 0;
+}
+.cardsHead {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 50px;
+}
+.cardsHead h2,
+.cardsHead a {
+  white-space: nowrap;
+}
+.cardsHead h2 {
+  font-weight: 500;
+  font-size: 30px;
+  line-height: 110%;
+  text-transform: uppercase;
+  color: #232730;
+}
+.cardsHead a,
+.importantInformation > a {
+  font-weight: 500;
+  font-size: 20px;
+  line-height: 100%;
+  color: #1d93d2;
+}
+.cardsWrapper {
+  display: flex;
+  gap: 20px;
+}
+.image {
+  width: 100%;
+  height: 245px;
+  border-radius: 24px;
+}
+.date {
+  display: block;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 110%;
+  color: #414141;
+  margin: 10px 0;
+}
+.title {
+  font-weight: 500;
+  font-size: 22px;
+  line-height: 110%;
+  text-decoration: underline;
+  color: #f34723;
+  margin: 10px 0;
+}
+.description {
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 110%;
+  color: #414141;
+  margin: 10px 0;
+}
+.personImg {
+  width: 62px;
+  height: 62px;
+  border-radius: 50%;
+  border: 2px solid #ffffff;
+}
+.author {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 50px;
+}
+.name,
+.position {
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 110%;
+  color: #232323;
+  padding: 3px 0;
+}
+.importantInformation > a {
+  display: none;
+}
+@media (max-width: 600px) {
+  .importantInformation {
+    padding: 20px;
+  }
+  .cardsHead h2 {
+    font-size: 22px;
+    white-space: initial;
+  }
+  .cardsWrapper div:nth-child(3),
+  .cardsWrapper div:nth-child(4),
+  .cardsHead a {
+    display: none;
+  }
+  .importantInformation > a {
+    margin-top: 20px;
+    display: flex;
+    font-size: 18px;
+    float: right;
+  }
+  .cardsHead {
+    margin-bottom: 20px;
+  }
+  .image {
+    height: 200px;
+  }
+  .title {
+    font-size: 18px;
+  }
+}

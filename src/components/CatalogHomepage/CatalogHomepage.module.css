@@ -1,0 +1,139 @@
+.whiteCards,
+.blackCards {
+  display: flex;
+  gap: 20px;
+  margin-top: 40px;
+}
+.cardW,
+.cardB {
+  width: 25%;
+}
+.cardW > div {
+  padding: 20px;
+  background: #ffffff;
+  border-radius: 24px;
+}
+.cardB > div {
+  padding: 20px;
+  background: linear-gradient(329.81deg, #000000 28.56%, #666666 113.62%);
+  box-shadow: 0px 24px 34px 0px #2b31361a;
+  border-radius: 24px;
+}
+.cardW > div p,
+.cardB > div p {
+  font-weight: 500;
+  font-size: 23px;
+  line-height: 25px;
+  text-transform: uppercase;
+  color: #1c1e20;
+  margin-bottom: 20px;
+}
+.cardB > div p {
+  color: #ffffff;
+}
+.cardW > div li,
+.cardB > div li {
+  margin-left: 20px;
+  list-style: disc;
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 25px;
+  color: #5b5b5b;
+}
+.cardB > div li {
+  color: #b6b6b6 !important;
+}
+.cardW > button,
+.cardB > button {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border-radius: 24px;
+  padding: 26px 42px;
+  background: #ffffff;
+  margin-top: 10px;
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 25px;
+}
+.cardB > button {
+  color: #fff !important;
+  background: linear-gradient(
+    326.76deg,
+    #000000 10.82%,
+    #666666 161.27%
+  ) !important;
+  box-shadow: 0px 24px 34px 0px #2b31361a !important;
+}
+.catalogTabs::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: calc((100% - 100vw) / 2);
+  background: #fff;
+  width: 100vw;
+  height: 100%;
+  z-index: -1;
+}
+.catalogTabs {
+  display: flex;
+  justify-content: space-between;
+  font-size: 19px;
+  line-height: 25px;
+  color: #717171;
+  background: #fff;
+  padding: 5px 0;
+  position: relative;
+}
+.catalogTabs button {
+  padding: 25px;
+}
+.catalogTabs .activeTab {
+  border-radius: 12px;
+  color: #fff;
+  background: #1c1e20;
+}
+@media (max-width: 600px) {
+  .catalogHP {
+    padding: 0 20px;
+  }
+  .cardW,
+  .cardB {
+    width: calc(50% - 10px);
+  }
+  .whiteCards,
+  .blackCards {
+    display: flex;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .whiteCards::-webkit-scrollbar,
+  .blackCards::-webkit-scrollbar {
+    display: none;
+  }
+  .cardW > button,
+  .cardB > button {
+    padding: 20px;
+    font-size: 16px;
+  }
+  .cardW > button svg,
+  .cardB > button svg {
+    min-width: 24px;
+  }
+  .cardW > div p,
+  .cardB > div p {
+    font-size: 20px;
+  }
+  .cardW > div li,
+  .cardB > div li {
+    font-size: 16px;
+  }
+  .cardW > div,
+  .cardB > div {
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+  }
+}

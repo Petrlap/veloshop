@@ -1,0 +1,149 @@
+.rutube {
+  padding: 40px 0;
+  overflow: hidden;
+}
+.head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 15px;
+  position: relative;
+}
+.head h2 {
+  font-weight: 500;
+  font-size: 30px;
+  line-height: 27px;
+  color: #000000;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.head a,
+.slider a {
+  font-weight: 500;
+  font-size: 20px;
+  line-height: 100%;
+  color: #1d93d2;
+  white-space: nowrap;
+}
+.buttons {
+  display: flex;
+  gap: 10px;
+  margin-left: 20px;
+  position: relative;
+  bottom: -5px;
+}
+.navBtn {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 2px solid #999;
+  background: #fff;
+  color: #555;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: 0.3s;
+}
+.navBtn:hover:not(.disabled) {
+  border-color: #000;
+  color: #000;
+}
+.disabled {
+  border-color: #eee;
+  color: #ddd;
+  cursor: default;
+}
+.subtitle {
+  max-width: 450px;
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 20px;
+  color: #595959;
+  margin: 30px 0;
+}
+.slider {
+  overflow: hidden;
+  width: 100%;
+}
+.track {
+  display: flex;
+  gap: 20px;
+  transition: transform 0.4s ease;
+}
+.slide {
+  flex: 0 0 calc(25% - (60px / 4));
+  box-sizing: border-box;
+}
+.preview {
+  position: relative;
+  cursor: pointer;
+  border-radius: 12px;
+  overflow: hidden;
+}
+.preview img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 12px;
+}
+.playBtn {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+}
+.playBtn:before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 20px;
+  height: 20px;
+  background: #fff;
+  transform: translate(-50%, -50%);
+  z-index: -1;
+}
+.line {
+  width: 100%;
+  border-bottom: 1px solid #e6e6e6;
+  margin: 0 20px 5px 20px;
+  position: relative;
+  bottom: 5px;
+}
+.slider a {
+  display: none;
+}
+@media (max-width: 600px) {
+  .head h2 {
+    font-size: 22px;
+  }
+  .rutube {
+    padding: 20px;
+  }
+  .subtitle {
+    max-width: 100%;
+    margin: 20px 0;
+  }
+  .line,
+  .head a {
+    display: none;
+  }
+  .slider a {
+    display: flex;
+    margin: 20px 20px 0 20px;
+    float: right;
+    font-size: 18px;
+  }
+  .slider {
+    width: calc(100% + 20px);
+  }
+  .slide {
+    flex: 0 0 calc(50% - 20px);
+  }
+  .head h2 {
+    font-size: 14px;
+    white-space: initial;
+  }
+}

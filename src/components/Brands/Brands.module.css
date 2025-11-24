@@ -1,0 +1,76 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  gap: 16px;
+  z-index: 1;
+  padding: 50px 0;
+  margin: 50px 0;
+}
+.wrapper:before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: calc((100% - 100vw) / 2);
+  width: 100vw;
+  height: 100%;
+  background: #fff;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  z-index: -1;
+}
+.rowScroll {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 16px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.rowScroll::-webkit-scrollbar {
+  display: none;
+}
+.rowScroll .logo {
+  max-width: 165px;
+  width: 100%;
+  justify-self: center;
+  object-fit: contain;
+}
+.grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 16px;
+}
+.grid .logo {
+  width: 100%;
+  max-width: 165px;
+  justify-self: center;
+  object-fit: contain;
+}
+.toggleBtn {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 5px;
+  font-size: 14px;
+  line-height: 20px;
+  letter-spacing: 0%;
+  color: #1d93d2;
+  cursor: pointer;
+}
+@media (max-width: 1200px) {
+  .rowScroll {
+    grid-template-columns: repeat(4, 1fr);
+  }
+  .grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+@media (max-width: 768px) {
+  .rowScroll {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}

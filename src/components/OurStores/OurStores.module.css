@@ -1,0 +1,117 @@
+.ourStores {
+  height: 568px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding-bottom: 100px;
+  position: relative;
+  z-index: 1;
+  margin-bottom: 150px;
+}
+.ourStores::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: calc((100% - 100vw) / 2);
+  width: 100vw;
+  height: 100%;
+  background-image: url("../../assets/bg.webp");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  z-index: -1;
+}
+.ourStores h2 {
+  font-weight: 500;
+  font-size: 30px;
+  line-height: 30px;
+  text-transform: uppercase;
+  color: #fff;
+  margin-bottom: 40px;
+}
+.cards {
+  display: flex;
+  gap: 20px;
+}
+.card {
+  width: 25%;
+  border-radius: 12px;
+  background: #fff;
+  padding: 20px;
+}
+.blackCard {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background: #000;
+}
+.svgCont {
+  width: 45px;
+  padding: 12px;
+  background: #fff;
+  border-radius: 6px;
+}
+.blackCard p {
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 18px;
+  color: #fff;
+}
+.blackCard button {
+  border-radius: 12px;
+  padding: 16px 20px;
+  box-shadow: 0px 3px 5px 0px #ff7d1e1f;
+  border: 2px solid #f34723;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 20px;
+  color: #f34723;
+}
+.title {
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 22px;
+  text-transform: uppercase;
+  color: #1d1a1a;
+}
+.addressBox span,
+.phonesBox span {
+  margin-top: 15px;
+  display: block;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 20px;
+  color: #909090;
+}
+.addressBox p,
+.phonesBox p {
+  height: 40px;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 20px;
+  color: #454545;
+}
+.phonesBox a {
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 20px;
+  color: #1d93d2;
+}
+@media (max-width: 600px) {
+  .cards {
+    flex-wrap: wrap;
+  }
+  .card {
+    width: 100%;
+    gap: 20px;
+  }
+  .ourStores {
+    height: auto;
+    padding: 20px;
+  }
+  .ourStores h2 {
+    font-weight: 500;
+    font-size: 22px;
+    margin-bottom: 20px;
+  }
+}
