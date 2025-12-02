@@ -1,7 +1,11 @@
 import { useEffect, useRef } from "react";
 import { HeadHeader } from "../HeadHeader/HeadHeader";
 import styles from "./Footer.module.css";
-import img from "../../assets/bg.webp";
+import mastercard from "../../assets/payments/mastercard.webp";
+import visa from "../../assets/payments/visa.webp";
+import mir from "../../assets/payments/mir.webp";
+import spasibo from "../../assets/payments/spasibo.webp";
+import pokupay from "../../assets/payments/pokupay.webp";
 import { IconWrapper } from "../IconWrapper/IconWrapper";
 import { IoLogoVk } from "react-icons/io";
 import { FaOdnoklassniki } from "react-icons/fa6";
@@ -9,6 +13,7 @@ import { FaYoutube } from "react-icons/fa";
 import { FaTelegramPlane } from "react-icons/fa";
 import { FaWhatsapp } from "react-icons/fa";
 import { HeadHeaderMobile } from "../HeadHeaderMobile/HeadHeaderMobile";
+import { Link } from "react-router-dom";
 
 export const Footer: React.FC = () => {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -73,11 +78,11 @@ export const Footer: React.FC = () => {
               </a>
               <a href="#">О компании</a>
               <a href="#">Реквизиты</a>
-              <a href="#">Оферта</a>
+              <Link to="/offerta">Оферта</Link>
               <a href="#">Новости</a>
               <a href="#">Вакансии</a>
               <a href="#">Магазины</a>
-              <a href="#">Соглашение</a>
+              <Link to="/agreement">Соглашение</Link>
               <a href="#">Велосипеды</a>
             </div>
             <div className={styles.menuColumn}>
@@ -146,28 +151,28 @@ export const Footer: React.FC = () => {
             <p>Принимаем к оплате</p>
             <div>
               <img
-                src={img}
+                src={mastercard}
                 style={{ width: "44px", height: "25px" }}
                 alt="Master Card"
               />
               <img
-                src={img}
+                src={visa}
                 style={{ width: "44px", height: "25px" }}
                 alt="Visa"
               />
               <img
-                src={img}
+                src={mir}
                 style={{ width: "59px", height: "25px" }}
                 alt="Mir"
               />
               <img
                 style={{ width: "77px", height: "25px" }}
-                src={img}
+                src={spasibo}
                 alt="Spasibo"
               />
               <img
                 style={{ width: "100px", height: "25px" }}
-                src={img}
+                src={pokupay}
                 alt="Pokupay"
               />
             </div>

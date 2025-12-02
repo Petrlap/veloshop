@@ -1,0 +1,68 @@
+.offerta p,
+.offerta li {
+  font-size: 14px;
+  line-height: 100%;
+  color: #333333;
+}
+.offerta li {
+  list-style: disc;
+  margin-left: 15px;
+}
+.offerta a {
+  text-decoration: underline;
+}
+.offerta h1 {
+  font-weight: 700;
+  font-size: 32px;
+  line-height: 31px;
+  color: #1c1e20;
+  margin: 20px 0;
+  text-transform: uppercase;
+}
+.breadcrubs {
+  font-size: 16px;
+  line-height: 100%;
+  color: #9f9f9f;
+  margin-top: 20px;
+  display: block;
+}
+.linksBlock {
+  width: 340px;
+  height: max-content;
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  background: #ffffff;
+  border-radius: 18px;
+  margin-right: 30px;
+}
+.linksBlock a {
+  font-size: 18px;
+  line-height: 100%;
+  color: #000000;
+  text-decoration: none;
+}
+.textBlock {
+  display: flex;
+  flex-direction: column;
+  width: calc(100% - 370px);
+}
+.offertaBox {
+  display: flex;
+}
+@media (max-width: 600px) {
+  .offerta {
+    margin: 0 20px;
+  }
+  .offerta h1 {
+    font-size: 22px;
+    line-height: 22px;
+  }
+  .linksBlock {
+    display: none;
+  }
+  .textBlock {
+    width: 100%;
+  }
+}

@@ -1,359 +1,156 @@
-/* src/pages/Catalog/Catalog.module.css */
-.catalog {
-  min-height: 100vh;
-  background: #f5f5f5;
+.h1 {
+  font-size: 32px;
+  line-height: 31px;
+  color: #1c1e20;
+  margin: 20px 0;
 }
-
-.container {
+.breadCrumbs {
+  font-size: 16px;
+  line-height: 100%;
+  color: #9f9f9f;
+  margin-top: 15px;
+}
+.catalogHP {
+  margin-bottom: 100px;
+}
+.whiteCards,
+.blackCards {
   display: flex;
-  padding: 20px 0;
-  gap: 60px;
+  gap: 20px;
+  margin-top: 40px;
 }
-
-/* Стили для фильтров */
-.filters {
-  width: 370px;
-  background: white;
-  border-radius: 8px;
+.cardW,
+.cardB {
+  width: 25%;
+}
+.cardW > div {
   padding: 20px;
-  height: fit-content;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  background: #ffffff;
+  border-radius: 24px;
+  height: calc(100% - 87px);
 }
-
-.filtersHeader {
-  display: none;
-  justify-content: space-between;
-  align-items: center;
+.cardB > div {
+  padding: 20px;
+  background: linear-gradient(329.81deg, #000000 28.56%, #666666 113.62%);
+  box-shadow: 0px 24px 34px 0px #2b31361a;
+  border-radius: 24px;
+  height: calc(100% - 87px);
+}
+.cardW > div p,
+.cardB > div p {
+  font-weight: 500;
+  font-size: 23px;
+  line-height: 25px;
+  text-transform: uppercase;
+  color: #1c1e20;
   margin-bottom: 20px;
-  padding-bottom: 15px;
-  border-bottom: 1px solid #e5e7eb;
 }
-
-.closeFilters {
-  background: none;
-  border: none;
-  font-size: 24px;
-  cursor: pointer;
-  color: #6b7280;
+.cardB > div p {
+  color: #ffffff;
 }
-
-.filterGroup {
-  margin-bottom: 15px;
-  border: 1px solid #e5e7eb;
-  border-radius: 6px;
-  overflow: hidden;
+.cardW > div li,
+.cardB > div li {
+  margin-left: 20px;
+  list-style: disc;
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 25px;
+  color: #5b5b5b;
 }
-
-.filterTitle {
+.cardB > div li {
+  color: #b6b6b6 !important;
+}
+.cardW > button,
+.cardB > button {
   width: 100%;
-  padding: 12px 15px;
-  background: #f8f9fa;
-  border: none;
-  text-align: left;
-  font-weight: 600;
-  cursor: pointer;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  transition: background-color 0.2s;
-}
-
-.filterTitle:hover {
-  background: #e9ecef;
-}
-
-.arrowDown,
-.arrowUp {
-  font-size: 12px;
-  transition: transform 0.2s;
-}
-
-.arrowUp {
-  transform: rotate(180deg);
-}
-
-.filterContent {
-  padding: 15px;
-  background: white;
-}
-
-/* Стили для фильтра стоимости */
-.priceRange {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-}
-
-.priceInputs {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  flex-wrap: wrap;
-}
-
-.priceInput {
-  border: 1px solid #d1d5db;
-  padding: 6px 10px;
-  border-radius: 4px;
-  width: 80px;
-  background: white;
-  font-size: 0.85rem;
-}
-
-.priceQuick {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-
-.priceBtn {
-  padding: 6px 12px;
-  border: 1px solid #d1d5db;
-  border-radius: 4px;
-  background: white;
-  cursor: pointer;
-  font-size: 0.8rem;
-  transition: all 0.2s;
-}
-
-.priceBtn:hover {
-  background: #f3f4f6;
-}
-
-/* Общие стили для контента фильтров */
-.filterOptions {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.checkboxLabel {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  cursor: pointer;
-  font-size: 0.9rem;
-  padding: 2px 0;
-}
-
-/* Основной контент */
-.content {
-  flex: 1;
-}
-
-.header {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  margin-bottom: 30px;
-  background: white;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-}
-
-.resultsInfo h1 {
-  margin: 0 0 15px 0;
-  font-size: 1.5rem;
-  color: #1f2937;
-}
-
-.checkboxes {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 15px;
-}
-
-.sort {
   display: flex;
   align-items: center;
   gap: 10px;
-  white-space: nowrap;
+  border-radius: 24px;
+  padding: 26px 42px;
+  background: #ffffff;
+  margin-top: 10px;
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 25px;
 }
-
-.sortSelect {
-  border: 1px solid #d1d5db;
-  padding: 8px 12px;
-  border-radius: 4px;
-  background: white;
-  cursor: pointer;
+.cardB > button {
+  color: #fff !important;
+  background: linear-gradient(
+    326.76deg,
+    #000000 10.82%,
+    #666666 161.27%
+  ) !important;
+  box-shadow: 0px 24px 34px 0px #2b31361a !important;
 }
-
-/* Сетка товаров */
-.productsGrid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
-  gap: 20px;
+.catalogTabs::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: calc((100% - 100vw) / 2);
+  background: #fff;
+  width: 100vw;
+  height: 100%;
+  z-index: -1;
 }
-
-.productsGrid > div {
-  width: 100%;
-}
-
-/* Мобильная версия */
-.mobileFilterToggle {
-  display: none;
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  z-index: 1000;
-  padding: 12px 20px;
-  background: #3b82f6;
-  color: white;
-  border: none;
-  border-radius: 25px;
-  font-weight: 600;
-  cursor: pointer;
-  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
-}
-
-.pagination {
+.catalogTabs {
   display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 8px;
-  margin-top: 40px;
-  padding: 20px;
-  background: white;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  justify-content: space-between;
+  font-size: 19px;
+  line-height: 25px;
+  color: #717171;
+  background: #fff;
+  padding: 5px 0;
+  position: relative;
 }
-
-.pageButton {
-  padding: 8px 12px;
-  border: 1px solid #d1d5db;
-  border-radius: 4px;
-  background: white;
-  cursor: pointer;
-  font-size: 0.9rem;
-  min-width: 40px;
-  transition: all 0.2s;
+.catalogTabs button {
+  padding: 25px;
 }
-
-.pageButton:hover {
-  background: #f3f4f6;
-  border-color: #3b82f6;
+.catalogTabs .activeTab {
+  border-radius: 12px;
+  color: #fff;
+  background: #1c1e20;
 }
-
-.pageButton.active {
-  background: #3b82f6;
-  color: white;
-  border-color: #3b82f6;
-}
-
-.ellipsis {
-  padding: 8px 4px;
-  color: #6b7280;
-}
-
-/* Адаптивность */
-@media (max-width: 1024px) {
-  .container {
-    padding: 15px;
-    gap: 20px;
+@media (max-width: 600px) {
+  .catalogHP {
+    padding: 0 20px;
   }
-
-  .filters {
-    width: 250px;
+  .cardW,
+  .cardB {
+    width: calc(50% - 10px);
   }
-
-  .header {
-    flex-direction: column;
-    gap: 15px;
-  }
-
-  .productsGrid {
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  }
-}
-
-@media (max-width: 768px) {
-  .container {
-    flex-direction: column;
-  }
-
-  .filters {
-    position: fixed;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100vh;
-    z-index: 1001;
-    border-radius: 0;
-    transition: left 0.3s ease;
-    overflow-y: auto;
-  }
-
-  .filtersOpen {
-    left: 0;
-  }
-
-  .filtersHeader {
+  .whiteCards,
+  .blackCards {
     display: flex;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
   }
-
-  .mobileFilterToggle {
-    display: block;
+  .whiteCards::-webkit-scrollbar,
+  .blackCards::-webkit-scrollbar {
+    display: none;
   }
-
-  .checkboxes {
-    flex-direction: column;
-    gap: 10px;
+  .cardW > button,
+  .cardB > button {
+    padding: 20px;
+    font-size: 16px;
   }
-
-  .sort {
-    width: 100%;
-    justify-content: space-between;
+  .cardW > button svg,
+  .cardB > button svg {
+    min-width: 24px;
   }
-
-  .pagination {
-    gap: 4px;
-    padding: 15px;
-    flex-wrap: wrap;
+  .cardW > div p,
+  .cardB > div p {
+    font-size: 20px;
   }
-
-  .pageButton {
-    padding: 6px 10px;
-    min-width: 36px;
-    font-size: 0.85rem;
+  .cardW > div li,
+  .cardB > div li {
+    font-size: 16px;
   }
-}
-
-@media (max-width: 480px) {
-  .container {
-    padding: 10px;
-  }
-
-  .header {
-    padding: 15px;
-  }
-
-  .resultsInfo h1 {
-    font-size: 1.25rem;
-  }
-
-  .productsGrid {
-    grid-template-columns: 1fr;
-    gap: 15px;
-  }
-
-  .priceQuick {
-    justify-content: center;
-  }
-
-  .priceBtn {
-    flex: 1;
-    min-width: 45%;
-    text-align: center;
-  }
-
-  .pagination {
-    gap: 2px;
-  }
-
-  .pageButton {
-    padding: 6px 8px;
-    min-width: 32px;
-    font-size: 0.8rem;
+  .cardW > div,
+  .cardB > div {
+    overflow-wrap: break-word;
+    word-wrap: break-word;
   }
 }

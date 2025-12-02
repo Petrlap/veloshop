@@ -1,0 +1,359 @@
+/* src/pages/Catalog/Catalog.module.css */
+.catalog {
+  min-height: 100vh;
+  background: #f5f5f5;
+}
+
+.container {
+  display: flex;
+  padding: 20px 0;
+  gap: 60px;
+}
+
+/* Стили для фильтров */
+.filters {
+  width: 370px;
+  background: white;
+  border-radius: 8px;
+  padding: 20px;
+  height: fit-content;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.filtersHeader {
+  display: none;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.closeFilters {
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: #6b7280;
+}
+
+.filterGroup {
+  margin-bottom: 15px;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.filterTitle {
+  width: 100%;
+  padding: 12px 15px;
+  background: #f8f9fa;
+  border: none;
+  text-align: left;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: background-color 0.2s;
+}
+
+.filterTitle:hover {
+  background: #e9ecef;
+}
+
+.arrowDown,
+.arrowUp {
+  font-size: 12px;
+  transition: transform 0.2s;
+}
+
+.arrowUp {
+  transform: rotate(180deg);
+}
+
+.filterContent {
+  padding: 15px;
+  background: white;
+}
+
+/* Стили для фильтра стоимости */
+.priceRange {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.priceInputs {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.priceInput {
+  border: 1px solid #d1d5db;
+  padding: 6px 10px;
+  border-radius: 4px;
+  width: 80px;
+  background: white;
+  font-size: 0.85rem;
+}
+
+.priceQuick {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.priceBtn {
+  padding: 6px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  background: white;
+  cursor: pointer;
+  font-size: 0.8rem;
+  transition: all 0.2s;
+}
+
+.priceBtn:hover {
+  background: #f3f4f6;
+}
+
+/* Общие стили для контента фильтров */
+.filterOptions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.checkboxLabel {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  padding: 2px 0;
+}
+
+/* Основной контент */
+.content {
+  flex: 1;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 30px;
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.resultsInfo h1 {
+  margin: 0 0 15px 0;
+  font-size: 1.5rem;
+  color: #1f2937;
+}
+
+.checkboxes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.sort {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  white-space: nowrap;
+}
+
+.sortSelect {
+  border: 1px solid #d1d5db;
+  padding: 8px 12px;
+  border-radius: 4px;
+  background: white;
+  cursor: pointer;
+}
+
+/* Сетка товаров */
+.productsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  gap: 20px;
+}
+
+.productsGrid > div {
+  width: 100%;
+}
+
+/* Мобильная версия */
+.mobileFilterToggle {
+  display: none;
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 1000;
+  padding: 12px 20px;
+  background: #3b82f6;
+  color: white;
+  border: none;
+  border-radius: 25px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  margin-top: 40px;
+  padding: 20px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.pageButton {
+  padding: 8px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  background: white;
+  cursor: pointer;
+  font-size: 0.9rem;
+  min-width: 40px;
+  transition: all 0.2s;
+}
+
+.pageButton:hover {
+  background: #f3f4f6;
+  border-color: #3b82f6;
+}
+
+.pageButton.active {
+  background: #3b82f6;
+  color: white;
+  border-color: #3b82f6;
+}
+
+.ellipsis {
+  padding: 8px 4px;
+  color: #6b7280;
+}
+
+/* Адаптивность */
+@media (max-width: 1024px) {
+  .container {
+    padding: 15px;
+    gap: 20px;
+  }
+
+  .filters {
+    width: 250px;
+  }
+
+  .header {
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .productsGrid {
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  }
+}
+
+@media (max-width: 768px) {
+  .container {
+    flex-direction: column;
+  }
+
+  .filters {
+    position: fixed;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100vh;
+    z-index: 1001;
+    border-radius: 0;
+    transition: left 0.3s ease;
+    overflow-y: auto;
+  }
+
+  .filtersOpen {
+    left: 0;
+  }
+
+  .filtersHeader {
+    display: flex;
+  }
+
+  .mobileFilterToggle {
+    display: block;
+  }
+
+  .checkboxes {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .sort {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .pagination {
+    gap: 4px;
+    padding: 15px;
+    flex-wrap: wrap;
+  }
+
+  .pageButton {
+    padding: 6px 10px;
+    min-width: 36px;
+    font-size: 0.85rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: 10px;
+  }
+
+  .header {
+    padding: 15px;
+  }
+
+  .resultsInfo h1 {
+    font-size: 1.25rem;
+  }
+
+  .productsGrid {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+
+  .priceQuick {
+    justify-content: center;
+  }
+
+  .priceBtn {
+    flex: 1;
+    min-width: 45%;
+    text-align: center;
+  }
+
+  .pagination {
+    gap: 2px;
+  }
+
+  .pageButton {
+    padding: 6px 8px;
+    min-width: 32px;
+    font-size: 0.8rem;
+  }
+}

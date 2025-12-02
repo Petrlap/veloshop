@@ -4,6 +4,13 @@ import { IoIosArrowRoundBack } from "react-icons/io";
 import styles from "./Quiz.module.css";
 import { IconWrapper } from "../IconWrapper/IconWrapper";
 import img from "../../assets/bg.webp";
+import bikeIcon from "../../assets/quiz/bikeIcon.webp";
+import img1 from "../../assets/quiz/image-1.webp";
+import img2 from "../../assets/quiz/image-2.webp";
+import cardThumb1 from "../../assets/quiz/cardthumb-1.webp";
+import cardThumb2 from "../../assets/quiz/cardthumb-2.webp";
+import cardThumb3 from "../../assets/quiz/cardthumb-3.webp";
+import cardThumb4 from "../../assets/quiz/cardthumb-4.webp";
 
 const totalSteps = 3;
 
@@ -44,13 +51,17 @@ export const Quiz: React.FC = () => {
               <div className={styles.slide}>
                 <div className={styles.cardsRow}>
                   {[
-                    { title: "Горный велосипед" },
-                    { title: "Городской велосипед" },
-                    { title: "Складной велосипед" },
-                    { title: "Пока не знаю" },
+                    { title: "Горный велосипед", cardThumb: cardThumb1 },
+                    { title: "Городской велосипед", cardThumb: cardThumb2 },
+                    { title: "Складной велосипед", cardThumb: cardThumb3 },
+                    { title: "Пока не знаю", cardThumb: cardThumb4 },
                   ].map((c, i) => (
                     <div key={i} className={styles.card}>
-                      <div className={styles.cardThumb} />
+                      <img
+                        src={c.cardThumb}
+                        className={styles.cardThumb}
+                        alt=""
+                      />
                       <div className={styles.cardTitle}>{c.title}</div>
                     </div>
                   ))}
@@ -107,7 +118,7 @@ export const Quiz: React.FC = () => {
                 style={{ left: `calc(${progress}% - 12px)` }}
                 aria-hidden
               >
-                <IconWrapper Icon={RiBikeLine} size={24} />
+                <img src={bikeIcon} alt="Icon bike" />
               </div>
             </div>
 
@@ -143,8 +154,8 @@ export const Quiz: React.FC = () => {
           <button>Узнать прайс лист {" >"}</button>
         </div>
         <div className={styles.imageBox}>
-          <img src={img} alt="Image 1" />
-          <img src={img} alt="Image 2" />
+          <img src={img1} alt="Image 1" />
+          <img src={img2} alt="Image 2" />
         </div>
       </div>
     </section>

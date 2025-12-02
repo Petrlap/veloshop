@@ -1,7 +1,7 @@
 import { NavLink } from "react-router-dom";
 import { IconWrapper } from "../IconWrapper/IconWrapper";
 import { BiUser } from "react-icons/bi";
-import logo from "../../assets/bg.webp";
+import logo from "../../assets/logo.webp";
 import styles from "./HeadHeader.module.css";
 
 export const HeadHeader: React.FC = () => {

@@ -1,12 +1,12 @@
 import { useState } from "react";
 import styles from "./HomePage.module.css";
 import { Card } from "../../components/Card/Card";
-import img1 from "../../assets/bg.webp";
-import img2 from "../../assets/bg.webp";
-import img3 from "../../assets/bg.webp";
-import img4 from "../../assets/bg.webp";
-import img5 from "../../assets/bg.webp";
-import img6 from "../../assets/bg.webp";
+import img1 from "../../assets/homepage/bike.webp";
+import img2 from "../../assets/homepage/bike.webp";
+import img3 from "../../assets/homepage/bike.webp";
+import img4 from "../../assets/homepage/bike.webp";
+import img5 from "../../assets/homepage/bike.webp";
+import img6 from "../../assets/homepage/bike.webp";
 import { ImportantInformation } from "../../components/ImportantInformation/ImportantInformation";
 import { OurStores } from "../../components/OurStores/OurStores";
 import { Rutube } from "../../components/Rutube/Rutube";

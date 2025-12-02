@@ -4,7 +4,7 @@ import { BiUser } from "react-icons/bi";
 import { SlBasket } from "react-icons/sl";
 import { FiSearch } from "react-icons/fi";
 import { HiMenuAlt3 } from "react-icons/hi";
-import logo from "../../assets/bg.webp";
+import logo from "../../assets/logo.webp";
 import styles from "./HeadHeaderMobile.module.css";
 
 export const HeadHeaderMobile: React.FC = () => {

@@ -1,6 +1,6 @@
 import React from "react";
 import styles from "./WarehouseText.module.css";
-import img from "../../assets/bg.webp";
+import logo from "../../assets/logo.webp";
 
 export const WarehouseText: React.FC = () => {
   return (
@@ -42,7 +42,7 @@ export const WarehouseText: React.FC = () => {
           <div className={styles.linksBlock}>
             <button>Подробно {">"}</button>
             <a href="tel:+74956461567">8 (495) 646-15-67</a>
-            <img src={img} alt="Logo" />
+            <img src={logo} alt="Logo" />
           </div>
         </div>
       </div>

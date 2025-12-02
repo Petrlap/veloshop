@@ -11,6 +11,10 @@ import { News } from "../pages/News/News";
 import { NotFound } from "../pages/NotFound/NotFound";
 import { Layout } from "../components/Layout";
 import { Catalog } from "../pages/Catalog/Catalog";
+import { FullCatalog } from "../pages/FullCatalog/FullCatalog";
+import { Agreement } from "../pages/Agreement/Agreement";
+import { Offerta } from "../pages/Offerta/Offerta";
+import { PrivacyPolicy } from "../pages/PrivacyPolicy/PrivacyPolicy";
 
 const App: React.FC = () => {
   return (
@@ -26,7 +30,11 @@ const App: React.FC = () => {
           <Route path="stores" element={<Stores />} />
           <Route path="workshop" element={<Workshop />} />
           <Route path="news" element={<News />} />
+          <Route path="offerta" element={<Offerta />} />
+          <Route path="agreement" element={<Agreement />} />
+          <Route path="privacypolicy" element={<PrivacyPolicy />} />
           <Route path="catalog" element={<Catalog />} />
+          <Route path="catalog/fullcatalog" element={<FullCatalog />} />
           <Route path="*" element={<NotFound />} />
         </Route>
       </Routes>

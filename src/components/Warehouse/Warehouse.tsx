@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 import styles from "./Warehouse.module.css";
-import img1 from "../../assets/bg.webp";
-import img2 from "../../assets/bg.webp";
-import img3 from "../../assets/bg.webp";
-import img4 from "../../assets/bg.webp";
-import img5 from "../../assets/bg.webp";
+import img1 from "../../assets/warehouse/image-1.webp";
+import img2 from "../../assets/warehouse/image-2.webp";
+import img3 from "../../assets/warehouse/image-3.webp";
+import img4 from "../../assets/warehouse/image-4.webp";
+import img5 from "../../assets/warehouse/image-1.webp";
 import { HiChevronLeft, HiChevronRight } from "react-icons/hi";
 import { IconWrapper } from "../IconWrapper/IconWrapper";
 

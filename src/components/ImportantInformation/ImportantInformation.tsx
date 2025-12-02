@@ -1,14 +1,18 @@
 import React from "react";
 import styles from "./ImportantInformation.module.css";
-import img1 from "../../assets/bg.webp";
-import img2 from "../../assets/bg.webp";
-import img3 from "../../assets/bg.webp";
-import img4 from "../../assets/bg.webp";
+import img1 from "../../assets/importantinformation/preview-1.webp";
+import img2 from "../../assets/importantinformation/preview-2.webp";
+import img3 from "../../assets/importantinformation/preview-3.webp";
+import img4 from "../../assets/importantinformation/preview-4.webp";
+import img5 from "../../assets/importantinformation/persone-1.webp";
+import img6 from "../../assets/importantinformation/persone-2.webp";
+import img7 from "../../assets/importantinformation/persone-3.webp";
+import img8 from "../../assets/importantinformation/persone-4.webp";
 
 const news = [
   {
     image: img1,
-    persone: img1,
+    persone: img5,
     date: "12 марта",
     title: "Краткий заголовок",
     description: "Краткий под заголовок возможно в две строки даже",
@@ -17,7 +21,7 @@ const news = [
   },
   {
     image: img2,
-    persone: img2,
+    persone: img6,
     date: "12 марта",
     title: "Краткий заголовок",
     description: "Краткий под заголовок возможно в две строки даже",
@@ -26,7 +30,7 @@ const news = [
   },
   {
     image: img3,
-    persone: img3,
+    persone: img7,
     date: "12 марта",
     title: "Краткий заголовок",
     description: "Краткий под заголовок возможно в две строки даже",
@@ -35,7 +39,7 @@ const news = [
   },
   {
     image: img4,
-    persone: img4,
+    persone: img8,
     date: "12 марта",
     title: "Краткий заголовок",
     description: "Краткий под заголовок возможно в две строки даже",

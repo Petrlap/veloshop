@@ -1,0 +1,84 @@
+.privacypolicy h2 {
+  font-weight: 500;
+  font-size: 30px;
+  line-height: 29px;
+  text-align: center;
+  color: #000000;
+}
+.privacypolicy h2 span {
+  display: block;
+  color: #f34723;
+  text-align: center;
+  margin: 20px 0 30px 0;
+}
+.privacypolicy p,
+.privacypolicy li {
+  font-size: 14px;
+  line-height: 100%;
+  color: #333333;
+}
+.privacypolicy li {
+  list-style: disc;
+  margin-left: 15px;
+}
+.privacypolicy a {
+  text-decoration: underline;
+}
+.privacypolicy h1 {
+  font-weight: 700;
+  font-size: 32px;
+  line-height: 31px;
+  color: #1c1e20;
+  margin: 20px 0;
+}
+.breadcrubs {
+  font-size: 16px;
+  line-height: 100%;
+  color: #9f9f9f;
+  margin-top: 20px;
+  display: block;
+}
+.linksBlock {
+  width: 340px;
+  height: max-content;
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  background: #ffffff;
+  border-radius: 18px;
+  margin-right: 30px;
+}
+.linksBlock a {
+  font-size: 18px;
+  line-height: 100%;
+  color: #000000;
+  text-decoration: none;
+}
+.textBlock {
+  display: flex;
+  flex-direction: column;
+  width: calc(100% - 370px);
+}
+.privacypolicyBox {
+  display: flex;
+}
+@media (max-width: 600px) {
+  .privacypolicy {
+    margin: 0 20px;
+  }
+  .privacypolicy h1 {
+    font-size: 22px;
+    line-height: 22px;
+  }
+  .linksBlock {
+    display: none;
+  }
+  .textBlock {
+    width: 100%;
+  }
+  .privacypolicy h2 {
+    font-size: 22px;
+    line-height: 22px;
+  }
+}

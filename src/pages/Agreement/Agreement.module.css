@@ -1,0 +1,48 @@
+.agreement p,
+.agreement li {
+  font-size: 14px;
+  line-height: 100%;
+  color: #333333;
+}
+.agreement li {
+  list-style: disc;
+  margin-left: 15px;
+}
+.agreement a {
+  text-decoration: underline;
+}
+.agreement h1 {
+  font-weight: 700;
+  font-size: 32px;
+  line-height: 31px;
+  color: #1c1e20;
+  margin: 20px 0;
+}
+.agreement ul {
+  margin-top: 10px;
+}
+.breadcrubs {
+  font-size: 16px;
+  line-height: 100%;
+  color: #9f9f9f;
+  margin-top: 20px;
+  display: block;
+}
+.mb_15 {
+  margin-bottom: 15px;
+}
+.m_40 {
+  margin: 40px 0;
+}
+.mt_30 {
+  margin-top: 30px;
+}
+@media (max-width: 600px) {
+  .agreement {
+    margin: 0 20px;
+  }
+  .agreement h1 {
+    font-size: 22px;
+    line-height: 22px;
+  }
+}

@@ -1,0 +1,70 @@
+.consultation {
+  background: #ffffff;
+  border-radius: 24px;
+  display: flex;
+  margin: 300px 0 100px;
+  padding: 30px;
+  position: relative;
+}
+.consultationTitle {
+  font-size: 32px !important;
+  line-height: 40px !important;
+  color: #1c1e20 !important;
+  margin-bottom: 20px;
+}
+.consultationTitle span {
+  color: #f34723;
+}
+.consultation > img {
+  max-width: 50%;
+  bottom: 10px;
+  position: absolute;
+  left: calc(433px + 10%);
+}
+.consultationBox {
+  height: 210px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.consultationText {
+  font-size: 18px !important;
+  line-height: 17px !important;
+  color: #000000 !important;
+}
+.whatsAppBlock {
+  display: flex;
+  gap: 20px;
+  align-items: flex-end;
+}
+.whatsAppContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 35px;
+  min-height: 35px;
+  border-radius: 8px;
+  background: #f3f5f6;
+}
+
+@media (max-width: 600px) {
+  .consultation {
+    margin: 30px 0 100px;
+  }
+  .consultation > img {
+    display: none;
+  }
+  .consultationBox {
+    height: auto;
+    width: 100%;
+    gap: 30px;
+  }
+  .consultationTitle {
+    font-size: 22px !important;
+    line-height: 28px !important;
+  }
+  .consultationText {
+    font-size: 14px !important;
+    line-height: 16px !important;
+  }
+}

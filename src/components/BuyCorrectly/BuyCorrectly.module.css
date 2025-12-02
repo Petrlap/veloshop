@@ -22,9 +22,16 @@
 }
 .correctlyBox {
   width: calc(50% - 10px);
-  background-image: url("../../assets/bg.webp");
   border-radius: 24px;
   padding: 40px;
+}
+.correctlyBox:first-child {
+  background: url("../../assets/buycorrectly/image-1.webp") center/cover
+    no-repeat;
+}
+.correctlyBox:last-child {
+  background: url("../../assets/buycorrectly/image-2.webp") center/cover
+    no-repeat;
 }
 .correctlyBox p {
   max-width: 480px;

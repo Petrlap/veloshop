@@ -1,6 +1,8 @@
 import React, { useRef } from "react";
 import styles from "./BannerBlock.module.css";
-import img from "../../assets/bg.webp";
+import img from "../../assets/banners/banner.webp";
+import minibanner1 from "../../assets/banners/minibanner-1.webp";
+import minibanner2 from "../../assets/banners/minibanner-2.webp";
 import { Swiper, SwiperSlide } from "swiper/react";
 import type { Swiper as SwiperType } from "swiper";
 import { Navigation, Pagination } from "swiper/modules";
@@ -84,8 +86,8 @@ export const BannerBlock: React.FC = () => {
           </div>
         </div>
         <div className={styles.miniBanners}>
-          <img src={img} alt="Mini banner 1" />
-          <img src={img} alt="Mini banner 2" />
+          <img src={minibanner1} alt="Mini banner 1" />
+          <img src={minibanner2} alt="Mini banner 2" />
         </div>
       </div>
     </section>

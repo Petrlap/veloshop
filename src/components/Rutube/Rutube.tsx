@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
 import styles from "./Rutube.module.css";
 import { HiChevronLeft, HiChevronRight } from "react-icons/hi";
-import img1 from "../../assets/bg.webp";
-import img2 from "../../assets/bg.webp";
-import img3 from "../../assets/bg.webp";
-import img4 from "../../assets/bg.webp";
-import img5 from "../../assets/bg.webp";
+import img1 from "../../assets/rutube/image-1.webp";
+import img2 from "../../assets/rutube/image-2.webp";
+import img3 from "../../assets/rutube/image-3.webp";
+import img4 from "../../assets/rutube/image-4.webp";
+import img5 from "../../assets/rutube/image-1.webp";
 import { IconWrapper } from "../IconWrapper/IconWrapper";
 import { FaYoutube } from "react-icons/fa";
 
