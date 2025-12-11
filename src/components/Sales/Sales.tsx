@@ -1,10 +1,11 @@
 import React, { useState, useEffect, useRef } from "react";
 import styles from "./Sales.module.css";
-import img1 from "../../assets/bg.webp";
-import img2 from "../../assets/bg.webp";
-import img3 from "../../assets/bg.webp";
-import img4 from "../../assets/bg.webp";
-import img5 from "../../assets/bg.webp";
+import imgSale from "../../assets/imgSale.webp";
+import img1 from "../../assets/sales/sale-1.webp";
+import img2 from "../../assets/sales/sale-2.webp";
+import img3 from "../../assets/sales/sale-1.webp";
+import img4 from "../../assets/sales/sale-2.webp";
+import img5 from "../../assets/sales/sale-1.webp";
 import { RiArrowLeftWideFill, RiArrowRightWideFill } from "react-icons/ri";
 import { IconWrapper } from "../IconWrapper/IconWrapper";
 
@@ -65,7 +66,9 @@ export const Sales: React.FC = () => {
 
       <div className={styles.salesCont}>
         <div className={styles.textBlock}>
-          <div className={styles.leftBackground}></div>
+          <div className={styles.leftBackground}>
+            <img src={imgSale} alt="" />
+          </div>
           <p>
             Текст акции в несколько строк Текст акции в несколько строкТекст
             акции в несколько строкТекст акции в несколько строк.

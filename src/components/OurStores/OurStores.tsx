@@ -6,7 +6,7 @@ import { IconWrapper } from "../IconWrapper/IconWrapper";
 export const OurStores: React.FC = () => {
   return (
     <section className={styles.ourStores}>
-      <h2>Важная информация</h2>
+      <h2>Наши магазины</h2>
       <div className={styles.cards}>
         <div className={styles.card}>
           <p className={styles.title}>Склад-магазин в Ленино</p>

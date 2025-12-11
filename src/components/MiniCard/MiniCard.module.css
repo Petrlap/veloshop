@@ -1,0 +1,68 @@
+.minicard {
+  width: calc((100% - 100px) / 6);
+  height: max-content;
+  border-radius: 24px;
+  background: #ffffff;
+  padding: 12px 11px 20px 11px;
+  position: absolute;
+  right: 0;
+  bottom: -100px;
+}
+.minicard > p {
+  font-size: 14px;
+  font-weight: 500;
+  color: #212121;
+}
+.headBlock {
+  display: flex;
+  justify-content: flex-end;
+  position: relative;
+}
+.headBlock img {
+  position: absolute;
+  width: 93px;
+  left: 0;
+  bottom: 0;
+}
+.headBlock > div {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.year {
+  font-size: 12px;
+  color: #606060;
+}
+.sale {
+  font-weight: 700;
+  font-size: 10px;
+  color: #ffffff;
+  background: #2cb742;
+  border-radius: 6px;
+  padding: 5px 4px;
+}
+.buttonBlock {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.buttonBlock p {
+  font-size: 12px;
+  color: #7c7c7c;
+}
+.buttonBlock p span {
+  color: #f34723;
+}
+.buttonBlock button {
+  padding: 10px 12px;
+  background: #f34723;
+  border-radius: 8px;
+  font-size: 14px;
+  color: #ffffff;
+}
+
+@media (max-width: 600px) {
+  .minicard {
+    width: calc(50% - 10px);
+  }
+}

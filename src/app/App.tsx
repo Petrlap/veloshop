@@ -15,6 +15,7 @@ import { FullCatalog } from "../pages/FullCatalog/FullCatalog";
 import { Agreement } from "../pages/Agreement/Agreement";
 import { Offerta } from "../pages/Offerta/Offerta";
 import { PrivacyPolicy } from "../pages/PrivacyPolicy/PrivacyPolicy";
+import { ProductDetail } from "../pages/ProductDetail/ProductDetail";
 
 const App: React.FC = () => {
   return (
@@ -35,6 +36,10 @@ const App: React.FC = () => {
           <Route path="privacypolicy" element={<PrivacyPolicy />} />
           <Route path="catalog" element={<Catalog />} />
           <Route path="catalog/fullcatalog" element={<FullCatalog />} />
+          <Route
+            path="catalog/fullcatalog/product"
+            element={<ProductDetail />}
+          />
           <Route path="*" element={<NotFound />} />
         </Route>
       </Routes>
