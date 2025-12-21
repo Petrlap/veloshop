@@ -1,23 +1,15 @@
-.offerta p,
-.offerta li {
-  font-size: 14px;
-  line-height: 100%;
-  color: #333333;
-}
-.offerta li {
-  list-style: disc;
-  margin-left: 15px;
-}
-.offerta a {
-  text-decoration: underline;
-}
-.offerta h1 {
+.help h1 {
   font-weight: 700;
   font-size: 32px;
   line-height: 31px;
   color: #1c1e20;
   margin: 20px 0;
-  text-transform: uppercase;
+}
+.help h2 {
+  font-weight: 500;
+  font-size: 30px;
+  line-height: 100%;
+  color: #000000;
 }
 .breadcrubs {
   font-size: 16px;
@@ -26,23 +18,32 @@
   margin-top: 20px;
   display: block;
 }
-.textBlock {
+.contentBlock {
   display: flex;
   flex-direction: column;
   width: calc(100% - 370px);
 }
-.offertaBox {
+.contentBlock p {
+  font-size: 18px;
+  line-height: 100%;
+  color: #333333;
+  margin-bottom: 20px;
+}
+.contentBlock a {
+  text-decoration: underline;
+}
+.helpBox {
   display: flex;
 }
 @media (max-width: 600px) {
-  .offerta {
+  .help {
     margin: 0 20px;
   }
-  .offerta h1 {
+  .help h1 {
     font-size: 22px;
     line-height: 22px;
   }
-  .textBlock {
+  .contentBlock {
     width: 100%;
   }
 }

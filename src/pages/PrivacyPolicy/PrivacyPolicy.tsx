@@ -1,4 +1,5 @@
 import { ConsultationForm } from "../../components/ConsultationForm/ConsultationForm";
+import { LeftMenu } from "../../components/LeftMenu/LeftMenu";
 import styles from "./PrivacyPolicy.module.css";
 
 export const PrivacyPolicy: React.FC = () => {
@@ -9,13 +10,7 @@ export const PrivacyPolicy: React.FC = () => {
       </span>
       <h1>Политика конфиденциальности</h1>
       <div className={styles.privacypolicyBox}>
-        <div className={styles.linksBlock}>
-          <a href="#">Помощь</a>
-          <a href="#">Статьи</a>
-          <a href="#">Вопрос-ответ</a>
-          <a href="#">Производители</a>
-          <a href="#">Видео обзоры</a>
-        </div>
+        <LeftMenu />
         <div className={styles.textBlock}>
           <h2>
             Политика конфиденциальности персональных данных посетителей сайта в

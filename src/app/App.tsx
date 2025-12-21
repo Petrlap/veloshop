@@ -16,6 +16,10 @@ import { Agreement } from "../pages/Agreement/Agreement";
 import { Offerta } from "../pages/Offerta/Offerta";
 import { PrivacyPolicy } from "../pages/PrivacyPolicy/PrivacyPolicy";
 import { ProductDetail } from "../pages/ProductDetail/ProductDetail";
+import { About } from "../pages/About/About";
+import { Requisite } from "../pages/Requisite/Requisite";
+import { Help } from "../pages/Help/Help";
+import { FAQ } from "../pages/FAQ/FAQ";
 
 const App: React.FC = () => {
   return (
@@ -23,6 +27,10 @@ const App: React.FC = () => {
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route index element={<HomePage />} />
+          <Route path="about" element={<About />} />
+          <Route path="requisite" element={<Requisite />} />
+          <Route path="help" element={<Help />} />
+          <Route path="faq" element={<FAQ />} />
           <Route path="stock" element={<Stock />} />
           <Route path="sale" element={<Sale />} />
           <Route path="forbuyers" element={<ForBuyers />} />
@@ -35,11 +43,8 @@ const App: React.FC = () => {
           <Route path="agreement" element={<Agreement />} />
           <Route path="privacypolicy" element={<PrivacyPolicy />} />
           <Route path="catalog" element={<Catalog />} />
-          <Route path="catalog/fullcatalog" element={<FullCatalog />} />
-          <Route
-            path="catalog/fullcatalog/product"
-            element={<ProductDetail />}
-          />
+          <Route path="fullcatalog" element={<FullCatalog />} />
+          <Route path="product" element={<ProductDetail />} />
           <Route path="*" element={<NotFound />} />
         </Route>
       </Routes>

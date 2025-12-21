@@ -1,0 +1,46 @@
+.tracker {
+  position: relative;
+  top: 50px;
+  margin-bottom: 120px;
+}
+.whiteBlock {
+  display: flex;
+  width: calc(100% - ((100% - 100px) / 6) - 20px);
+  margin-bottom: 80px;
+}
+.bottomBlock {
+  width: calc(100% - 500px);
+  display: inline-flex;
+  flex-direction: column;
+  background: #ffffff;
+  border-radius: 24px;
+  padding: 30px;
+}
+.bottomBlock .title {
+  font-size: 20px;
+  line-height: 100%;
+  font-weight: 500;
+  color: #000000;
+  margin-bottom: 15px;
+}
+.bottomBlock p {
+  font-size: 16px;
+  line-height: 100%;
+  color: #565656;
+  margin-bottom: 5px;
+}
+.bottomBlock span {
+  color: #f34723;
+}
+.imageBlock {
+  display: inline-flex;
+  gap: 20px;
+  width: 500px;
+  padding-left: 40px;
+}
+.miniCard {
+  position: absolute;
+  right: 0;
+  top: 60px;
+  width: 100%;
+}

@@ -1,0 +1,55 @@
+.detailTabs {
+  position: relative;
+  top: 50px;
+  margin-bottom: 120px;
+}
+.informationBlock {
+  display: flex;
+  width: calc(100% - ((100% - 100px) / 6) - 20px);
+  margin-bottom: 80px;
+}
+.wrapper {
+  width: 100%;
+  border-radius: 12px;
+  padding: 12px;
+}
+.tabs {
+  display: flex;
+  gap: 4px;
+  background: #fff;
+  border-radius: 12px;
+  padding: 11px;
+}
+.tab {
+  border: none;
+  background: transparent;
+  padding: 18px 36px;
+  font-size: 22px;
+  line-height: 100%;
+  color: #8c8c8c;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.tab:hover {
+  color: #fff;
+}
+.active {
+  background: #333;
+  color: #fff;
+}
+.content {
+  margin-top: 30px;
+  font-size: 18px;
+  line-height: 100%;
+  color: #333;
+}
+.content p {
+  line-height: 110%;
+}
+.miniCard {
+  position: absolute;
+  right: 0;
+  top: 60px;
+  width: 100%;
+}

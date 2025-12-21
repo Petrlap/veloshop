@@ -1,0 +1,81 @@
+.characteristics {
+  position: relative;
+  top: 50px;
+  margin-bottom: 120px;
+}
+.informationBlock {
+  display: flex;
+  width: calc(100% - ((100% - 100px) / 6) - 20px);
+  margin-bottom: 80px;
+}
+.informationBlock h2 {
+  font-size: 25px;
+  line-height: 100%;
+  color: #1c1e20;
+  margin-bottom: 20px;
+}
+.characteristicsBlock {
+  width: calc(100% - 500px);
+  display: inline-flex;
+  flex-direction: column;
+}
+.characteristicsBlock > div {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+.documentsBlock {
+  display: inline-flex;
+  flex-direction: column;
+  width: 500px;
+  padding-left: 40px;
+}
+.documentsList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+.documentsList > div {
+  width: calc(50% - 10px);
+  border: 1.5px solid #f34723;
+  border-radius: 12px;
+  padding: 15px 10px;
+  gap: 5px;
+  display: flex;
+  align-items: center;
+}
+.documentsList .pretitle {
+  font-size: 12px;
+  line-height: 130%;
+  color: #797979;
+}
+.documentsList p {
+  font-size: 14px;
+  line-height: 130%;
+  color: #000000;
+}
+.characteristicsItem {
+  display: flex;
+}
+.characteristicsItem span {
+  width: 100%;
+  margin: 0 5px;
+  border-bottom: 1px dashed #c6c6c6;
+}
+.characteristicsItem .name,
+.characteristicsItem .value {
+  font-size: 18px;
+  line-height: 100%;
+  color: #949494;
+  text-wrap: nowrap;
+}
+.characteristicsItem .value {
+  font-weight: 500;
+  color: #000000;
+}
+.miniCard {
+  position: absolute;
+  right: 0;
+  top: 60px;
+  width: 100%;
+}

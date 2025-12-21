@@ -1,0 +1,22 @@
+.linksBlock {
+  width: 340px;
+  height: max-content;
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  background: #ffffff;
+  border-radius: 18px;
+  margin-right: 30px;
+}
+.linksBlock a {
+  font-size: 18px;
+  line-height: 100%;
+  color: #000000;
+  text-decoration: none !important;
+}
+@media (max-width: 600px) {
+  .linksBlock {
+    display: none;
+  }
+}

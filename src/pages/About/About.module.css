@@ -1,0 +1,153 @@
+.about h1 {
+  font-weight: 700;
+  font-size: 32px;
+  line-height: 31px;
+  color: #1c1e20;
+  margin: 20px 0;
+}
+.about h2 {
+  font-weight: 500;
+  font-size: 30px;
+  line-height: 100%;
+  color: #000000;
+}
+.breadcrubs {
+  font-size: 16px;
+  line-height: 100%;
+  color: #9f9f9f;
+  margin-top: 20px;
+  display: block;
+}
+.contentBlock {
+  display: flex;
+  flex-direction: column;
+  width: calc(100% - 370px);
+}
+.aboutBox {
+  display: flex;
+}
+.whiteBox {
+  background: #ffffff;
+  border-radius: 24px;
+  padding: 50px 30px;
+  margin-bottom: 20px;
+}
+.bigNumber {
+  font-size: 200px !important;
+  line-height: 100% !important;
+  font-weight: 500;
+  color: #f34723 !important;
+}
+.grayBlock_1,
+.grayBlock_2 {
+  display: flex;
+  justify-content: space-between;
+  background: #f3f5f6;
+  border-radius: 24px;
+  margin-top: 70px;
+  padding: 0 20px 0 50px;
+  position: relative;
+}
+.grayBlock_1 p,
+.grayBlock_2 p,
+.headBox p {
+  font-size: 18px;
+  line-height: 100%;
+  color: #333333;
+  margin-bottom: 15px;
+}
+.grayBlock_1 {
+  align-items: center;
+  padding-top: 80px;
+  padding-bottom: 80px;
+}
+.grayBlock_1 div {
+  width: 48%;
+  margin-top: 50px;
+}
+.grayBlock_1 img {
+  width: 30%;
+  position: absolute;
+  bottom: 0;
+  left: 17%;
+}
+.grayBlock_2 {
+  justify-content: flex-start;
+}
+.grayBlock_2 img {
+  position: absolute;
+  bottom: -60px;
+  right: -40px;
+}
+.grayBlock_2 p {
+  width: 26%;
+  margin-top: 240px;
+}
+.grayBlock_2 .bigNumber {
+  margin: 0;
+}
+.grayBlock_2 {
+  gap: 20px;
+  padding-top: 60px;
+  padding-bottom: 60px;
+}
+.bottomImage {
+  margin-top: 180px;
+}
+.headBox {
+  display: flex;
+  gap: 20px;
+}
+.littleBlack {
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 100%;
+  color: #000000;
+}
+.bottomBlock {
+  display: flex;
+  align-items: flex-end;
+  gap: 30px;
+  margin-top: 50px;
+}
+.bottomBlock p {
+  max-width: 568px;
+  margin-bottom: 50px;
+  font-size: 18px;
+  line-height: 100%;
+}
+.bottomBlock .bigNumber {
+  margin-bottom: 0;
+}
+.bottomText {
+  margin-top: 30px;
+}
+.bottomText p {
+  font-size: 18px;
+  line-height: 100%;
+  color: #333333;
+  margin-bottom: 15px;
+}
+.bottomText li {
+  list-style: disc;
+  margin-left: 20px;
+  margin-bottom: 15px;
+  font-size: 18px;
+  line-height: 100%;
+  color: #333333;
+}
+.bottomText h2 {
+  margin: 40px 0 15px;
+}
+@media (max-width: 600px) {
+  .about {
+    margin: 0 20px;
+  }
+  .about h1 {
+    font-size: 22px;
+    line-height: 22px;
+  }
+  .contentBlock {
+    width: 100%;
+  }
+}

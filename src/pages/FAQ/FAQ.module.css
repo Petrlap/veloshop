@@ -1,0 +1,136 @@
+.faq h1 {
+  font-weight: 700;
+  font-size: 32px;
+  line-height: 31px;
+  color: #1c1e20;
+  margin: 20px 0;
+}
+.faq h2 {
+  font-size: 30px;
+  line-height: 100%;
+  color: #000000;
+  margin-top: 20px;
+}
+.breadcrubs {
+  font-size: 16px;
+  line-height: 100%;
+  color: #9f9f9f;
+  margin-top: 20px;
+  display: block;
+}
+.faqBox {
+  display: flex;
+}
+.faqList {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  margin-top: 90px;
+}
+.item {
+  border-radius: 24px;
+  background: #fff;
+  overflow: hidden;
+}
+.header {
+  width: 100%;
+  background: none;
+  border: none;
+  outline: none;
+  padding: 18px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 18px;
+  font-weight: 500;
+  color: #2e2e2e;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.header > span {
+  font-weight: 500;
+  font-size: 22px;
+}
+.icon {
+  min-width: 48px;
+  min-height: 48px;
+  font-size: 46px;
+  color: #000;
+  transition: transform 0.3s;
+  border-radius: 50%;
+  display: inline-flex;
+  padding: 12px;
+}
+.header:hover,
+.header:hover .icon {
+  color: #f34723;
+}
+.content {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s ease, padding 0.4s ease;
+  padding: 0 20px;
+  font-size: 16px;
+  color: #565656;
+}
+.open {
+  max-height: 500px;
+  padding: 0 20px 20px;
+}
+.contentBlock {
+  display: flex;
+  flex-direction: flex;
+  width: calc(100% - 370px);
+  background: #ffffff;
+  border-radius: 18px;
+  position: relative;
+  padding: 40px;
+}
+.contentBlock > div {
+  width: 42%;
+}
+.contentBlock > div > img {
+  max-width: 85px;
+}
+.contentBlock > img {
+  width: 45%;
+  position: absolute;
+  right: 50px;
+  bottom: 0;
+}
+.contentBlock p {
+  font-size: 18px;
+  line-height: 100%;
+  color: #333333;
+}
+.contentBlock button {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 19px 36px;
+  background: #f34723;
+  border: 2px solid #ffffff;
+  box-shadow: 0px 3px 5px rgba(255, 125, 30, 0.12);
+  border-radius: 12px;
+  font-size: 18px;
+  line-height: 100%;
+  color: #fff;
+  margin-top: 20px;
+}
+.faqBox > div:first-child {
+  gap: 42px !important;
+}
+@media (max-width: 600px) {
+  .faq {
+    margin: 0 20px;
+  }
+  .faq h1 {
+    font-size: 22px;
+    line-height: 22px;
+  }
+  .contentBlock {
+    width: 100%;
+  }
+}

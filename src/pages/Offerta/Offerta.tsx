@@ -1,4 +1,5 @@
 import { ConsultationForm } from "../../components/ConsultationForm/ConsultationForm";
+import { LeftMenu } from "../../components/LeftMenu/LeftMenu";
 import styles from "./Offerta.module.css";
 
 export const Offerta: React.FC = () => {
@@ -7,13 +8,7 @@ export const Offerta: React.FC = () => {
       <span className={styles.breadcrubs}>главная / о компании / оферта</span>
       <h1>ПУБЛИЧНЫЙ ДОГОВОР – ОФЕРТА О ПРОДАЖЕ ТОВАРОВ</h1>
       <div className={styles.offertaBox}>
-        <div className={styles.linksBlock}>
-          <a href="#">Помощь</a>
-          <a href="#">Статьи</a>
-          <a href="#">Вопрос-ответ</a>
-          <a href="#">Производители</a>
-          <a href="#">Видео обзоры</a>
-        </div>
+        <LeftMenu />
         <div className={styles.textBlock}>
           <p>
             Настоящий договор между интернет-магазином «Велошоп» и пользователем

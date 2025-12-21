@@ -1,23 +1,9 @@
-.offerta p,
-.offerta li {
-  font-size: 14px;
-  line-height: 100%;
-  color: #333333;
-}
-.offerta li {
-  list-style: disc;
-  margin-left: 15px;
-}
-.offerta a {
-  text-decoration: underline;
-}
-.offerta h1 {
+.requisite h1 {
   font-weight: 700;
   font-size: 32px;
   line-height: 31px;
   color: #1c1e20;
   margin: 20px 0;
-  text-transform: uppercase;
 }
 .breadcrubs {
   font-size: 16px;
@@ -26,23 +12,40 @@
   margin-top: 20px;
   display: block;
 }
-.textBlock {
+.contentBlock {
   display: flex;
   flex-direction: column;
   width: calc(100% - 370px);
 }
-.offertaBox {
+.requisiteBox {
   display: flex;
 }
+.contentBlock {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background: #ffffff;
+  border-radius: 18px;
+  padding: 50px 40px;
+}
+.contentBlock p,
+.contentBlock span {
+  max-width: 700px;
+  font-size: 18px;
+  line-height: 100%;
+}
+.contentBlock span {
+  font-weight: 700;
+}
 @media (max-width: 600px) {
-  .offerta {
+  .requisite {
     margin: 0 20px;
   }
-  .offerta h1 {
+  .requisite h1 {
     font-size: 22px;
     line-height: 22px;
   }
-  .textBlock {
+  .contentBlock {
     width: 100%;
   }
 }

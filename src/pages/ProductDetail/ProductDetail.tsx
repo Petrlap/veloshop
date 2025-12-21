@@ -23,7 +23,11 @@ import { FaChalkboardUser } from "react-icons/fa6";
 import { IoBuildOutline } from "react-icons/io5";
 import { MdOutlinePedalBike } from "react-icons/md";
 import { LuCircleChevronDown, LuCircleChevronUp } from "react-icons/lu";
-import { UNSAFE_getTurboStreamSingleFetchDataStrategy } from "react-router-dom";
+import { Assembly } from "../../components/Assembly/Assembly";
+import { Tracker } from "../../components/Tracker/Tracker";
+import { Сharacteristics } from "../../components/Сharacteristics/Сharacteristics";
+import { DetailTabs } from "../../components/DetailTabs/DetailTabs";
+import { DetailHead } from "../../components/DetailHead/DetailHead";
 
 type Question = {
   id: number;
@@ -214,10 +218,12 @@ export const ProductDetail: React.FC = () => {
   return (
     <>
       <span className={styles.breadcrubs}>
-        главная / каталог / велосипеды / горные /{" "}
+        главная / каталог / велосипеды / горные /
       </span>
       <h1>Женский велосипед Welt Edelweiss 2.0 HD 27 (2024)</h1>
-
+      <DetailHead />
+      <DetailTabs />
+      <Сharacteristics />
       <section className={styles.cardsLineCont}>
         <div className={styles.cardsHead}>
           <h2>
@@ -370,6 +376,8 @@ export const ProductDetail: React.FC = () => {
           </div>
         </div>
       </section>
+      <Assembly />
+      <Tracker />
       <OurStores />
     </>
   );

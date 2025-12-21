@@ -1,0 +1,79 @@
+.assembly {
+  position: relative;
+  top: 50px;
+}
+h2 {
+  font-weight: 700;
+  font-size: 30px;
+  line-height: 29px;
+  color: #1c1e20;
+  margin-bottom: 20px;
+}
+h2 span {
+  color: #f34723 !important;
+}
+.whiteBlock {
+  width: calc(100% - ((100% - 100px) / 6) - 20px);
+  background: #ffffff;
+  border-radius: 24px;
+  padding: 30px;
+  margin-bottom: 80px;
+}
+.leftText {
+  width: 50%;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 30px;
+}
+.leftText .title {
+  font-weight: 500;
+  font-size: 22px;
+  color: #000000;
+  margin-bottom: 10px;
+}
+.leftText p {
+  font-size: 14px;
+  line-height: 100%;
+  color: #565656;
+}
+.textBlock {
+  display: flex;
+  position: relative;
+  margin-bottom: 70px;
+}
+.textBlock img {
+  width: 50%;
+  position: absolute;
+  right: 0;
+  top: -130px;
+}
+.leftText > div {
+  width: calc(50% - 15px);
+}
+.bottomBlock {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 50px;
+}
+.bottomBlock div {
+  width: calc((100% - 100px) / 3);
+}
+.bottomBlock .title {
+  display: flex;
+  gap: 30px;
+  font-size: 20px;
+  line-height: 100%;
+  color: #000000;
+  margin-bottom: 15px;
+}
+.bottomBlock p {
+  font-size: 16px;
+  line-height: 100%;
+  color: #565656;
+}
+.miniCard {
+  position: absolute;
+  right: 0;
+  top: -90px;
+  width: 100%;
+}
