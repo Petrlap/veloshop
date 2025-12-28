@@ -1,0 +1,256 @@
+.deferred h1,
+.deferredEmpty h1 {
+  font-weight: 700;
+  font-size: 32px;
+  line-height: 31px;
+  color: #1c1e20;
+  margin: 20px 0;
+}
+.breadcrubs {
+  font-size: 16px;
+  line-height: 100%;
+  color: #9f9f9f;
+  margin-top: 20px;
+  display: block;
+}
+.sidebar {
+  background: #fafafa;
+  padding: 16px;
+  border-radius: 12px;
+}
+.sidebarItem {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  margin-bottom: 8px;
+  color: #7b7b7b;
+}
+.sidebarItem svg {
+  min-width: 24px;
+}
+.sidebarItem a {
+  font-weight: 500;
+  color: #6a6969;
+  text-decoration: underline dotted;
+}
+.content {
+  display: grid;
+  grid-template-columns: 1fr 320px;
+  gap: 24px;
+  margin-top: 50px;
+}
+.listHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #fff;
+  border-radius: 18px;
+  padding: 12px 12px 12px 20px;
+}
+.checkbox {
+  display: flex;
+  gap: 8px;
+  font-size: 14px;
+}
+.tabs {
+  display: flex;
+  gap: 30px;
+  background: #f5f7fa;
+  border-radius: 12px;
+  padding: 16px 20px;
+}
+.tabs button {
+  background: none;
+  border: none;
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 100%;
+  color: #545454;
+}
+.activeTab {
+  font-weight: 700 !important;
+  color: #1c1e20 !important;
+}
+.item {
+  display: grid;
+  grid-template-columns: 18% 44% calc(38% - 166px) 118px;
+  gap: 16px;
+  padding: 40px 0 16px 0;
+  align-items: center;
+  position: relative;
+}
+.imageBox {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  border-radius: 0px 18px 18px 18px;
+  padding: 10px;
+  background: #f3f5f6;
+}
+.image {
+  width: 100%;
+}
+.info h3 {
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 100%;
+  color: #000000;
+  margin-bottom: 10px;
+}
+.info p {
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 24px;
+  color: #000000;
+}
+.actions {
+  margin-top: 15px;
+  display: flex;
+  gap: 12px;
+}
+.actions button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  background: #f5f7fa;
+  border-radius: 12px;
+  cursor: pointer;
+}
+.price {
+  height: 100%;
+  text-align: left;
+  position: relative;
+}
+.price strong {
+  font-weight: 500;
+  font-size: 24px;
+  line-height: 100%;
+  text-transform: uppercase;
+  color: #000000;
+}
+.price span {
+  display: block;
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 24px;
+  text-decoration-line: line-through;
+  color: #bfbfbf;
+}
+.price .left {
+  position: absolute;
+  bottom: 0;
+}
+.counter {
+  position: absolute;
+  top: 30px;
+  right: 0;
+  width: 118px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #f5f7fa;
+  border-radius: 12px;
+  padding: 0 15px;
+}
+.counter button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 25px;
+}
+.counter * {
+  font-weight: 500;
+  font-size: 20px;
+  line-height: 30px;
+  color: #333333;
+}
+.listHeader .checkbox {
+  position: initial;
+}
+.checkbox {
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
+  position: absolute;
+  left: 0;
+  top: 0;
+  margin-right: 10px;
+  user-select: none;
+}
+.item .checkbox {
+  top: 40px;
+  left: -8px;
+  background: #fff;
+  border-radius: 0 0 6px 0;
+  padding: 3px;
+}
+.checkbox input {
+  display: none;
+}
+.checkBoxCustom {
+  min-width: 18px;
+  height: 18px;
+  border: 2px solid #ccc;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: white;
+  transition: border-color 0.2s;
+}
+.checkbox.checked .checkBoxCustom {
+  border-color: #f34723;
+}
+.checkbox span:last-child {
+  font-weight: 400;
+  font-size: 19px;
+  line-height: 100%;
+  color: #000000;
+  margin-left: 8px;
+}
+.deferred h1 span {
+  font-size: 18px;
+  line-height: 24px;
+  display: inline-flex;
+  font-weight: 400;
+  margin-left: 5px;
+  position: relative;
+  top: -5px;
+  color: #7f8284;
+}
+.listHeader div,
+.left {
+  width: max-content;
+  padding: 11px 13px;
+  background: #fbf0ee;
+  border-radius: 12px;
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 100%;
+  color: #f34723;
+}
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.leftBlock {
+  background: #fff;
+  border-radius: 18px;
+  padding: 12px 12px 12px 20px;
+}
+
+@media (max-width: 600px) {
+  .deferred,
+  .deferredEmpty {
+    margin: 0 20px;
+  }
+  .deferred h1,
+  .deferredEmpty h1 {
+    font-size: 22px;
+    line-height: 22px;
+  }
+}

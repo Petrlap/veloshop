@@ -20,6 +20,9 @@ import { About } from "../pages/About/About";
 import { Requisite } from "../pages/Requisite/Requisite";
 import { Help } from "../pages/Help/Help";
 import { FAQ } from "../pages/FAQ/FAQ";
+import { Guarantee } from "../pages/Guarantee/Guarantee";
+import { Deferred } from "../pages/Deferred/Deferred";
+import { ExtendedWarranty } from "../pages/ExtendedWarranty/ExtendedWarranty";
 
 const App: React.FC = () => {
   return (
@@ -32,6 +35,9 @@ const App: React.FC = () => {
           <Route path="help" element={<Help />} />
           <Route path="faq" element={<FAQ />} />
           <Route path="stock" element={<Stock />} />
+          <Route path="guarantee" element={<Guarantee />} />
+          <Route path="extendedwarranty" element={<ExtendedWarranty />} />
+          <Route path="deferred" element={<Deferred />} />
           <Route path="sale" element={<Sale />} />
           <Route path="forbuyers" element={<ForBuyers />} />
           <Route path="payment" element={<Payment />} />
