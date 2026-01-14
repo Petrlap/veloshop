@@ -9,6 +9,7 @@ import {
 } from "react-icons/fa";
 import { BsFillCreditCard2FrontFill } from "react-icons/bs";
 import { FiHeart } from "react-icons/fi";
+import { FaArrowRight } from "react-icons/fa6";
 import { IconWrapper } from "../../components/IconWrapper/IconWrapper";
 import styles from "./Deferred.module.css";
 import img from "../../assets/deferred/bike.webp";
@@ -68,7 +69,14 @@ export const Deferred: React.FC = () => {
           <a href="#">выберите в каталоге</a> интересующий товар и нажмите
           кнопку «В корзину».
         </p>
-        <button>В каталог</button>
+        <button>
+          В каталог
+          <IconWrapper
+            Icon={FaArrowRight}
+            size={20}
+            style={{ color: "#fff" }}
+          />
+        </button>
         <ConsultationForm />
       </section>
 
@@ -139,7 +147,9 @@ export const Deferred: React.FC = () => {
                     </span>
                   </label>
 
-                  <div className={styles.imageBox}><img src={img} alt="" className={styles.image} /></div>
+                  <div className={styles.imageBox}>
+                    <img src={img} alt="" className={styles.image} />
+                  </div>
 
                   <div className={styles.info}>
                     <h3>{item.name}</h3>

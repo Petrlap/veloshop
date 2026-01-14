@@ -139,8 +139,27 @@
 .bottomText h2 {
   margin: 40px 0 15px;
 }
+@media (max-width: 1470px) {
+  .headBox img {
+    max-width: 50%;
+    object-fit: contain;
+  }
+  .grayBlock_2 img {
+    max-width: 50%;
+  }
+}
+@media (max-width: 1300px) {
+}
+@media (max-width: 1100px) {
+  .contentBlock {
+    width: 100%;
+  }
+}
+@media (max-width: 900px) {
+}
 @media (max-width: 600px) {
   .about {
+    width: calc(100% - 40px);
     margin: 0 20px;
   }
   .about h1 {
@@ -149,5 +168,62 @@
   }
   .contentBlock {
     width: 100%;
+  }
+  .headBox {
+    display: flex;
+    flex-direction: column-reverse;
+  }
+  .headBox img {
+    max-width: 100%;
+  }
+  .grayBlock_1 img,
+  .grayBlock_2 img {
+    display: none;
+  }
+  .grayBlock_1,
+  .grayBlock_2 {
+    padding: 20px !important;
+    flex-direction: column;
+    gap: 0 !important;
+    text-align: center;
+    margin-top: 40px;
+  }
+  .grayBlock_1 div {
+    width: 100%;
+    margin: 0;
+  }
+  .grayBlock_2 p {
+    width: 100%;
+    margin: 0;
+  }
+  .grayBlock_2 {
+    justify-content: center;
+    flex-direction: column-reverse !important;
+  }
+  .bigNumber {
+    font-size: 150px !important;
+  }
+  .bottomImage {
+    margin-top: 50px;
+  }
+  .bottomBlock {
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+    margin-top: 20px;
+  }
+  .bottomBlock p {
+    margin-bottom: 0;
+  }
+  .whiteBox {
+    padding: 30px 20px;
+  }
+  .about h2 {
+    font-size: 20px;
+  }
+  .grayBlock_1 p,
+  .grayBlock_2 p,
+  .headBox p {
+    font-size: 16px;
   }
 }

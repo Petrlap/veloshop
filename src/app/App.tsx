@@ -34,20 +34,20 @@ const App: React.FC = () => {
           <Route path="requisite" element={<Requisite />} />
           <Route path="help" element={<Help />} />
           <Route path="faq" element={<FAQ />} />
-          <Route path="stock" element={<Stock />} />
           <Route path="guarantee" element={<Guarantee />} />
           <Route path="extendedwarranty" element={<ExtendedWarranty />} />
+          <Route path="offerta" element={<Offerta />} />
+          <Route path="agreement" element={<Agreement />} />
+          <Route path="privacypolicy" element={<PrivacyPolicy />} />
           <Route path="deferred" element={<Deferred />} />
           <Route path="sale" element={<Sale />} />
+          <Route path="stock" element={<Stock />} />
           <Route path="forbuyers" element={<ForBuyers />} />
           <Route path="payment" element={<Payment />} />
           <Route path="delivery" element={<Delivery />} />
           <Route path="stores" element={<Stores />} />
           <Route path="workshop" element={<Workshop />} />
           <Route path="news" element={<News />} />
-          <Route path="offerta" element={<Offerta />} />
-          <Route path="agreement" element={<Agreement />} />
-          <Route path="privacypolicy" element={<PrivacyPolicy />} />
           <Route path="catalog" element={<Catalog />} />
           <Route path="fullcatalog" element={<FullCatalog />} />
           <Route path="product" element={<ProductDetail />} />

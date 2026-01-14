@@ -22,6 +22,7 @@
 }
 @media (max-width: 600px) {
   .about {
+    width: calc(100% - 40px);
     margin: 0 20px;
   }
   .about h1 {

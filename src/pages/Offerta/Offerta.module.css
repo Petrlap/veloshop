@@ -34,15 +34,23 @@
 .offertaBox {
   display: flex;
 }
+@media (max-width: 1470px) {
+}
+@media (max-width: 1300px) {
+}
+@media (max-width: 1100px) {
+  .textBlock {
+    width: 100%;
+  }
+}
+@media (max-width: 900px) {
+}
 @media (max-width: 600px) {
   .offerta {
     margin: 0 20px;
   }
   .offerta h1 {
-    font-size: 22px;
-    line-height: 22px;
-  }
-  .textBlock {
-    width: 100%;
+    font-size: 20px;
+    line-height: 100%;
   }
 }

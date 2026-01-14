@@ -35,6 +35,20 @@
 .helpBox {
   display: flex;
 }
+@media (max-width: 1470px) {
+}
+@media (max-width: 1300px) {
+}
+@media (max-width: 1100px) {
+  .contentBlock {
+    width: 100%;
+  }
+  .help h2 {
+    display: none;
+  }
+}
+@media (max-width: 900px) {
+}
 @media (max-width: 600px) {
   .help {
     margin: 0 20px;
@@ -45,5 +59,8 @@
   }
   .contentBlock {
     width: 100%;
+  }
+  .contentBlock p {
+    font-size: 16px;
   }
 }
