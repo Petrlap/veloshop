@@ -1,0 +1,229 @@
+.payment h1 {
+  font-weight: 700;
+  font-size: 32px;
+  line-height: 31px;
+  color: #1c1e20;
+  margin: 20px 0;
+}
+.breadcrubs {
+  font-size: 16px;
+  line-height: 100%;
+  color: #9f9f9f;
+  margin-top: 20px;
+  display: block;
+}
+.textBlock {
+  display: flex;
+  flex-direction: column;
+  width: calc(100% - 370px);
+}
+.paymentBox {
+  display: flex;
+}
+.paymentBox h2,
+.bottomBlock h2 {
+  font-weight: 500;
+  font-size: 30px;
+  line-height: 100%;
+  display: flex;
+  align-items: center;
+  color: #000000;
+  margin: 40px 0 15px;
+}
+.paymentBox p,
+.bottomBlock p {
+  font-size: 18px;
+  line-height: 100%;
+  color: #333333;
+}
+.bottomBlock ul {
+  list-style: disc;
+  margin: 10px 20px;
+}
+.bottomBlock ol {
+  list-style: decimal;
+  padding-left: 20px;
+}
+.orangeBorder {
+  position: relative;
+  padding-left: 16px;
+  margin-top: 40px;
+}
+.orangeBorder ul {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.orangeBorder li {
+  list-style: disc;
+  margin-left: 20px;
+}
+.orangeBorder p,
+.darkText {
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 100%;
+  color: #333333;
+  margin-bottom: 10px;
+}
+.orangeBorder::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 4px;
+  height: 100%;
+  background: #f34723;
+  border-radius: 4px;
+}
+.faqList {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  margin-top: 20px;
+}
+.item {
+  border-radius: 24px;
+  background: #fff;
+  overflow: hidden;
+}
+.header {
+  width: 100%;
+  background: none;
+  border: none;
+  outline: none;
+  padding: 18px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 18px;
+  font-weight: 500;
+  color: #2e2e2e;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.header > span {
+  font-weight: 500;
+  font-size: 22px;
+}
+.icon {
+  min-width: 48px;
+  min-height: 48px;
+  font-size: 46px;
+  color: #000;
+  transition: transform 0.3s;
+  border-radius: 50%;
+  display: inline-flex;
+  padding: 12px;
+}
+.header:hover,
+.header:hover .icon {
+  color: #f34723;
+}
+.content {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s ease, padding 0.4s ease;
+  padding: 0 20px;
+  font-size: 16px;
+  color: #565656;
+}
+.open {
+  max-height: 500px;
+  padding: 0 20px 20px;
+}
+.slide {
+  box-sizing: border-box;
+  margin: 50px 0;
+}
+.preview {
+  position: relative;
+  cursor: pointer;
+  border-radius: 12px;
+  overflow: hidden;
+}
+.preview img {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  border-radius: 12px;
+}
+.playBtn {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+}
+.playBtn:before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 20px;
+  height: 20px;
+  background: #fff;
+  transform: translate(-50%, -50%);
+  z-index: -1;
+}
+.linksBox {
+  margin: 10px 0;
+  display: flex;
+  flex-direction: column;
+}
+.linksBox a,
+.customLink {
+  font-size: 18px;
+  line-height: 100%;
+  color: #1d93d2;
+  text-decoration: underline;
+}
+.orangeText {
+  font-weight: 500;
+  color: #f34723 !important;
+}
+@media (max-width: 1470px) {
+  .slide iframe {
+    height: 40vw;
+  }
+}
+@media (max-width: 1300px) {
+}
+@media (max-width: 1100px) {
+  .textBlock {
+    width: 100%;
+  }
+}
+@media (max-width: 900px) {
+}
+@media (max-width: 600px) {
+  .payment {
+    margin: 0 20px;
+  }
+  .payment h1 {
+    font-size: 22px;
+    line-height: 100%;
+  }
+  .header > span,
+  .paymentBox p,
+  .bottomBlock p,
+  .linksBox a,
+  .customLink {
+    font-size: 16px;
+  }
+  .paymentBox h2,
+  .bottomBlock h2 {
+    font-size: 20px;
+  }
+  .orangeBorder li {
+    font-size: 16px;
+    line-height: 100%;
+  }
+  .bottomBlock ul {
+    line-height: 100%;
+  }
+  .bottomBlock .orangeBorder ul {
+    margin: 10px 0;
+  }
+}

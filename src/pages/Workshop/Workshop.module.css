@@ -1,0 +1,66 @@
+.workshop h1 {
+  font-weight: 700;
+  font-size: 32px;
+  line-height: 31px;
+  color: #1c1e20;
+  margin: 20px 0;
+}
+.breadcrubs {
+  font-size: 16px;
+  line-height: 100%;
+  color: #9f9f9f;
+  margin-top: 20px;
+  display: block;
+}
+.workshop {
+  display: flex;
+  gap: 20px;
+}
+.workshop p {
+  font-size: 18px;
+  line-height: 100%;
+  color: #333333;
+}
+.orangeText {
+  color: #f34723 !important;
+  margin-top: 20px;
+}
+.whiteBox {
+  background: #ffffff;
+  border-radius: 24px;
+  padding: 30px;
+  margin: 40px 0;
+}
+.mobile {
+  display: none;
+}
+@media (max-width: 1470px) {
+}
+@media (max-width: 1300px) {
+}
+@media (max-width: 1100px) {
+  .mobile {
+    display: block;
+  }
+  .desk {
+    display: none;
+  }
+}
+@media (max-width: 900px) {
+}
+@media (max-width: 600px) {
+  .workshop {
+    margin: 0 20px;
+  }
+  .workshop h1 {
+    font-size: 22px;
+    line-height: 22px;
+  }
+  .workshop p {
+    font-size: 16px !important;
+    line-height: 100% !important;
+  }
+  .workshop div {
+    width: 100%;
+  }
+}

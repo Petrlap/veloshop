@@ -1,0 +1,124 @@
+.stock {
+  display: flex;
+  gap: 20px;
+}
+.stock h1 {
+  font-weight: 700;
+  font-size: 32px;
+  line-height: 31px;
+  color: #1c1e20;
+  margin: 20px 0;
+}
+.breadcrubs {
+  font-size: 16px;
+  line-height: 100%;
+  color: #9f9f9f;
+  margin-top: 20px;
+  display: block;
+}
+.mobile {
+  display: none;
+}
+.desk {
+  display: flex;
+  flex-direction: column;
+  gap: 210px;
+}
+.moreBtn {
+  width: 100%;
+  text-align: center;
+  font-size: 20px;
+  line-height: 100%;
+  color: #1d93d2;
+  border: none;
+}
+.stockBox {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  margin: 40px 0 40px;
+}
+.stock > div > p {
+  font-size: 18px;
+  line-height: 100%;
+  color: #333333;
+}
+.stockItem {
+  display: flex;
+  gap: 30px;
+  background: #ffffff;
+  border-radius: 24px;
+  padding: 20px;
+}
+.stockItem img {
+  width: 44%;
+  object-fit: cover;
+  border-radius: 24px;
+}
+.stockItem > div {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 20px;
+}
+.title {
+  max-width: 400px;
+  font-weight: 500;
+  font-size: 30px;
+  line-height: 100%;
+  color: #000000;
+}
+.description {
+  font-size: 18px;
+  line-height: 100%;
+  color: #333333;
+}
+.stockItem button {
+  padding: 20px 27px;
+  background: #f34723;
+  border: 2px solid #ffffff;
+  box-shadow: 0px 3px 5px rgba(255, 125, 30, 0.12);
+  border-radius: 12px;
+  font-size: 16px;
+  line-height: 100%;
+  text-transform: capitalize;
+  color: #ffffff;
+}
+@media (max-width: 1470px) {
+}
+@media (max-width: 1300px) {
+}
+@media (max-width: 1100px) {
+  .mobile {
+    display: block;
+  }
+  .desk {
+    display: none;
+  }
+}
+@media (max-width: 900px) {
+  .stockItem {
+    flex-direction: column;
+  }
+  .stockItem img {
+    width: 100%;
+  }
+}
+@media (max-width: 600px) {
+  .stock {
+    margin: 0 20px;
+  }
+  .stock div {
+    width: 100%;
+  }
+  .stock h1 {
+    font-size: 22px;
+    line-height: 22px;
+  }
+  .stock p,
+  .moreBtn {
+    font-size: 16px !important;
+    line-height: 100% !important;
+  }
+}
