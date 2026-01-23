@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { Card } from "../../components/Card/Card";
 import { CardAccessories } from "../../components/CardAccessories/CardAccessories";
 import styles from "./ProductDetail.module.css";
@@ -215,6 +215,50 @@ export const ProductDetail: React.FC = () => {
       title: "Женский велосипед Welt Edelweiss 2.0 HD27...",
     },
   ];
+
+  const scrollRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+
+    let isDown = false;
+    let startX = 0;
+    let scrollLeft = 0;
+
+    const onMouseDown = (e: MouseEvent) => {
+      isDown = true;
+      el.classList.add(styles.activeDrag);
+      startX = e.pageX - el.offsetLeft;
+      scrollLeft = el.scrollLeft;
+    };
+
+    const onMouseUpOrLeave = () => {
+      isDown = false;
+      el.classList.remove(styles.activeDrag);
+    };
+
+    const onMouseMove = (e: MouseEvent) => {
+      if (!isDown) return;
+      e.preventDefault();
+      const x = e.pageX - el.offsetLeft;
+      const walk = (x - startX) * 2;
+      el.scrollLeft = scrollLeft - walk;
+    };
+
+    el.addEventListener("mousedown", onMouseDown);
+    el.addEventListener("mouseup", onMouseUpOrLeave);
+    el.addEventListener("mouseleave", onMouseUpOrLeave);
+    el.addEventListener("mousemove", onMouseMove);
+
+    return () => {
+      el.removeEventListener("mousedown", onMouseDown);
+      el.removeEventListener("mouseup", onMouseUpOrLeave);
+      el.removeEventListener("mouseleave", onMouseUpOrLeave);
+      el.removeEventListener("mousemove", onMouseMove);
+    };
+  }, []);
+
   return (
     <>
       <span className={styles.breadcrubs}>
@@ -226,29 +270,34 @@ export const ProductDetail: React.FC = () => {
       <Сharacteristics />
       <section className={styles.cardsLineCont}>
         <div className={styles.cardsHead}>
-          <h2>
+          <h2 className={styles.title50}>
             С этим товаром <span>покупают</span>
           </h2>
           <a href="#">Смотреть все предложения {">"}</a>
         </div>
-        <div className={styles.cardsLine}>
+        <div className={styles.cardsLine} ref={scrollRef}>
           {accessories.map((item, index) => (
             <CardAccessories key={index} {...item} />
           ))}
-          {minicard.map((item, index) => (
-            <MiniCard key={index} {...item} />
-          ))}
+          <div className={styles.miniCard}>
+            {minicard.map((item, index) => (
+              <MiniCard key={index} {...item} />
+            ))}
+          </div>
         </div>
         <a href="#">Смотреть все предложения {">"}</a>
       </section>
       <section className={styles.cardsLineCont}>
         <div className={styles.cardsHead}>
-          <h2>
+          <h2 className={styles.title50}>
             <span>Новинки</span> 2025
           </h2>
           <a href="#">Смотреть все предложения {">"}</a>
         </div>
-        <div className={styles.cardsLine}>
+        <div
+          className={`${styles.cardsLine} ${styles.cardsBox}`}
+          ref={scrollRef}
+        >
           {news.map((item, index) => (
             <Card key={index} {...item} />
           ))}

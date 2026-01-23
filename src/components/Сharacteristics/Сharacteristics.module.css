@@ -79,3 +79,41 @@
   top: 60px;
   width: 100%;
 }
+@media (max-width: 1470px) {
+  .miniCard {
+    display: none;
+  }
+  .informationBlock {
+    width: 100%;
+  }
+}
+@media (max-width: 1300px) {
+}
+@media (max-width: 1100px) {
+  .informationBlock {
+    flex-direction: column;
+  }
+  .characteristicsBlock,
+  .documentsBlock {
+    width: 100%;
+    display: flex;
+  }
+  .documentsBlock {
+    margin-top: 50px;
+    padding-left: 0;
+  }
+}
+@media (max-width: 900px) {
+}
+@media (max-width: 600px) {
+  .informationBlock h2 {
+    font-size: 20px;
+  }
+  .characteristics {
+    margin: 0 20px;
+  }
+  .characteristicsItem .name,
+  .characteristicsItem .value {
+    font-size: 14px;
+  }
+}

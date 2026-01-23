@@ -1,7 +1,7 @@
 h1 {
   font-weight: 700;
   font-size: 32px;
-  line-height: 31px;
+  line-height: 100%;
   color: #1c1e20;
   margin: 20px 0;
 }
@@ -204,12 +204,75 @@ h1 {
   right: 0;
   width: 100%;
 }
+@media (max-width: 1470px) {
+  .cardsHead,
+  .faqList,
+  .betterBlock {
+    width: 100%;
+  }
+  .miniCard {
+    display: none;
+  }
+  .card {
+    width: calc((100% - 80px) / 5);
+  }
+  .cardsBox > div {
+    flex: 0 0 250px;
+    scroll-snap-align: start;
+    user-select: none;
+    cursor: grabbing;
+  }
+}
+@media (max-width: 1300px) {
+  .cardsLine {
+    display: flex;
+    gap: 20px;
+    overflow-x: auto;
+    padding-bottom: 10px;
+    scroll-behavior: smooth;
+  }
+}
+@media (max-width: 1100px) {
+  .betterModal img {
+    max-width: 400px;
+    top: 200px;
+  }
+}
+@media (max-width: 900px) {
+  .cardsHead {
+    align-items: flex-start;
+  }
+  .title50 {
+    max-width: 50% !important;
+    white-space: wrap !important;
+  }
+  .betterBlock {
+    display: flex;
+    flex-direction: column;
+  }
+  .betterModal,
+  .betterModalText {
+    margin-top: 10px;
+    width: 100%;
+  }
+  .betterCards {
+    width: 100%;
+  }
+  .betterModal img {
+    display: none;
+  }
+}
 @media (max-width: 600px) {
+  h1 {
+    font-size: 22px;
+    margin: 0 20px 20px;
+  }
   .cardsLineCont {
     padding: 0 20px;
+    margin: 80px 0 40px 0;
   }
   .cardsLineCont h2 {
-    font-size: 22px;
+    font-size: 20px;
   }
   .cardsHead a {
     display: none;
@@ -225,20 +288,53 @@ h1 {
     scroll-behavior: smooth;
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
+    margin-top: 0;
   }
   .cardsLine::-webkit-scrollbar {
     display: none;
   }
   .cardsHead {
-    margin: 0 20px;
+    margin: 0;
     align-items: baseline;
   }
   .cardsHead h2 {
-    font-size: 22px !important;
+    font-size: 20px !important;
     width: 50%;
     text-wrap: wrap;
   }
   .filter .cardsHead button {
     text-align: end;
+  }
+  .cardsLineCont p,
+  .header > span {
+    font-size: 16px;
+  }
+  .faq {
+    gap: 0;
+  }
+  .cardsHead h2 {
+    width: 100%;
+  }
+  .betterCard {
+    width: 100%;
+    padding: 20px;
+  }
+  .betterCardWB {
+    width: 100%;
+    padding: 20px;
+    align-items: center;
+    border: 2px solid #ffffff;
+    border-radius: 18px;
+  }
+  .betterCardWB p {
+    width: 100%;
+    text-align: center;
+  }
+  .betterBlock {
+    margin: 0 0 80px 0;
+  }
+  .breadcrubs,
+  h1 {
+    margin: 20px;
   }
 }

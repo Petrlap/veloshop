@@ -77,3 +77,50 @@ h2 span {
   top: -90px;
   width: 100%;
 }
+@media (max-width: 1470px) {
+  .miniCard {
+    display: none;
+  }
+  .whiteBlock {
+    width: 100%;
+  }
+}
+@media (max-width: 1100px) {
+  .textBlock img {
+    top: 0;
+  }
+}
+@media (max-width: 900px) {
+  .textBlock img {
+    display: none;
+  }
+  .leftText,
+  .bottomBlock div {
+    width: 100%;
+  }
+  .bottomBlock {
+    flex-direction: column;
+    gap: 30px;
+  }
+}
+@media (max-width: 600px) {
+  .assembly {
+    margin: 0 20px;
+  }
+  h2 {
+    font-size: 20px;
+  }
+  .whiteBlock {
+    padding: 20px;
+  }
+  .leftText {
+    gap: 20px;
+  }
+  .leftText .title,
+  .bottomBlock .title {
+    font-size: 16px;
+  }
+  .bottomBlock p {
+    font-size: 14px;
+  }
+}

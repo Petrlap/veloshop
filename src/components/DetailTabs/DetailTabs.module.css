@@ -31,9 +31,6 @@
   cursor: pointer;
   transition: all 0.2s ease;
 }
-.tab:hover {
-  color: #fff;
-}
 .active {
   background: #333;
   color: #fff;
@@ -52,4 +49,37 @@
   right: 0;
   top: 60px;
   width: 100%;
+}
+@media (max-width: 1470px) {
+  .miniCard {
+    display: none;
+  }
+  .informationBlock {
+    width: 100%;
+  }
+}
+@media (max-width: 1300px) {
+}
+@media (max-width: 1100px) {
+  .tab {
+    font-size: 16px;
+  }
+}
+@media (max-width: 900px) {
+}
+@media (max-width: 600px) {
+  .detailTabs {
+    margin-bottom: 60px;
+  }
+  .content p {
+    font-size: 16px;
+  }
+  .tab {
+    padding: 10px 20px;
+  }
+  .tabs {
+    overflow-x: auto;
+    overflow-y: hidden;
+    white-space: nowrap;
+  }
 }

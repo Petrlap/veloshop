@@ -44,3 +44,32 @@
   top: 60px;
   width: 100%;
 }
+@media (max-width: 1470px) {
+  .miniCard {
+    display: none;
+  }
+  .whiteBlock {
+    width: 100%;
+  }
+}
+@media (max-width: 900px) {
+  .whiteBlock {
+    flex-direction: column;
+  }
+  .bottomBlock {
+    width: 100%;
+  }
+  .imageBlock {
+    width: 100%;
+    padding-left: 0;
+    margin-top: 20px;
+  }
+}
+@media (max-width: 600px) {
+  .tracker {
+    margin: 0 20px;
+  }
+  .bottomBlock {
+    padding: 20px;
+  }
+}

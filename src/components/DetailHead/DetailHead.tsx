@@ -30,10 +30,17 @@ const images = [detail1, detail2, detail3, detail4, detail5, detail6];
 
 export const DetailHead: React.FC = () => {
   const [active, setActive] = useState(0);
-  const [qty, setQty] = useState(1);
   const [height, setHeight] = useState(175);
   const increase = () => setHeight((prev) => prev + 1);
   const decrease = () => setHeight((prev) => prev - 1);
+  const [qty, setQty] = useState(1);
+  const [colorOpen, setColorOpen] = useState(false);
+  const [sizeOpen, setSizeOpen] = useState(false);
+  const [color, setColor] = useState({
+    name: "Бордовый",
+    value: "#7b001c",
+  });
+  const [size, setSize] = useState('16"');
 
   return (
     <section className={styles.wrapper}>
@@ -150,18 +157,104 @@ export const DetailHead: React.FC = () => {
         </div>
 
         <div className={styles.options}>
-          <div>
+          <div className={styles.colorBox}>
             <label>Цвет</label>
-            <select>
-              <option>Бордовый</option>
-            </select>
+
+            <div className={styles.selectWrapper}>
+              <div
+                className={styles.select}
+                onClick={() => {
+                  setColorOpen(!colorOpen);
+                  setSizeOpen(false);
+                }}
+              >
+                <span
+                  className={styles.colorDot}
+                  style={{ background: color.value }}
+                />
+                <span>{color.name}</span>
+                <span
+                  className={`${styles.arrow} ${colorOpen ? styles.open : ""}`}
+                >
+                  <IconWrapper
+                    Icon={IoIosArrowDown}
+                    size={14}
+                    style={{ color: "#606060" }}
+                  />
+                </span>
+              </div>
+
+              {colorOpen && (
+                <div className={styles.dropdown}>
+                  {[
+                    { name: "Бордовый", value: "#7b001c" },
+                    { name: "Чёрный", value: "#000000" },
+                    { name: "Синий", value: "#0033aa" },
+                  ].map((item) => (
+                    <div
+                      key={item.name}
+                      className={styles.option}
+                      onClick={() => {
+                        setColor(item);
+                        setColorOpen(false);
+                      }}
+                    >
+                      <div className={styles.optionContent}>
+                        <span
+                          className={styles.colorDot}
+                          style={{ background: item.value }}
+                        />
+                        <span>{item.name}</span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
+
           <div>
             <label>Размер</label>
-            <select>
-              <option>16"</option>
-            </select>
+
+            <div className={styles.selectWrapper}>
+              <div
+                className={styles.select}
+                onClick={() => {
+                  setSizeOpen(!sizeOpen);
+                  setColorOpen(false);
+                }}
+              >
+                <span>{size}</span>
+                <span
+                  className={`${styles.arrow} ${sizeOpen ? styles.open : ""}`}
+                >
+                  <IconWrapper
+                    Icon={IoIosArrowDown}
+                    size={14}
+                    style={{ color: "#606060" }}
+                  />
+                </span>
+              </div>
+
+              {sizeOpen && (
+                <div className={styles.dropdown}>
+                  {['14"', '16"', '18"'].map((item) => (
+                    <div
+                      key={item}
+                      className={styles.option}
+                      onClick={() => {
+                        setSize(item);
+                        setSizeOpen(false);
+                      }}
+                    >
+                      {item}
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
+
           <div>
             <label>Количество</label>
             <div className={styles.counter}>
