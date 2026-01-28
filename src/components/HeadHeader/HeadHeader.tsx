@@ -2,33 +2,65 @@ import React, { useState, useEffect, useRef } from "react";
 import { NavLink } from "react-router-dom";
 import { IconWrapper } from "../IconWrapper/IconWrapper";
 import { BiUser } from "react-icons/bi";
+import { useMenu } from "../../hooks/useMenu";
 import logo from "../../assets/logo.webp";
 import styles from "./HeadHeader.module.css";
 
+interface MenuItem {
+  to: string;
+  text: string;
+  id: number;
+  target?: string;
+  seoTitle?: string;
+  className?: string | null;
+}
+
 export const HeadHeader: React.FC = () => {
+  const { mainMenu, loading, error } = useMenu();
   const [isPopupOpen, setIsPopupOpen] = useState(false);
-  const [hiddenItems, setHiddenItems] = useState<
-    Array<{ to: string; text: string }>
-  >([]);
-  const [visibleItems, setVisibleItems] = useState<
-    Array<{ to: string; text: string }>
-  >([]);
+  const [hiddenItems, setHiddenItems] = useState<MenuItem[]>([]);
+  const [visibleItems, setVisibleItems] = useState<MenuItem[]>([]);
   const [popupPosition, setPopupPosition] = useState({ top: 0, left: 0 });
   const navRef = useRef<HTMLElement>(null);
   const moreButtonRef = useRef<HTMLButtonElement>(null);
   const popupRef = useRef<HTMLDivElement>(null);
   const itemRefs = useRef<(HTMLAnchorElement | null)[]>([]);
 
-  const allMenuItems = [
-    { to: "/stock", text: "Акции" },
-    { to: "/sale", text: "Распродажа" },
-    { to: "/forbuyers", text: "Покупателям" },
-    { to: "/payment", text: "Оплата" },
-    { to: "/delivery", text: "Доставка" },
-    { to: "/stores", text: "Магазины" },
-    { to: "/workshop", text: "Мастерская" },
-    { to: "/news", text: "Новости" },
-  ];
+  // Преобразуем данные из API в нужный формат
+  const transformMenuData = () => {
+    if (!mainMenu || mainMenu.length === 0) return [];
+
+    return mainMenu
+      .filter((item) => item.is_active)
+      .sort((a, b) => a.order - b.order)
+      .map((item) => ({
+        to: item.url,
+        text: item.title,
+        id: item.id,
+        target: item.target,
+        seoTitle: item.seo_title,
+        className: item.class,
+      }));
+  };
+
+  // Получаем все пункты меню (из API или fallback)
+  const allMenuItems = React.useMemo(() => {
+    if (!loading && !error && mainMenu.length > 0) {
+      return transformMenuData();
+    }
+
+    // Fallback меню если API недоступно или грузится
+    return [
+      { to: "/stock", text: "Акции", id: 1 },
+      { to: "/sale", text: "Распродажа", id: 2 },
+      { to: "/forbuyers", text: "Покупателям", id: 3 },
+      { to: "/payment", text: "Оплата", id: 4 },
+      { to: "/delivery", text: "Доставка", id: 5 },
+      { to: "/stores", text: "Магазины", id: 6 },
+      { to: "/workshop", text: "Мастерская", id: 7 },
+      { to: "/news", text: "Новости", id: 8 },
+    ];
+  }, [mainMenu, loading, error]);
 
   // Закрытие попапа при клике вне его
   useEffect(() => {
@@ -76,7 +108,7 @@ export const HeadHeader: React.FC = () => {
 
   // Функция для расчета видимых и скрытых пунктов
   const calculateItems = () => {
-    if (!navRef.current) return;
+    if (!navRef.current || allMenuItems.length === 0) return;
 
     const nav = navRef.current;
     const navWidth = nav.offsetWidth;
@@ -103,8 +135,8 @@ export const HeadHeader: React.FC = () => {
 
     // Определяем, сколько пунктов помещается
     let totalWidth = 0;
-    const newVisibleItems = [];
-    const newHiddenItems = [];
+    const newVisibleItems: MenuItem[] = [];
+    const newHiddenItems: MenuItem[] = [];
 
     for (let i = 0; i < allMenuItems.length; i++) {
       const itemWidth = itemWidths[i] || 80;
@@ -142,7 +174,7 @@ export const HeadHeader: React.FC = () => {
       clearTimeout(timer);
       window.removeEventListener("resize", handleResize);
     };
-  }, []);
+  }, [allMenuItems]); // Зависимость от allMenuItems
 
   // Обновляем ссылки на элементы меню
   const updateItemRef = (index: number, element: HTMLAnchorElement | null) => {
@@ -158,6 +190,15 @@ export const HeadHeader: React.FC = () => {
   const handlePopupItemClick = () => {
     setIsPopupOpen(false);
   };
+
+  // Показываем loading пока меню грузится
+  if (loading) {
+    return (
+      <header className={styles.header}>
+        <div className={styles.loadingContainer}>Загрузка меню...</div>
+      </header>
+    );
+  }
 
   return (
     <div className={styles.headHeader}>

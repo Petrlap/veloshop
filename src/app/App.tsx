@@ -23,10 +23,11 @@ import { FAQ } from "../pages/FAQ/FAQ";
 import { Guarantee } from "../pages/Guarantee/Guarantee";
 import { Deferred } from "../pages/Deferred/Deferred";
 import { ExtendedWarranty } from "../pages/ExtendedWarranty/ExtendedWarranty";
-
+import { Provider } from "react-redux";
+import { store } from "../store";
 const App: React.FC = () => {
   return (
-    <>
+    <Provider store={store}>
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route index element={<HomePage />} />
@@ -40,21 +41,21 @@ const App: React.FC = () => {
           <Route path="agreement/" element={<Agreement />} />
           <Route path="privacypolicy/" element={<PrivacyPolicy />} />
           <Route path="deferred/" element={<Deferred />} />
-          <Route path="sale/" element={<Sale />} />
-          <Route path="stock/" element={<Stock />} />
-          <Route path="forbuyers/" element={<ForBuyers />} />
-          <Route path="payment/" element={<Payment />} />
-          <Route path="delivery/" element={<Delivery />} />
-          <Route path="stores/" element={<Stores />} />
-          <Route path="workshop/" element={<Workshop />} />
-          <Route path="news/" element={<News />} />
+          <Route path="stock/" element={<Sale />} />
+          <Route path="sale/" element={<Stock />} />
+          <Route path="info/" element={<ForBuyers />} />
+          <Route path="info/payment/" element={<Payment />} />
+          <Route path="info/delivery/" element={<Delivery />} />
+          <Route path="contacts/stores/" element={<Stores />} />
+          <Route path="services/" element={<Workshop />} />
+          <Route path="company/news/" element={<News />} />
           <Route path="catalog/" element={<Catalog />} />
           <Route path="fullcatalog/" element={<FullCatalog />} />
           <Route path="product/" element={<ProductDetail />} />
           <Route path="*" element={<NotFound />} />
         </Route>
       </Routes>
-    </>
+    </Provider>
   );
 };
 

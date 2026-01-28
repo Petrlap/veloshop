@@ -18,7 +18,7 @@ export const Header: React.FC = () => {
       <HeadHeaderMobile />
       <div className={`${styles.headerCont} container`}>
         <div className={styles.contactsBlock}>
-          <Link to="/catalog" className={styles.catalog}>
+          <Link to="/fullcatalog" className={styles.catalog}>
             <IconWrapper
               Icon={TbGridDots}
               size={20}

@@ -1,10 +1,13 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchCatalog } from "../../store/catalogSlice";
+import { RootState } from "../../store";
 import { Card } from "../../components/Card/Card";
 import img from "../../assets/bg.webp";
 import styles from "./FullCatalog.module.css";
 
 // Моковые данные товаров (20 товаров)
-const products = [
+/*const products = [
   {
     image: img,
     hit: true,
@@ -225,9 +228,16 @@ const products = [
     oldprice: "",
     pricePerMonth: "от 1 945 руб. в месяц",
   },
-];
+];*/
 
 export const FullCatalog = () => {
+  const dispatch = useDispatch();
+  const {
+    products: apiProducts,
+    loading,
+    error,
+  } = useSelector((state: RootState) => state.catalog);
+
   const [openFilter, setOpenFilter] = useState("price");
   const [inStockOnly, setInStockOnly] = useState(false);
   const [withDiscount, setWithDiscount] = useState(false);
@@ -237,9 +247,12 @@ export const FullCatalog = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 16;
 
-  // Фильтрация и сортировка товаров
+  useEffect(() => {
+    dispatch(fetchCatalog() as any);
+  }, [dispatch]);
+
   const filteredAndSortedProducts = useMemo(() => {
-    let filtered = [...products];
+    let filtered = [...apiProducts]; // Используем данные из API вместо моковых
 
     // Применяем фильтры
     if (inStockOnly) {
@@ -271,12 +284,16 @@ export const FullCatalog = () => {
         filtered.sort((a, b) => (b.hit ? 1 : 0) - (a.hit ? 1 : 0));
         break;
       case "new":
-        // Для примера - сортируем по убыванию цены как новинки
-        filtered.sort(
-          (a, b) =>
-            parseInt(b.price.replace(/\s/g, "")) -
-            parseInt(a.price.replace(/\s/g, ""))
-        );
+        // Сортируем по дате создания (если есть поле created_at)
+        filtered.sort((a: any, b: any) => {
+          if (a.created_at && b.created_at) {
+            return (
+              new Date(b.created_at).getTime() -
+              new Date(a.created_at).getTime()
+            );
+          }
+          return 0;
+        });
         break;
       case "discount":
         // Сортируем по размеру скидки
@@ -297,7 +314,7 @@ export const FullCatalog = () => {
     }
 
     return filtered;
-  }, [inStockOnly, withDiscount, sortBy]);
+  }, [apiProducts, inStockOnly, withDiscount, sortBy]);
 
   // Пагинация
   const totalPages = Math.ceil(filteredAndSortedProducts.length / itemsPerPage);
@@ -412,201 +429,229 @@ export const FullCatalog = () => {
 
   return (
     <div className={styles.catalog}>
-      {/* Мобильная кнопка фильтров */}
-      <button
-        className={styles.mobileFilterToggle}
-        onClick={() => setShowMobileFilters(!showMobileFilters)}
-      >
-        Фильтры
-      </button>
+      {loading && (
+        <div className={styles.loading}>
+          <div className={styles.spinner}></div>
+          <p>Загрузка каталога...</p>
+        </div>
+      )}
 
-      <div className={styles.container}>
-        {/* Боковая панель с фильтрами */}
-        <aside
-          className={`${styles.filters} ${
-            showMobileFilters ? styles.filtersOpen : ""
-          }`}
-        >
-          <div className={styles.filtersHeader}>
-            <h3>Фильтры</h3>
-            <button
-              className={styles.closeFilters}
-              onClick={() => setShowMobileFilters(false)}
+      {error && (
+        <div className={styles.error}>
+          <h2>Ошибка при загрузке каталога</h2>
+          <p>{error}</p>
+          <button onClick={() => dispatch(fetchCatalog() as any)}>
+            Попробовать снова
+          </button>
+        </div>
+      )}
+
+      {!loading && !error && (
+        <>
+          {/* Мобильная кнопка фильтров */}
+          <button
+            className={styles.mobileFilterToggle}
+            onClick={() => setShowMobileFilters(!showMobileFilters)}
+          >
+            Фильтры
+          </button>
+
+          <div className={styles.container}>
+            {/* Боковая панель с фильтрами */}
+            <aside
+              className={`${styles.filters} ${
+                showMobileFilters ? styles.filtersOpen : ""
+              }`}
             >
-              ×
-            </button>
-          </div>
-
-          {/* Фильтр стоимости */}
-          <div className={styles.filterGroup}>
-            <button
-              className={styles.filterTitle}
-              onClick={() => toggleFilter("price")}
-            >
-              Стоимость
-              <span
-                className={
-                  openFilter === "price" ? styles.arrowUp : styles.arrowDown
-                }
-              >
-                ▼
-              </span>
-            </button>
-            {openFilter === "price" && (
-              <div className={styles.filterContent}>
-                <div className={styles.priceRange}>
-                  <div className={styles.priceInputs}>
-                    <span>от:</span>
-                    <input
-                      type="text"
-                      defaultValue="1 990"
-                      className={styles.priceInput}
-                    />
-                    <span>до:</span>
-                    <input
-                      type="text"
-                      defaultValue="1 755 000"
-                      className={styles.priceInput}
-                    />
-                    <span>p</span>
-                  </div>
-                  <div className={styles.priceQuick}>
-                    <button className={styles.priceBtn}>До 20 000 ₽</button>
-                    <button className={styles.priceBtn}>До 30 000 ₽</button>
-                    <button className={styles.priceBtn}>До 35 000 ₽</button>
-                    <button className={styles.priceBtn}>До 40 000 ₽</button>
-                    <button className={styles.priceBtn}>До 50 000 ₽</button>
-                    <button className={styles.priceBtn}>До 100 000 ₽</button>
-                  </div>
-                </div>
-              </div>
-            )}
-          </div>
-
-          {/* Остальные фильтры (свернутые по умолчанию) */}
-          {[
-            "brand",
-            "type",
-            "wheelDiameter",
-            "rimType",
-            "year",
-            "equipment",
-            "height",
-            "gender",
-            "color",
-            "city",
-            "fork",
-            "brakes",
-            "material",
-            "weight",
-          ].map((filter) => (
-            <div key={filter} className={styles.filterGroup}>
-              <button
-                className={styles.filterTitle}
-                onClick={() => toggleFilter(filter)}
-              >
-                {getFilterLabel(filter)}
-                <span
-                  className={
-                    openFilter === filter ? styles.arrowUp : styles.arrowDown
-                  }
+              <div className={styles.filtersHeader}>
+                <h3>Фильтры</h3>
+                <button
+                  className={styles.closeFilters}
+                  onClick={() => setShowMobileFilters(false)}
                 >
-                  ▼
-                </span>
-              </button>
-              {openFilter === filter && (
-                <div className={styles.filterContent}>
-                  <div className={styles.filterOptions}>
-                    {Array(5)
-                      .fill(null)
-                      .map((_, i) => (
-                        <label key={i} className={styles.checkboxLabel}>
-                          <input type="checkbox" />
-                          <span>Опция {i + 1}</span>
-                        </label>
-                      ))}
+                  ×
+                </button>
+              </div>
+
+              {/* Фильтр стоимости */}
+              <div className={styles.filterGroup}>
+                <button
+                  className={styles.filterTitle}
+                  onClick={() => toggleFilter("price")}
+                >
+                  Стоимость
+                  <span
+                    className={
+                      openFilter === "price" ? styles.arrowUp : styles.arrowDown
+                    }
+                  >
+                    ▼
+                  </span>
+                </button>
+                {openFilter === "price" && (
+                  <div className={styles.filterContent}>
+                    <div className={styles.priceRange}>
+                      <div className={styles.priceInputs}>
+                        <span>от:</span>
+                        <input
+                          type="text"
+                          defaultValue="1 990"
+                          className={styles.priceInput}
+                        />
+                        <span>до:</span>
+                        <input
+                          type="text"
+                          defaultValue="1 755 000"
+                          className={styles.priceInput}
+                        />
+                        <span>p</span>
+                      </div>
+                      <div className={styles.priceQuick}>
+                        <button className={styles.priceBtn}>До 20 000 ₽</button>
+                        <button className={styles.priceBtn}>До 30 000 ₽</button>
+                        <button className={styles.priceBtn}>До 35 000 ₽</button>
+                        <button className={styles.priceBtn}>До 40 000 ₽</button>
+                        <button className={styles.priceBtn}>До 50 000 ₽</button>
+                        <button className={styles.priceBtn}>
+                          До 100 000 ₽
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* Остальные фильтры (свернутые по умолчанию) */}
+              {[
+                "brand",
+                "type",
+                "wheelDiameter",
+                "rimType",
+                "year",
+                "equipment",
+                "height",
+                "gender",
+                "color",
+                "city",
+                "fork",
+                "brakes",
+                "material",
+                "weight",
+              ].map((filter) => (
+                <div key={filter} className={styles.filterGroup}>
+                  <button
+                    className={styles.filterTitle}
+                    onClick={() => toggleFilter(filter)}
+                  >
+                    {getFilterLabel(filter)}
+                    <span
+                      className={
+                        openFilter === filter
+                          ? styles.arrowUp
+                          : styles.arrowDown
+                      }
+                    >
+                      ▼
+                    </span>
+                  </button>
+                  {openFilter === filter && (
+                    <div className={styles.filterContent}>
+                      <div className={styles.filterOptions}>
+                        {Array(5)
+                          .fill(null)
+                          .map((_, i) => (
+                            <label key={i} className={styles.checkboxLabel}>
+                              <input type="checkbox" />
+                              <span>Опция {i + 1}</span>
+                            </label>
+                          ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              ))}
+            </aside>
+
+            {/* Основной контент */}
+            <main className={styles.content}>
+              {/* Заголовок и управление */}
+              <div className={styles.header}>
+                <div className={styles.resultsInfo}>
+                  <h1>В наличии: {filteredAndSortedProducts.length} товаров</h1>
+                  <div className={styles.checkboxes}>
+                    <label className={styles.checkboxLabel}>
+                      <input
+                        type="checkbox"
+                        checked={inStockOnly}
+                        onChange={(e) => {
+                          setInStockOnly(e.target.checked);
+                          setCurrentPage(1); // Сбрасываем на первую страницу при изменении фильтра
+                        }}
+                      />
+                      <span>Только в наличии</span>
+                    </label>
+                    <label className={styles.checkboxLabel}>
+                      <input
+                        type="checkbox"
+                        checked={withDiscount}
+                        onChange={(e) => {
+                          setWithDiscount(e.target.checked);
+                          setCurrentPage(1);
+                        }}
+                      />
+                      <span>Со скидкой</span>
+                    </label>
+                    <label className={styles.checkboxLabel}>
+                      <input
+                        type="checkbox"
+                        checked={withVideo}
+                        onChange={(e) => {
+                          setWithVideo(e.target.checked);
+                          setCurrentPage(1);
+                        }}
+                      />
+                      <span>Видеообзор</span>
+                    </label>
                   </div>
                 </div>
-              )}
-            </div>
-          ))}
-        </aside>
 
-        {/* Основной контент */}
-        <main className={styles.content}>
-          {/* Заголовок и управление */}
-          <div className={styles.header}>
-            <div className={styles.resultsInfo}>
-              <h1>В наличии: {filteredAndSortedProducts.length} товаров</h1>
-              <div className={styles.checkboxes}>
-                <label className={styles.checkboxLabel}>
-                  <input
-                    type="checkbox"
-                    checked={inStockOnly}
+                <div className={styles.sort}>
+                  <label>Сортировать по:</label>
+                  <select
+                    value={sortBy}
                     onChange={(e) => {
-                      setInStockOnly(e.target.checked);
-                      setCurrentPage(1); // Сбрасываем на первую страницу при изменении фильтра
-                    }}
-                  />
-                  <span>Только в наличии</span>
-                </label>
-                <label className={styles.checkboxLabel}>
-                  <input
-                    type="checkbox"
-                    checked={withDiscount}
-                    onChange={(e) => {
-                      setWithDiscount(e.target.checked);
+                      setSortBy(e.target.value);
                       setCurrentPage(1);
                     }}
-                  />
-                  <span>Со скидкой</span>
-                </label>
-                <label className={styles.checkboxLabel}>
-                  <input
-                    type="checkbox"
-                    checked={withVideo}
-                    onChange={(e) => {
-                      setWithVideo(e.target.checked);
-                      setCurrentPage(1);
-                    }}
-                  />
-                  <span>Видеообзор</span>
-                </label>
+                    className={styles.sortSelect}
+                  >
+                    <option value="cheap">Дешевле</option>
+                    <option value="expensive">Дороже</option>
+                    <option value="popular">Популярные</option>
+                    <option value="new">Новинки</option>
+                    <option value="discount">По скидке</option>
+                  </select>
+                </div>
               </div>
-            </div>
 
-            <div className={styles.sort}>
-              <label>Сортировать по:</label>
-              <select
-                value={sortBy}
-                onChange={(e) => {
-                  setSortBy(e.target.value);
-                  setCurrentPage(1);
-                }}
-                className={styles.sortSelect}
-              >
-                <option value="cheap">Дешевле</option>
-                <option value="expensive">Дороже</option>
-                <option value="popular">Популярные</option>
-                <option value="new">Новинки</option>
-                <option value="discount">По скидке</option>
-              </select>
-            </div>
+              {/* Сетка товаров */}
+              <div className={styles.productsGrid}>
+                {currentProducts.map((product, index) => (
+                  <Card
+                    key={`${product.offer_id || product.product_id || index}`}
+                    {...product}
+                  />
+                ))}
+              </div>
+
+              {/* Пагинация */}
+              {totalPages > 1 && (
+                <div className={styles.pagination}>{renderPagination()}</div>
+              )}
+            </main>
           </div>
-
-          {/* Сетка товаров */}
-          <div className={styles.productsGrid}>
-            {currentProducts.map((product, index) => (
-              <Card key={index} {...product} />
-            ))}
-          </div>
-
-          {/* Пагинация */}
-          {totalPages > 1 && (
-            <div className={styles.pagination}>{renderPagination()}</div>
-          )}
-        </main>
-      </div>
+        </>
+      )}
     </div>
   );
 };
