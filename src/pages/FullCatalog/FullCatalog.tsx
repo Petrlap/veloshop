@@ -248,8 +248,8 @@ export const FullCatalog = () => {
   const itemsPerPage = 16;
 
   useEffect(() => {
-    dispatch(fetchCatalog() as any);
-  }, [dispatch]);
+    dispatch(fetchCatalog({ page: currentPage, perPage: itemsPerPage }) as any);
+  }, [dispatch, currentPage]);
 
   const filteredAndSortedProducts = useMemo(() => {
     let filtered = [...apiProducts]; // Используем данные из API вместо моковых
@@ -318,10 +318,7 @@ export const FullCatalog = () => {
 
   // Пагинация
   const totalPages = Math.ceil(filteredAndSortedProducts.length / itemsPerPage);
-  const currentProducts = filteredAndSortedProducts.slice(
-    (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage
-  );
+  const currentProducts = filteredAndSortedProducts.slice(0, itemsPerPage);
 
   const toggleFilter = (filterName: string) => {
     setOpenFilter(openFilter === filterName ? "" : filterName);
@@ -440,7 +437,16 @@ export const FullCatalog = () => {
         <div className={styles.error}>
           <h2>Ошибка при загрузке каталога</h2>
           <p>{error}</p>
-          <button onClick={() => dispatch(fetchCatalog() as any)}>
+          <button
+            onClick={() =>
+              dispatch(
+                fetchCatalog({
+                  page: currentPage,
+                  perPage: itemsPerPage,
+                }) as any
+              )
+            }
+          >
             Попробовать снова
           </button>
         </div>

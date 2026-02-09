@@ -3,13 +3,12 @@ import { MenuState, MenuApiResponse } from "../types/menu";
 
 const initialState: MenuState = {
   menus: [],
-  topMenu: [], // Топ меню
-  mainMenu: [], // Основное меню
+  topMenu: [],
+  mainMenu: [],
   loading: false,
   error: null,
 };
 
-// Async thunk для загрузки меню
 export const fetchMenu = createAsyncThunk(
   "menu/fetchMenu",
   async (_, { rejectWithValue }) => {
@@ -53,18 +52,14 @@ const menuSlice = createSlice({
         state.loading = false;
         state.menus = action.payload;
 
-        // Разделяем меню по типам
-        const topMenu = action.payload.find(
-          (menu) => menu.menu_type.name === "header_top"
+        const headerMenu = action.payload.find(
+          (menu) => menu.menu_type?.name === "top_header"
         );
 
-        const mainMenu = action.payload.find(
-          (menu) =>
-            menu.menu_type.name === "header" || menu.name === "Основное меню"
-        );
+        const items = headerMenu?.items ?? [];
 
-        state.topMenu = topMenu?.items || [];
-        state.mainMenu = mainMenu?.items || [];
+        state.topMenu = items;
+        state.mainMenu = items;
       })
       .addCase(fetchMenu.rejected, (state, action) => {
         state.loading = false;

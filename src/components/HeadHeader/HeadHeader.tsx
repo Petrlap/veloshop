@@ -32,7 +32,7 @@ export const HeadHeader: React.FC = () => {
 
     return mainMenu
       .filter((item) => item.is_active)
-      .sort((a, b) => a.order - b.order)
+      .sort((a, b) => (a.order ?? 0) - (b.order ?? 0))
       .map((item) => ({
         to: item.url,
         text: item.title,
