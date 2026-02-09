@@ -3,232 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchCatalog } from "../../store/catalogSlice";
 import { RootState } from "../../store";
 import { Card } from "../../components/Card/Card";
-import img from "../../assets/bg.webp";
 import styles from "./FullCatalog.module.css";
-
-// Моковые данные товаров (20 товаров)
-/*const products = [
-  {
-    image: img,
-    hit: true,
-    sale: false,
-    section: "Велосипеды",
-    status: "В наличии",
-    title: "Stark Krafter 29.8 HD (2025) велосипед",
-    price: "41 050",
-    oldprice: "",
-    pricePerMonth: "от 2 675 руб. в месяц",
-  },
-  {
-    image: img,
-    hit: true,
-    sale: false,
-    section: "Велосипеды",
-    status: "В наличии",
-    title: "Stark Mountain 27.5 Pro (2024) велосипед",
-    price: "35 800",
-    oldprice: "",
-    pricePerMonth: "от 2 330 руб. в месяц",
-  },
-  {
-    image: img,
-    hit: false,
-    sale: false,
-    section: "Велосипеды",
-    status: "В наличии",
-    title: "Forward Prime 29.1 (2024) велосипед",
-    price: "28 900",
-    oldprice: "",
-    pricePerMonth: "от 1 880 руб. в месяц",
-  },
-  {
-    image: img,
-    hit: false,
-    sale: false,
-    section: "Велосипеды",
-    status: "В наличии",
-    title: "Stels Navigator 500 MD 26 (2024)",
-    price: "23 450",
-    oldprice: "",
-    pricePerMonth: "от 1 525 руб. в месяц",
-  },
-  {
-    image: img,
-    hit: false,
-    sale: true,
-    section: "Велосипеды",
-    status: "В наличии",
-    title: "Cube Analog 29 (2023) велосипед",
-    price: "41 050",
-    oldprice: "52 100",
-    pricePerMonth: "от 2 675 руб. в месяц",
-  },
-  {
-    image: img,
-    hit: false,
-    sale: true,
-    section: "Велосипеды",
-    status: "В наличии",
-    title: "Ghost Kato 2.9 (2024) велосипед",
-    price: "38 750",
-    oldprice: "45 900",
-    pricePerMonth: "от 2 520 руб. в месяц",
-  },
-  {
-    image: img,
-    hit: true,
-    sale: false,
-    section: "Велосипеды",
-    status: "В наличии",
-    title: "Trek Marlin 5 (2024) велосипед",
-    price: "47 300",
-    oldprice: "",
-    pricePerMonth: "от 3 080 руб. в месяц",
-  },
-  {
-    image: img,
-    hit: false,
-    sale: false,
-    section: "Велосипеды",
-    status: "В наличии",
-    title: "Scott Aspect 960 (2024) велосипед",
-    price: "39 200",
-    oldprice: "",
-    pricePerMonth: "от 2 550 руб. в месяц",
-  },
-  {
-    image: img,
-    hit: false,
-    sale: true,
-    section: "Велосипеды",
-    status: "В наличии",
-    title: "Giant Talon 3 (2023) велосипед",
-    price: "34 500",
-    oldprice: "41 200",
-    pricePerMonth: "от 2 245 руб. в месяц",
-  },
-  {
-    image: img,
-    hit: true,
-    sale: false,
-    section: "Велосипеды",
-    status: "В наличии",
-    title: "Merida Big Nine 300 (2024) велосипед",
-    price: "52 100",
-    oldprice: "",
-    pricePerMonth: "от 3 390 руб. в месяц",
-  },
-  {
-    image: img,
-    hit: false,
-    sale: false,
-    section: "Велосипеды",
-    status: "В наличии",
-    title: "Cannondale Trail 6 (2024) велосипед",
-    price: "45 800",
-    oldprice: "",
-    pricePerMonth: "от 2 980 руб. в месяц",
-  },
-  {
-    image: img,
-    hit: false,
-    sale: true,
-    section: "Велосипеды",
-    status: "В наличии",
-    title: "Specialized Rockhopper 29 (2023)",
-    price: "43 200",
-    oldprice: "48 500",
-    pricePerMonth: "от 2 810 руб. в месяц",
-  },
-  {
-    image: img,
-    hit: true,
-    sale: false,
-    section: "Велосипеды",
-    status: "В наличии",
-    title: "Norco Storm 1 (2024) велосипед",
-    price: "38 900",
-    oldprice: "",
-    pricePerMonth: "от 2 530 руб. в месяц",
-  },
-  {
-    image: img,
-    hit: false,
-    sale: false,
-    section: "Велосипеды",
-    status: "В наличии",
-    title: "GT Aggressor Pro (2024) велосипед",
-    price: "32 700",
-    oldprice: "",
-    pricePerMonth: "от 2 130 руб. в месяц",
-  },
-  {
-    image: img,
-    hit: false,
-    sale: true,
-    section: "Велосипеды",
-    status: "В наличии",
-    title: "Diamondback Overdrive 29 (2023)",
-    price: "36 800",
-    oldprice: "42 100",
-    pricePerMonth: "от 2 395 руб. в месяц",
-  },
-  {
-    image: img,
-    hit: true,
-    sale: false,
-    section: "Велосипеды",
-    status: "В наличии",
-    title: "Raleigh Tokul 2 (2024) велосипед",
-    price: "49 500",
-    oldprice: "",
-    pricePerMonth: "от 3 220 руб. в месяц",
-  },
-  {
-    image: img,
-    hit: false,
-    sale: false,
-    section: "Велосипеды",
-    status: "В наличии",
-    title: "Marin San Quentin 1 (2024) велосипед",
-    price: "41 300",
-    oldprice: "",
-    pricePerMonth: "от 2 690 руб. в месяц",
-  },
-  {
-    image: img,
-    hit: false,
-    sale: true,
-    section: "Велосипеды",
-    status: "В наличии",
-    title: "Kona Fire Mountain (2023) велосипед",
-    price: "37 600",
-    oldprice: "44 800",
-    pricePerMonth: "от 2 450 руб. в месяц",
-  },
-  {
-    image: img,
-    hit: true,
-    sale: false,
-    section: "Велосипеды",
-    status: "В наличии",
-    title: "Santa Cruz Chameleon (2024) велосипед",
-    price: "67 800",
-    oldprice: "",
-    pricePerMonth: "от 4 410 руб. в месяц",
-  },
-  {
-    image: img,
-    hit: false,
-    sale: false,
-    section: "Велосипеды",
-    status: "В наличии",
-    title: "Polygon Premier 4 (2024) велосипед",
-    price: "29 900",
-    oldprice: "",
-    pricePerMonth: "от 1 945 руб. в месяц",
-  },
-];*/
 
 export const FullCatalog = () => {
   const dispatch = useDispatch();
@@ -236,6 +11,9 @@ export const FullCatalog = () => {
     products: apiProducts,
     loading,
     error,
+    totalProducts,
+    totalPages: totalPagesFromStore,
+    currentPage: currentPageFromStore,
   } = useSelector((state: RootState) => state.catalog);
 
   const [openFilter, setOpenFilter] = useState("price");
@@ -245,25 +23,21 @@ export const FullCatalog = () => {
   const [sortBy, setSortBy] = useState("cheap");
   const [showMobileFilters, setShowMobileFilters] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 16;
 
   useEffect(() => {
-    dispatch(fetchCatalog({ page: currentPage, perPage: itemsPerPage }) as any);
+    dispatch(fetchCatalog({ page: currentPage, perPage: 100 }) as any);
   }, [dispatch, currentPage]);
 
   const filteredAndSortedProducts = useMemo(() => {
-    let filtered = [...apiProducts]; // Используем данные из API вместо моковых
+    let filtered = [...apiProducts];
 
-    // Применяем фильтры
     if (inStockOnly) {
       filtered = filtered.filter((product) => product.status === "В наличии");
     }
     if (withDiscount) {
       filtered = filtered.filter((product) => product.sale);
     }
-    // Фильтр withVideo пока не применяем, так как в данных нет этого поля
 
-    // Применяем сортировку
     switch (sortBy) {
       case "cheap":
         filtered.sort(
@@ -280,11 +54,9 @@ export const FullCatalog = () => {
         );
         break;
       case "popular":
-        // Сортируем по хитам
         filtered.sort((a, b) => (b.hit ? 1 : 0) - (a.hit ? 1 : 0));
         break;
       case "new":
-        // Сортируем по дате создания (если есть поле created_at)
         filtered.sort((a: any, b: any) => {
           if (a.created_at && b.created_at) {
             return (
@@ -296,7 +68,6 @@ export const FullCatalog = () => {
         });
         break;
       case "discount":
-        // Сортируем по размеру скидки
         filtered.sort((a, b) => {
           const discountA = a.oldprice
             ? parseInt(a.oldprice.replace(/\s/g, "")) -
@@ -316,10 +87,6 @@ export const FullCatalog = () => {
     return filtered;
   }, [apiProducts, inStockOnly, withDiscount, sortBy]);
 
-  // Пагинация
-  const totalPages = Math.ceil(filteredAndSortedProducts.length / itemsPerPage);
-  const currentProducts = filteredAndSortedProducts.slice(0, itemsPerPage);
-
   const toggleFilter = (filterName: string) => {
     setOpenFilter(openFilter === filterName ? "" : filterName);
   };
@@ -334,13 +101,15 @@ export const FullCatalog = () => {
     const maxVisiblePages = 5;
 
     let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
-    let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
+    let endPage = Math.min(
+      totalPagesFromStore,
+      startPage + maxVisiblePages - 1
+    );
 
     if (endPage - startPage + 1 < maxVisiblePages) {
       startPage = Math.max(1, endPage - maxVisiblePages + 1);
     }
 
-    // Кнопка "Назад"
     if (currentPage > 1) {
       pages.push(
         <button
@@ -353,7 +122,6 @@ export const FullCatalog = () => {
       );
     }
 
-    // Первая страница
     if (startPage > 1) {
       pages.push(
         <button
@@ -373,7 +141,6 @@ export const FullCatalog = () => {
       }
     }
 
-    // Основные страницы
     for (let i = startPage; i <= endPage; i++) {
       pages.push(
         <button
@@ -388,9 +155,8 @@ export const FullCatalog = () => {
       );
     }
 
-    // Последняя страница
-    if (endPage < totalPages) {
-      if (endPage < totalPages - 1) {
+    if (endPage < totalPagesFromStore) {
+      if (endPage < totalPagesFromStore - 1) {
         pages.push(
           <span key="ellipsis2" className={styles.ellipsis}>
             ...
@@ -399,17 +165,16 @@ export const FullCatalog = () => {
       }
       pages.push(
         <button
-          key={totalPages}
-          onClick={() => handlePageChange(totalPages)}
+          key={totalPagesFromStore}
+          onClick={() => handlePageChange(totalPagesFromStore)}
           className={styles.pageButton}
         >
-          {totalPages}
+          {totalPagesFromStore}
         </button>
       );
     }
 
-    // Кнопка "Вперед"
-    if (currentPage < totalPages) {
+    if (currentPage < totalPagesFromStore) {
       pages.push(
         <button
           key="next"
@@ -429,7 +194,7 @@ export const FullCatalog = () => {
       {loading && (
         <div className={styles.loading}>
           <div className={styles.spinner}></div>
-          <p>Загрузка каталога...</p>
+          <p>Загрузка страницы...</p>
         </div>
       )}
 
@@ -442,7 +207,7 @@ export const FullCatalog = () => {
               dispatch(
                 fetchCatalog({
                   page: currentPage,
-                  perPage: itemsPerPage,
+                  perPage: 100,
                 }) as any
               )
             }
@@ -454,7 +219,6 @@ export const FullCatalog = () => {
 
       {!loading && !error && (
         <>
-          {/* Мобильная кнопка фильтров */}
           <button
             className={styles.mobileFilterToggle}
             onClick={() => setShowMobileFilters(!showMobileFilters)}
@@ -463,7 +227,6 @@ export const FullCatalog = () => {
           </button>
 
           <div className={styles.container}>
-            {/* Боковая панель с фильтрами */}
             <aside
               className={`${styles.filters} ${
                 showMobileFilters ? styles.filtersOpen : ""
@@ -479,7 +242,6 @@ export const FullCatalog = () => {
                 </button>
               </div>
 
-              {/* Фильтр стоимости */}
               <div className={styles.filterGroup}>
                 <button
                   className={styles.filterTitle}
@@ -527,7 +289,6 @@ export const FullCatalog = () => {
                 )}
               </div>
 
-              {/* Остальные фильтры (свернутые по умолчанию) */}
               {[
                 "brand",
                 "type",
@@ -578,12 +339,10 @@ export const FullCatalog = () => {
               ))}
             </aside>
 
-            {/* Основной контент */}
             <main className={styles.content}>
-              {/* Заголовок и управление */}
               <div className={styles.header}>
                 <div className={styles.resultsInfo}>
-                  <h1>В наличии: {filteredAndSortedProducts.length} товаров</h1>
+                  <h1>Найдено товаров: {filteredAndSortedProducts.length}</h1>
                   <div className={styles.checkboxes}>
                     <label className={styles.checkboxLabel}>
                       <input
@@ -591,7 +350,7 @@ export const FullCatalog = () => {
                         checked={inStockOnly}
                         onChange={(e) => {
                           setInStockOnly(e.target.checked);
-                          setCurrentPage(1); // Сбрасываем на первую страницу при изменении фильтра
+                          setCurrentPage(1);
                         }}
                       />
                       <span>Только в наличии</span>
@@ -619,6 +378,9 @@ export const FullCatalog = () => {
                       <span>Видеообзор</span>
                     </label>
                   </div>
+                  <div className={styles.totalInfo}>
+                    Всего в каталоге: {totalProducts} товаров
+                  </div>
                 </div>
 
                 <div className={styles.sort}>
@@ -640,19 +402,34 @@ export const FullCatalog = () => {
                 </div>
               </div>
 
-              {/* Сетка товаров */}
               <div className={styles.productsGrid}>
-                {currentProducts.map((product, index) => (
+                {filteredAndSortedProducts.map((product, index) => (
                   <Card
-                    key={`${product.offer_id || product.product_id || index}`}
-                    {...product}
+                    key={product.offer_id || product.product_id || index}
+                    image={product.image}
+                    hit={product.hit}
+                    sale={product.sale}
+                    section={product.section}
+                    status={product.status}
+                    title={product.title}
+                    price={product.price}
+                    oldprice={product.oldprice}
+                    pricePerMonth={product.pricePerMonth}
+                    product_id={product.product_id} // Добавляем
+                    offer_id={product.offer_id} // Добавляем
                   />
                 ))}
               </div>
 
-              {/* Пагинация */}
-              {totalPages > 1 && (
-                <div className={styles.pagination}>{renderPagination()}</div>
+              {totalPagesFromStore > 1 && (
+                <div className={styles.pagination}>
+                  <div className={styles.paginationStats}>
+                    Страница {currentPage} из {totalPagesFromStore}
+                  </div>
+                  <div className={styles.paginationButtons}>
+                    {renderPagination()}
+                  </div>
+                </div>
               )}
             </main>
           </div>
@@ -662,7 +439,6 @@ export const FullCatalog = () => {
   );
 };
 
-// Вспомогательная функция для получения названий фильтров
 const getFilterLabel = (filter: string) => {
   const labels: { [key: string]: string } = {
     brand: "Бренд",

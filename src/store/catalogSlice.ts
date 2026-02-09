@@ -7,6 +7,9 @@ interface CatalogState {
   error: string | null;
   categories: string[];
   brands: string[];
+  totalProducts: number;
+  totalPages: number;
+  currentPage: number;
 }
 
 const initialState: CatalogState = {
@@ -15,18 +18,18 @@ const initialState: CatalogState = {
   error: null,
   categories: [],
   brands: [],
+  totalProducts: 0,
+  totalPages: 0,
+  currentPage: 1,
 };
 
-// Форматируем число в строку с пробелами
 const formatPrice = (price: number) => price.toLocaleString("ru-RU");
 
-// Считаем цену в месяц
 const calculatePricePerMonth = (price: number) => {
   const monthly = Math.round(price / 12);
   return `от ${monthly.toLocaleString("ru-RU")} руб. в месяц`;
 };
 
-// Получаем основные и старые цены
 const getPrices = (prices: any[]) => {
   const main = prices.find((p) => p.type === "price");
   const old = prices.find((p) => p.type === "price1c");
@@ -42,40 +45,40 @@ const getPrices = (prices: any[]) => {
   };
 };
 
-// Преобразуем API продукт в массив карточек
-const transformApiToCardProducts = (product: any): CardProduct[] => {
-  if (!product.offers?.length) return [];
+const transformApiToCardProduct = (product: any): CardProduct | null => {
+  if (!product.offers?.length) return null;
 
-  return product.offers.map((offer: any) => {
-    const { price, oldprice, priceFormatted, oldpriceFormatted } = getPrices(
-      offer.prices || []
-    );
+  const mainOffer = product.offers[0];
 
-    return {
-      image: `https://via.placeholder.com/300x200/4A6FA5/FFFFFF?text=${encodeURIComponent(
-        offer.name.slice(0, 30)
-      )}`,
-      hit: Math.random() > 0.8,
-      sale: oldprice > 0,
-      section: "Каталог",
-      status: offer.warehouses?.some((w: any) => w.count > 0)
-        ? "В наличии"
-        : "Нет в наличии",
-      title: offer.name,
-      price: priceFormatted,
-      oldprice: oldpriceFormatted,
-      pricePerMonth: calculatePricePerMonth(price),
-      brand: product.brand,
-      model: product.model,
-      offer_id: offer.offer_id,
-      product_id: product.product_id,
-      articul_supplier: offer.offer_id,
-      created_at: "", // можно заменить на offer.created_at если есть
-    };
-  });
+  const { price, oldprice, priceFormatted, oldpriceFormatted } = getPrices(
+    mainOffer.prices || []
+  );
+
+  if (price === 0) return null;
+
+  return {
+    image: `https://via.placeholder.com/300x200/4A6FA5/FFFFFF?text=${encodeURIComponent(
+      product.name.slice(0, 30)
+    )}`,
+    hit: Math.random() > 0.8,
+    sale: oldprice > 0,
+    section: "Каталог",
+    status: mainOffer.warehouses?.some((w: any) => w.count > 0)
+      ? "В наличии"
+      : "Нет в наличии",
+    title: product.name,
+    price: priceFormatted,
+    oldprice: oldpriceFormatted,
+    pricePerMonth: calculatePricePerMonth(price),
+    brand: product.brand,
+    model: product.model,
+    offer_id: mainOffer.offer_id,
+    product_id: product.product_id,
+    articul_supplier: mainOffer.offer_id,
+    created_at: "",
+  };
 };
 
-// Thunk для загрузки каталога
 export const fetchCatalog = createAsyncThunk(
   "catalog/fetchCatalog",
   async (
@@ -97,14 +100,20 @@ export const fetchCatalog = createAsyncThunk(
       const brands = new Set<string>();
 
       data.data.forEach((product: any) => {
-        products.push(...transformApiToCardProducts(product));
-        if (product.brand) brands.add(product.brand);
+        const cardProduct = transformApiToCardProduct(product);
+        if (cardProduct) {
+          products.push(cardProduct);
+          if (product.brand) brands.add(product.brand);
+        }
       });
 
       return {
         products,
-        categories: [], // категорий пока нет в API
+        categories: [],
         brands: Array.from(brands),
+        totalProducts: data.meta.total,
+        totalPages: data.meta.total_pages,
+        currentPage: page,
       };
     } catch (e) {
       return rejectWithValue(e instanceof Error ? e.message : "Unknown error");
@@ -112,7 +121,6 @@ export const fetchCatalog = createAsyncThunk(
   }
 );
 
-// Slice
 const catalogSlice = createSlice({
   name: "catalog",
   initialState,
@@ -135,12 +143,18 @@ const catalogSlice = createSlice({
             products: CardProduct[];
             categories: string[];
             brands: string[];
+            totalProducts: number;
+            totalPages: number;
+            currentPage: number;
           }>
         ) => {
           state.loading = false;
           state.products = action.payload.products;
           state.categories = action.payload.categories;
           state.brands = action.payload.brands;
+          state.totalProducts = action.payload.totalProducts;
+          state.totalPages = action.payload.totalPages;
+          state.currentPage = action.payload.currentPage;
         }
       )
       .addCase(fetchCatalog.rejected, (state, action) => {

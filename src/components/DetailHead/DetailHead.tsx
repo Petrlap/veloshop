@@ -27,8 +27,46 @@ import detail5 from "../../assets/detailpage/detail-bike-5.webp";
 import detail6 from "../../assets/detailpage/detail-bike-6.webp";
 
 const images = [detail1, detail2, detail3, detail4, detail5, detail6];
+interface Price {
+  type_price_id: number;
+  type: string;
+  title: string;
+  price: number;
+  currency: string;
+}
 
-export const DetailHead: React.FC = () => {
+interface Warehouse {
+  warehouse_id: number;
+  title: string;
+  count: number;
+}
+
+interface Offer {
+  id: number;
+  offer_id: string;
+  name: string;
+  size: string | null;
+  color: string | null;
+  prices: Price[];
+  warehouses: Warehouse[];
+}
+
+interface ProductData {
+  id: number;
+  product_id: string;
+  name: string;
+  brand: string;
+  model: string;
+  offers: Offer[];
+}
+
+// Пропсы компонента
+interface DetailHeadProps {
+  product: ProductData;
+}
+
+export const DetailHead: React.FC<DetailHeadProps> = ({ product }) => {
+  console.log("Product в DetailHead:", product);
   const [active, setActive] = useState(0);
   const [height, setHeight] = useState(175);
   const increase = () => setHeight((prev) => prev + 1);

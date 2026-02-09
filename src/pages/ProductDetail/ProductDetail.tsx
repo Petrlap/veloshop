@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import { Card } from "../../components/Card/Card";
 import { CardAccessories } from "../../components/CardAccessories/CardAccessories";
 import styles from "./ProductDetail.module.css";
@@ -86,8 +87,63 @@ const faqData: Question[] = [
   },
 ];
 
+interface ProductData {
+  product_id: string;
+  offer_id?: string;
+  title: string;
+  price: string;
+  oldprice: string;
+  image: string;
+  brand: string;
+  model: string;
+  status: string;
+  hit: boolean;
+  sale: boolean;
+  section: string;
+  pricePerMonth: string;
+}
+
+interface ProductData {
+  id: number;
+  product_id: string;
+  name: string;
+  brand: string;
+  model: string;
+  offers: any[];
+}
+
 export const ProductDetail: React.FC = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
   const [openId, setOpenId] = useState<number | null>(null);
+  const [product, setProduct] = useState<ProductData | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    // Пробуем получить продукт из state (при переходе из каталога)
+    const productFromState = location.state?.product;
+
+    if (productFromState) {
+      setProduct(productFromState);
+      setLoading(false);
+      // Сохраняем в localStorage на случай обновления страницы
+      localStorage.setItem("currentProduct", JSON.stringify(productFromState));
+    } else {
+      // Если нет в state (при обновлении страницы), пробуем получить из localStorage
+      const savedProduct = localStorage.getItem("currentProduct");
+      if (savedProduct) {
+        setProduct(JSON.parse(savedProduct));
+        setLoading(false);
+      } else {
+        // Если нет нигде - редирект на каталог через 1 секунду
+        const timer = setTimeout(() => {
+          navigate("/catalog");
+        }, 1000);
+
+        return () => clearTimeout(timer);
+      }
+    }
+  }, [location.state, navigate]);
 
   const toggle = (id: number) => {
     setOpenId(openId === id ? null : id);
@@ -104,6 +160,8 @@ export const ProductDetail: React.FC = () => {
       price: "41 050",
       oldprice: "",
       pricePerMonth: "от 2 675 руб. в месяц",
+      product_id: "temp_1",
+      offer_id: "temp_offer_1",
     },
     {
       image: img2,
@@ -115,6 +173,8 @@ export const ProductDetail: React.FC = () => {
       price: "41 050",
       oldprice: "",
       pricePerMonth: "от 2 675 руб. в месяц",
+      product_id: "temp_2",
+      offer_id: "temp_offer_2",
     },
     {
       image: img3,
@@ -126,6 +186,8 @@ export const ProductDetail: React.FC = () => {
       price: "41 050",
       oldprice: "",
       pricePerMonth: "от 2 675 руб. в месяц",
+      product_id: "temp_3",
+      offer_id: "temp_offer_3",
     },
     {
       image: img4,
@@ -137,6 +199,8 @@ export const ProductDetail: React.FC = () => {
       price: "41 050",
       oldprice: "",
       pricePerMonth: "от 2 675 руб. в месяц",
+      product_id: "temp_4",
+      offer_id: "temp_offer_4",
     },
     {
       image: img5,
@@ -148,6 +212,8 @@ export const ProductDetail: React.FC = () => {
       price: "41 050",
       oldprice: "82 100",
       pricePerMonth: "от 2 675 руб. в месяц",
+      product_id: "temp_5",
+      offer_id: "temp_offer_5",
     },
   ];
   const accessories = [
@@ -259,21 +325,64 @@ export const ProductDetail: React.FC = () => {
     };
   }, []);
 
+  // Показываем загрузку
+  if (loading) {
+    return (
+      <div className={styles.loadingContainer}>
+        <div className={styles.spinner}></div>
+        <p>Загрузка товара...</p>
+      </div>
+    );
+  }
+
+  // Если нет продукта (будет редирект)
+  if (!product) {
+    return null;
+  }
+
   return (
     <>
       <span className={styles.breadcrubs}>
-        главная / каталог / велосипеды / горные /
+        <button
+          onClick={() => navigate("/catalog")}
+          className={styles.breadcrumbLink}
+        >
+          главная
+        </button>{" "}
+        /
+        <button
+          onClick={() => navigate("/catalog")}
+          className={styles.breadcrumbLink}
+        >
+          каталог
+        </button>{" "}
+        /
+        <button
+          onClick={() => navigate("/catalog")}
+          className={styles.breadcrumbLink}
+        >
+          {product.section.toLowerCase()}
+        </button>{" "}
+        /<span className={styles.currentPage}> {product.title}</span>
       </span>
-      <h1>Женский велосипед Welt Edelweiss 2.0 HD 27 (2024)</h1>
-      <DetailHead />
+
+      <h1>{product.title}</h1>
+
+      <DetailHead product={product} />
       <DetailTabs />
       <Сharacteristics />
+
       <section className={styles.cardsLineCont}>
         <div className={styles.cardsHead}>
           <h2 className={styles.title50}>
             С этим товаром <span>покупают</span>
           </h2>
-          <a href="#">Смотреть все предложения {">"}</a>
+          <button
+            onClick={() => navigate("/catalog")}
+            className={styles.viewAllButton}
+          >
+            Смотреть все предложения {">"}
+          </button>
         </div>
         <div className={styles.cardsLine} ref={scrollRef}>
           {accessories.map((item, index) => (
@@ -285,25 +394,47 @@ export const ProductDetail: React.FC = () => {
             ))}
           </div>
         </div>
-        <a href="#">Смотреть все предложения {">"}</a>
+        <button
+          onClick={() => navigate("/catalog")}
+          className={styles.viewAllButton}
+        >
+          Смотреть все предложения {">"}
+        </button>
       </section>
+
       <section className={styles.cardsLineCont}>
         <div className={styles.cardsHead}>
           <h2 className={styles.title50}>
             <span>Новинки</span> 2025
           </h2>
-          <a href="#">Смотреть все предложения {">"}</a>
+          <button
+            onClick={() => navigate("/catalog")}
+            className={styles.viewAllButton}
+          >
+            Смотреть все предложения {">"}
+          </button>
         </div>
         <div
           className={`${styles.cardsLine} ${styles.cardsBox}`}
           ref={scrollRef}
         >
           {news.map((item, index) => (
-            <Card key={index} {...item} />
+            <Card
+              key={index}
+              {...item}
+              product_id={item.product_id}
+              offer_id={item.offer_id}
+            />
           ))}
         </div>
-        <a href="#">Смотреть все предложения {">"}</a>
+        <button
+          onClick={() => navigate("/catalog")}
+          className={styles.viewAllButton}
+        >
+          Смотреть все предложения {">"}
+        </button>
       </section>
+
       <section
         className={`${styles.cardsLineCont} ${styles.better}`}
         style={{ position: "relative" }}
@@ -381,6 +512,7 @@ export const ProductDetail: React.FC = () => {
           ))}
         </div>
       </section>
+
       <section
         className={`${styles.cardsLineCont} ${styles.faq}`}
         style={{ position: "relative" }}
@@ -425,6 +557,7 @@ export const ProductDetail: React.FC = () => {
           </div>
         </div>
       </section>
+
       <Assembly />
       <Tracker />
       <OurStores />

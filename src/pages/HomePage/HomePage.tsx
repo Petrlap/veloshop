@@ -265,9 +265,9 @@ export const HomePage: React.FC = () => {
           <a href="#">Смотреть все предложения {">"}</a>
         </div>
         <div className={styles.cardsLine}>
-          {hits.map((item, index) => (
+          {/*{hits.map((item, index) => (
             <Card key={index} {...item} />
-          ))}
+          ))}*/}
         </div>
         <a href="#">Смотреть все предложения {">"}</a>
       </section>
@@ -280,9 +280,9 @@ export const HomePage: React.FC = () => {
           <a href="#">Смотреть все предложения {">"}</a>
         </div>
         <div className={styles.cardsLine}>
-          {news.map((item, index) => (
+          {/*{news.map((item, index) => (
             <Card key={index} {...item} />
-          ))}
+          ))}*/}
         </div>
         <a href="#">Смотреть все предложения {">"}</a>
       </section>
@@ -295,9 +295,9 @@ export const HomePage: React.FC = () => {
           <a href="#">Смотреть все предложения {">"}</a>
         </div>
         <div className={styles.cardsLine}>
-          {sales.map((item, index) => (
+          {/*{sales.map((item, index) => (
             <Card key={index} {...item} />
-          ))}
+          ))}*/}
         </div>
         <a href="#">Смотреть все предложения {">"}</a>
       </section>

@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import styles from "./Card.module.css";
 import { IconWrapper } from "../IconWrapper/IconWrapper";
 import { SlBasket } from "react-icons/sl";
@@ -15,6 +16,10 @@ interface CardProps {
   price: string;
   oldprice: string;
   pricePerMonth: string;
+  product_id: string;
+  offer_id?: string;
+  brand?: string;
+  model?: string;
 }
 
 export const Card: React.FC<CardProps> = ({
@@ -27,9 +32,76 @@ export const Card: React.FC<CardProps> = ({
   price,
   oldprice,
   pricePerMonth,
+  product_id,
+  offer_id,
+  brand,
+  model,
 }) => {
+  const navigate = useNavigate();
+
+  const handleTitleClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    navigate("/product", {
+      state: {
+        product: {
+          image,
+          title,
+          price,
+          oldprice,
+          pricePerMonth,
+          product_id,
+          offer_id,
+          brand,
+          model,
+          status,
+          hit,
+          sale,
+          section,
+        },
+      },
+    });
+  };
+
+  const handleCardClick = (e: React.MouseEvent) => {
+    // Если клик не по кнопке или заголовку (заголовок уже обрабатывается отдельно)
+    if (
+      !(e.target as HTMLElement).closest("button") &&
+      !(e.target as HTMLElement).closest(`.${styles.title}`)
+    ) {
+      navigate("/product", {
+        state: {
+          product: {
+            image,
+            title,
+            price,
+            oldprice,
+            pricePerMonth,
+            product_id,
+            offer_id,
+            brand,
+            model,
+            status,
+            hit,
+            sale,
+            section,
+          },
+        },
+      });
+    }
+  };
+
+  const handleAddToCart = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    // Логика добавления в корзину
+    console.log("Добавить в корзину:", product_id);
+  };
+
   return (
-    <div className={styles.card}>
+    <div
+      className={styles.card}
+      onClick={handleCardClick}
+      style={{ cursor: "pointer" }}
+    >
       <div className={styles.imageBlock}>
         {hit && <div className={styles.hitLabel}>Hit</div>}
         {sale && <div className={styles.saleLabel}>Sale</div>}
@@ -48,7 +120,13 @@ export const Card: React.FC<CardProps> = ({
           {status}
         </div>
       </div>
-      <h3 className={styles.title}>{title}</h3>
+      <h3
+        className={styles.title}
+        onClick={handleTitleClick}
+        style={{ cursor: "pointer" }}
+      >
+        {title}
+      </h3>
       <div className={oldprice ? styles.oldPriceLine : ""}>
         {oldprice && (
           <span className={styles.oldPrice}>
@@ -79,7 +157,7 @@ export const Card: React.FC<CardProps> = ({
           }}
         />
       </div>
-      <button>
+      <button onClick={handleAddToCart}>
         + Добавить{" "}
         <IconWrapper
           Icon={SlBasket}
