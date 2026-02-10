@@ -41,7 +41,7 @@ const faqData: Question[] = [
     id: 1,
     question: "Как выбрать правильный размер рамы?",
     answer:
-      "При выборе рамы важно учесть свой рост, длину ног и предполагаемый стиль катания. Обычно производители указывают рекомендации по росту для каждой модели, но если возникли сомнения, лучше уточнить в сервис-центре магазина или обратиться к консультанту. Для горных велосипедов и самокатов также имеет значение тип подвески и размер колёс — чем выше предполагаемая нагрузка, тем важнее подобрать надёжную конструкцию.",
+      "При выборе рамы важно учесть свой рост, длину ног и предполагаемый стиль катания. Обычно производители указывают рекомендации по росту для каждой модели, но если возникли сомнения, лучше уточнить в сервис-центре магазина или обратиться к консультанту. Для горных велосипедах и самокатов также имеет значение тип подвески и размер колёс — чем выше предполагаемая нагрузка, тем важнее подобрать надёжную конструкцию.",
   },
   {
     id: 2,
@@ -53,7 +53,7 @@ const faqData: Question[] = [
     id: 3,
     question: "Какие гарантии даёт магазин?",
     answer:
-      "Обычно на велосипеды и самокаты распространяется официальная гарантия производителя, которая покрывает заводской брак и механические неисправности при правильной эксплуатации. В «ВелоШоп» дополнительно предусмотрены консультации по настройке и обслуживанию. Перед покупкой уточните срок гарантии для конкретной модели и возможен ли бесплатный ремонт в авторизованном сервисном центре.",
+      "Обычно на велосипеды и самокаты распространяется официальная гарантия производителя, которая покрывает заводской брак и механические неисправности при правильной эксплуатации. В «ВелоШоп» дополнительно предусмотрены консультации по настройке и обслуживанию. Перед покупкой уточните срок гарантия для конкретной модели и возможен ли бесплатный ремонт в авторизованном сервисном центре.",
   },
   {
     id: 4,
@@ -88,28 +88,22 @@ const faqData: Question[] = [
 ];
 
 interface ProductData {
-  product_id: string;
-  offer_id?: string;
-  title: string;
-  price: string;
-  oldprice: string;
-  image: string;
-  brand: string;
-  model: string;
-  status: string;
-  hit: boolean;
-  sale: boolean;
-  section: string;
-  pricePerMonth: string;
-}
-
-interface ProductData {
   id: number;
   product_id: string;
   name: string;
   brand: string;
   model: string;
   offers: any[];
+  // Для совместимости с остальным кодом
+  title?: string;
+  price?: string;
+  oldprice?: string;
+  image?: string;
+  status?: string;
+  hit?: boolean;
+  sale?: boolean;
+  section?: string;
+  pricePerMonth?: string;
 }
 
 export const ProductDetail: React.FC = () => {
@@ -119,30 +113,139 @@ export const ProductDetail: React.FC = () => {
   const [product, setProduct] = useState<ProductData | null>(null);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    // Пробуем получить продукт из state (при переходе из каталога)
-    const productFromState = location.state?.product;
+  // Функция для загрузки полных данных товара
+  const fetchFullProductData = async (productId: string) => {
+    try {
+      console.log(`Загружаю полные данные для товара: ${productId}`);
 
-    if (productFromState) {
-      setProduct(productFromState);
-      setLoading(false);
-      // Сохраняем в localStorage на случай обновления страницы
-      localStorage.setItem("currentProduct", JSON.stringify(productFromState));
-    } else {
-      // Если нет в state (при обновлении страницы), пробуем получить из localStorage
-      const savedProduct = localStorage.getItem("currentProduct");
-      if (savedProduct) {
-        setProduct(JSON.parse(savedProduct));
-        setLoading(false);
-      } else {
-        // Если нет нигде - редирект на каталог через 1 секунду
-        const timer = setTimeout(() => {
-          navigate("/catalog");
-        }, 1000);
+      const response = await fetch(
+        `https://admin.velo-shop.ru/api/catalog/tree/page=1/perPage=100`
+      );
 
-        return () => clearTimeout(timer);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
       }
+
+      const data = await response.json();
+
+      if (!data.success || !data.data) {
+        throw new Error("API error");
+      }
+
+      // Ищем нужный товар по product_id
+      const fullProductData = data.data.find(
+        (item: any) => item.product_id === productId
+      );
+
+      if (!fullProductData) {
+        throw new Error("Товар не найден");
+      }
+
+      console.log("Найден товар с API:", fullProductData);
+
+      // Убедимся, что offers есть
+      const productWithOffers = {
+        ...fullProductData,
+        offers: fullProductData.offers || [],
+        title: fullProductData.name,
+        name: fullProductData.name,
+      };
+
+      return productWithOffers;
+    } catch (error) {
+      console.error("Ошибка загрузки полных данных:", error);
+      return null;
     }
+  };
+
+  useEffect(() => {
+    const loadProduct = async () => {
+      // Пробуем получить продукт из state (при переходе из каталога)
+      const productFromState = location.state?.product;
+
+      if (productFromState) {
+        console.log("Product из state:", productFromState);
+
+        // Проверяем, есть ли уже полные данные с offers
+        if (productFromState.offers && productFromState.offers.length > 0) {
+          // Если есть offers - используем как есть
+          setProduct(productFromState);
+          setLoading(false);
+          localStorage.setItem(
+            "currentProduct",
+            JSON.stringify(productFromState)
+          );
+        } else {
+          // Если нет offers - загружаем полные данные
+          const fullProduct = await fetchFullProductData(
+            productFromState.product_id
+          );
+
+          if (fullProduct) {
+            setProduct(fullProduct);
+            localStorage.setItem("currentProduct", JSON.stringify(fullProduct));
+          } else {
+            // Если не удалось загрузить - используем то что есть
+            const productWithEmptyOffers = {
+              ...productFromState,
+              offers: [],
+              name: productFromState.title || productFromState.name || "",
+              id: productFromState.id || 0,
+              title: productFromState.title || productFromState.name || "",
+            };
+            setProduct(productWithEmptyOffers);
+            localStorage.setItem(
+              "currentProduct",
+              JSON.stringify(productWithEmptyOffers)
+            );
+          }
+          setLoading(false);
+        }
+      } else {
+        // Если нет в state (при обновлении страницы), пробуем получить из localStorage
+        const savedProduct = localStorage.getItem("currentProduct");
+        if (savedProduct) {
+          const parsedProduct = JSON.parse(savedProduct);
+          console.log("Product из localStorage:", parsedProduct);
+
+          // Проверяем, есть ли offers в сохраненных данных
+          if (!parsedProduct.offers || parsedProduct.offers.length === 0) {
+            // Если нет offers - пробуем загрузить заново
+            if (parsedProduct.product_id) {
+              const fullProduct = await fetchFullProductData(
+                parsedProduct.product_id
+              );
+
+              if (fullProduct) {
+                setProduct(fullProduct);
+                localStorage.setItem(
+                  "currentProduct",
+                  JSON.stringify(fullProduct)
+                );
+              } else {
+                setProduct(parsedProduct);
+              }
+            } else {
+              setProduct(parsedProduct);
+            }
+          } else {
+            // Если offers есть - используем сохраненные данные
+            setProduct(parsedProduct);
+          }
+          setLoading(false);
+        } else {
+          // Если нет нигде - редирект на каталог через 1 секунду
+          console.log("Нет данных о товаре, редирект на каталог");
+          const timer = setTimeout(() => {
+            navigate("/catalog");
+          }, 1000);
+
+          return () => clearTimeout(timer);
+        }
+      }
+    };
+
+    loadProduct();
   }, [location.state, navigate]);
 
   const toggle = (id: number) => {
@@ -340,6 +443,13 @@ export const ProductDetail: React.FC = () => {
     return null;
   }
 
+  // Для совместимости с остальным кодом
+  const displayProduct = {
+    ...product,
+    title: product.title || product.name || "",
+    section: product.section || "Каталог",
+  };
+
   return (
     <>
       <span className={styles.breadcrubs}>
@@ -361,12 +471,12 @@ export const ProductDetail: React.FC = () => {
           onClick={() => navigate("/catalog")}
           className={styles.breadcrumbLink}
         >
-          {product.section.toLowerCase()}
+          {displayProduct.section.toLowerCase()}
         </button>{" "}
-        /<span className={styles.currentPage}> {product.title}</span>
+        /<span className={styles.currentPage}> {displayProduct.title}</span>
       </span>
 
-      <h1>{product.title}</h1>
+      <h1>{displayProduct.title}</h1>
 
       <DetailHead product={product} />
       <DetailTabs />

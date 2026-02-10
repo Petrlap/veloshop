@@ -10,6 +10,9 @@ interface CatalogState {
   totalProducts: number;
   totalPages: number;
   currentPage: number;
+  productDetails: any | null;
+  productDetailsLoading: boolean;
+  productDetailsError: string | null;
 }
 
 const initialState: CatalogState = {
@@ -21,6 +24,9 @@ const initialState: CatalogState = {
   totalProducts: 0,
   totalPages: 0,
   currentPage: 1,
+  productDetails: null,
+  productDetailsLoading: false,
+  productDetailsError: null,
 };
 
 const formatPrice = (price: number) => price.toLocaleString("ru-RU");
@@ -121,12 +127,44 @@ export const fetchCatalog = createAsyncThunk(
   }
 );
 
+export const fetchProductById = createAsyncThunk(
+  "catalog/fetchProductById",
+  async (productId: string, { rejectWithValue }) => {
+    try {
+      const response = await fetch(
+        `https://admin.velo-shop.ru/api/catalog/tree/page=1/perPage=100`
+      );
+
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+
+      const data = await response.json();
+
+      if (!data.success) throw new Error("API error");
+
+      // Ищем нужный товар по product_id
+      const product = data.data.find(
+        (item: any) => item.product_id === productId
+      );
+
+      if (!product) throw new Error("Товар не найден");
+
+      return product; // Возвращаем полные данные товара
+    } catch (e) {
+      return rejectWithValue(e instanceof Error ? e.message : "Unknown error");
+    }
+  }
+);
+
 const catalogSlice = createSlice({
   name: "catalog",
   initialState,
   reducers: {
     clearError: (state) => {
       state.error = null;
+    },
+    clearProductDetails: (state) => {
+      state.productDetails = null;
+      state.productDetailsError = null;
     },
   },
   extraReducers: (builder) => {
@@ -160,9 +198,21 @@ const catalogSlice = createSlice({
       .addCase(fetchCatalog.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
+      })
+      .addCase(fetchProductById.pending, (state) => {
+        state.productDetailsLoading = true;
+        state.productDetailsError = null;
+      })
+      .addCase(fetchProductById.fulfilled, (state, action) => {
+        state.productDetailsLoading = false;
+        state.productDetails = action.payload;
+      })
+      .addCase(fetchProductById.rejected, (state, action) => {
+        state.productDetailsLoading = false;
+        state.productDetailsError = action.payload as string;
       });
   },
 });
 
-export const { clearError } = catalogSlice.actions;
+export const { clearError, clearProductDetails } = catalogSlice.actions;
 export default catalogSlice.reducer;
