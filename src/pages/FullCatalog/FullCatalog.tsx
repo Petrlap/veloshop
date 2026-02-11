@@ -1,6 +1,10 @@
 import { useState, useMemo, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchCatalog } from "../../store/catalogSlice";
+import {
+  fetchAllInStockProducts,
+  fetchCatalog,
+  toggleInStockFilter,
+} from "../../store/catalogSlice";
 import { RootState } from "../../store";
 import { Card } from "../../components/Card/Card";
 import styles from "./FullCatalog.module.css";
@@ -14,6 +18,11 @@ export const FullCatalog = () => {
     totalProducts,
     totalPages: totalPagesFromStore,
     currentPage: currentPageFromStore,
+
+    // Добавляем новые состояния
+    inStockProducts,
+    inStockLoading,
+    showOnlyInStock,
   } = useSelector((state: RootState) => state.catalog);
 
   const [openFilter, setOpenFilter] = useState("price");
@@ -24,20 +33,49 @@ export const FullCatalog = () => {
   const [showMobileFilters, setShowMobileFilters] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
 
+  // Эффект для загрузки обычного каталога
   useEffect(() => {
-    dispatch(fetchCatalog({ page: currentPage, perPage: 100 }) as any);
-  }, [dispatch, currentPage]);
+    if (!showOnlyInStock) {
+      dispatch(fetchCatalog({ page: currentPage, perPage: 100 }) as any);
+    }
+  }, [dispatch, currentPage, showOnlyInStock]);
+
+  // Эффект для загрузки ВСЕХ товаров в наличии при включении фильтра
+  useEffect(() => {
+    if (inStockOnly && !showOnlyInStock && inStockProducts.length === 0) {
+      console.log("Загружаю все товары в наличии...");
+      dispatch(fetchAllInStockProducts() as any);
+      dispatch(toggleInStockFilter(true));
+    } else if (!inStockOnly && showOnlyInStock) {
+      // При выключении фильтра - сбрасываем состояние
+      dispatch(toggleInStockFilter(false));
+      setCurrentPage(1);
+    }
+  }, [inStockOnly, showOnlyInStock, inStockProducts.length, dispatch]);
+
+  // Определяем какие товары показывать
+  const productsToDisplay = showOnlyInStock ? inStockProducts : apiProducts;
+  const isLoading = showOnlyInStock ? inStockLoading : loading;
+  const totalPages = showOnlyInStock ? 1 : totalPagesFromStore;
+  const totalDisplayProducts = showOnlyInStock
+    ? inStockProducts.length
+    : totalProducts;
 
   const filteredAndSortedProducts = useMemo(() => {
-    let filtered = [...apiProducts];
+    let filtered = [...productsToDisplay];
 
-    if (inStockOnly) {
-      filtered = filtered.filter((product) => product.status === "В наличии");
-    }
+    // Фильтр по скидке
     if (withDiscount) {
       filtered = filtered.filter((product) => product.sale);
     }
 
+    // Фильтр по видео (заглушка)
+    if (withVideo) {
+      // Здесь можно добавить реальную логику фильтрации по видео
+      filtered = filtered.filter(() => Math.random() > 0.5);
+    }
+
+    // Сортировка
     switch (sortBy) {
       case "cheap":
         filtered.sort(
@@ -85,26 +123,28 @@ export const FullCatalog = () => {
     }
 
     return filtered;
-  }, [apiProducts, inStockOnly, withDiscount, sortBy]);
+  }, [productsToDisplay, withDiscount, withVideo, sortBy]);
 
   const toggleFilter = (filterName: string) => {
     setOpenFilter(openFilter === filterName ? "" : filterName);
   };
 
   const handlePageChange = (page: number) => {
-    setCurrentPage(page);
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    // При фильтре "в наличии" пагинация не нужна
+    if (!showOnlyInStock) {
+      setCurrentPage(page);
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
   };
 
   const renderPagination = () => {
+    // Если включен фильтр "в наличии", не показываем пагинацию
+    if (showOnlyInStock) return null;
+
     const pages = [];
     const maxVisiblePages = 5;
-
     let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
-    let endPage = Math.min(
-      totalPagesFromStore,
-      startPage + maxVisiblePages - 1
-    );
+    let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
 
     if (endPage - startPage + 1 < maxVisiblePages) {
       startPage = Math.max(1, endPage - maxVisiblePages + 1);
@@ -155,8 +195,8 @@ export const FullCatalog = () => {
       );
     }
 
-    if (endPage < totalPagesFromStore) {
-      if (endPage < totalPagesFromStore - 1) {
+    if (endPage < totalPages) {
+      if (endPage < totalPages - 1) {
         pages.push(
           <span key="ellipsis2" className={styles.ellipsis}>
             ...
@@ -165,16 +205,16 @@ export const FullCatalog = () => {
       }
       pages.push(
         <button
-          key={totalPagesFromStore}
-          onClick={() => handlePageChange(totalPagesFromStore)}
+          key={totalPages}
+          onClick={() => handlePageChange(totalPages)}
           className={styles.pageButton}
         >
-          {totalPagesFromStore}
+          {totalPages}
         </button>
       );
     }
 
-    if (currentPage < totalPagesFromStore) {
+    if (currentPage < totalPages) {
       pages.push(
         <button
           key="next"
@@ -349,11 +389,23 @@ export const FullCatalog = () => {
                         type="checkbox"
                         checked={inStockOnly}
                         onChange={(e) => {
-                          setInStockOnly(e.target.checked);
-                          setCurrentPage(1);
+                          const checked = e.target.checked;
+                          setInStockOnly(checked);
+                          // При включении фильтра сбрасываем на первую страницу
+                          if (!checked) {
+                            setCurrentPage(1);
+                          }
                         }}
+                        disabled={inStockLoading}
                       />
-                      <span>Только в наличии</span>
+                      <span>
+                        Только в наличии
+                        {showOnlyInStock && inStockProducts.length > 0 && (
+                          <span className={styles.filterCount}>
+                            ({inStockProducts.length})
+                          </span>
+                        )}
+                      </span>
                     </label>
                     <label className={styles.checkboxLabel}>
                       <input

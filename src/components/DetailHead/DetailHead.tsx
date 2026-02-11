@@ -215,7 +215,7 @@ export const DetailHead: React.FC<DetailHeadProps> = ({ product }) => {
       <div className={styles.gallery}>
         <div className={styles.meta}>
           <span>
-            Арт: {product.product_id}{" "}
+            Арт: {product.offers[0].offer_id}{" "}
             <IconWrapper Icon={BiCopy} style={{ color: "#545454" }} />
           </span>
           <span className={styles.inStock}>

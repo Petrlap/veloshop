@@ -10,9 +10,17 @@ interface CatalogState {
   totalProducts: number;
   totalPages: number;
   currentPage: number;
+
+  // Для деталей товара
   productDetails: any | null;
   productDetailsLoading: boolean;
   productDetailsError: string | null;
+
+  // Для фильтра "в наличии"
+  inStockProducts: CardProduct[];
+  inStockLoading: boolean;
+  inStockError: string | null;
+  showOnlyInStock: boolean;
 }
 
 const initialState: CatalogState = {
@@ -24,9 +32,15 @@ const initialState: CatalogState = {
   totalProducts: 0,
   totalPages: 0,
   currentPage: 1,
+
   productDetails: null,
   productDetailsLoading: false,
   productDetailsError: null,
+
+  inStockProducts: [],
+  inStockLoading: false,
+  inStockError: null,
+  showOnlyInStock: false,
 };
 
 const formatPrice = (price: number) => price.toLocaleString("ru-RU");
@@ -155,12 +169,121 @@ export const fetchProductById = createAsyncThunk(
   }
 );
 
+export const fetchAllInStockProducts = createAsyncThunk(
+  "catalog/fetchAllInStockProducts",
+  async (_, { rejectWithValue }) => {
+    try {
+      console.log("Загружаю ВСЕ товары в наличии...");
+
+      // Загружаем все страницы товаров
+      const allProducts: any[] = [];
+      let page = 1;
+      const perPage = 100; // Максимум за один запрос
+
+      // Сначала загружаем первую страницу чтобы узнать общее количество
+      const firstResponse = await fetch(
+        `https://admin.velo-shop.ru/api/catalog/tree/page=1/perPage=1`
+      );
+
+      if (!firstResponse.ok) throw new Error(`HTTP ${firstResponse.status}`);
+
+      const firstData = await firstResponse.json();
+
+      if (!firstData.success) throw new Error("API error");
+
+      const totalProducts = firstData.meta.total;
+      const totalPages = Math.ceil(totalProducts / perPage);
+
+      console.log(`Всего товаров: ${totalProducts}, страниц: ${totalPages}`);
+
+      // Загружаем все страницы параллельно
+      const pagePromises = [];
+
+      for (let page = 1; page <= totalPages; page++) {
+        pagePromises.push(
+          fetch(
+            `https://admin.velo-shop.ru/api/catalog/tree/page=${page}/perPage=${perPage}`
+          ).then((response) => response.json())
+        );
+      }
+
+      // Ждем загрузки всех страниц
+      const allPagesData = await Promise.all(pagePromises);
+
+      // Собираем все товары
+      allPagesData.forEach((pageData) => {
+        if (pageData.success && pageData.data) {
+          allProducts.push(...pageData.data);
+        }
+      });
+
+      console.log(`Загружено ${allProducts.length} товаров`);
+
+      // Фильтруем только товары в наличии
+      const inStockProductsRaw = allProducts.filter(isProductInStock);
+      console.log(`Товаров в наличии (сырых): ${inStockProductsRaw.length}`);
+
+      // Преобразуем в CardProduct
+      const inStockProducts: CardProduct[] = [];
+      const brands = new Set<string>();
+
+      inStockProductsRaw.forEach((product: any) => {
+        const cardProduct = transformApiToCardProduct(product);
+        if (cardProduct) {
+          // Принудительно устанавливаем статус "В наличии"
+          cardProduct.status = "В наличии";
+          inStockProducts.push(cardProduct);
+          if (product.brand) brands.add(product.brand);
+        }
+      });
+
+      console.log(`Преобразовано в CardProduct: ${inStockProducts.length}`);
+
+      return {
+        products: inStockProducts,
+        categories: [],
+        brands: Array.from(brands),
+        totalProducts: inStockProducts.length,
+        totalPages: 1,
+        currentPage: 1,
+      };
+    } catch (e) {
+      console.error("Ошибка загрузки всех товаров:", e);
+      return rejectWithValue(e instanceof Error ? e.message : "Unknown error");
+    }
+  }
+);
+
+const isProductInStock = (product: any): boolean => {
+  // Проверяем наличие товара по его offers
+  if (!product.offers || product.offers.length === 0) return false;
+
+  // Проверяем все offers товара
+  return product.offers.some((offer: any) => {
+    if (!offer.warehouses || offer.warehouses.length === 0) return false;
+    return offer.warehouses.some((warehouse: any) => warehouse.count > 0);
+  });
+};
+
 const catalogSlice = createSlice({
   name: "catalog",
   initialState,
   reducers: {
     clearError: (state) => {
       state.error = null;
+      state.productDetailsError = null;
+      state.inStockError = null;
+    },
+    toggleInStockFilter: (state, action: PayloadAction<boolean>) => {
+      state.showOnlyInStock = action.payload;
+      if (!action.payload) {
+        state.inStockProducts = [];
+      }
+    },
+    clearInStockProducts: (state) => {
+      state.inStockProducts = [];
+      state.inStockError = null;
+      state.showOnlyInStock = false;
     },
     clearProductDetails: (state) => {
       state.productDetails = null;
@@ -210,9 +333,43 @@ const catalogSlice = createSlice({
       .addCase(fetchProductById.rejected, (state, action) => {
         state.productDetailsLoading = false;
         state.productDetailsError = action.payload as string;
+      })
+      .addCase(fetchAllInStockProducts.pending, (state) => {
+        state.inStockLoading = true;
+        state.inStockError = null;
+      })
+      .addCase(
+        fetchAllInStockProducts.fulfilled,
+        (
+          state,
+          action: PayloadAction<{
+            products: CardProduct[];
+            categories: string[];
+            brands: string[];
+            totalProducts: number;
+            totalPages: number;
+            currentPage: number;
+          }>
+        ) => {
+          state.inStockLoading = false;
+          state.inStockProducts = action.payload.products;
+          state.showOnlyInStock = true;
+        }
+      )
+      .addCase(fetchAllInStockProducts.rejected, (state, action) => {
+        state.inStockLoading = false;
+        state.inStockError = action.payload as string;
+        state.showOnlyInStock = false;
       });
   },
 });
 
-export const { clearError, clearProductDetails } = catalogSlice.actions;
+// ОДИН экспорт со всеми экшенами
+export const {
+  clearError,
+  toggleInStockFilter,
+  clearInStockProducts,
+  clearProductDetails,
+} = catalogSlice.actions;
+
 export default catalogSlice.reducer;
