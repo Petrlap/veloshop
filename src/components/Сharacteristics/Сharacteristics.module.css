@@ -72,6 +72,8 @@
 .characteristicsItem .value {
   font-weight: 500;
   color: #000000;
+  text-wrap: wrap;
+  min-width: fit-content;
 }
 .miniCard {
   position: absolute;

@@ -29,6 +29,7 @@ import { Tracker } from "../../components/Tracker/Tracker";
 import { Сharacteristics } from "../../components/Сharacteristics/Сharacteristics";
 import { DetailTabs } from "../../components/DetailTabs/DetailTabs";
 import { DetailHead } from "../../components/DetailHead/DetailHead";
+import { ProductApi } from "../../types/catalog";
 
 type Question = {
   id: number;
@@ -87,39 +88,25 @@ const faqData: Question[] = [
   },
 ];
 
-interface ProductData {
-  id: number;
-  product_id: string;
-  name: string;
-  brand: string;
-  model: string;
-  offers: any[];
-  // Для совместимости с остальным кодом
-  title?: string;
-  price?: string;
-  oldprice?: string;
-  image?: string;
-  status?: string;
-  hit?: boolean;
-  sale?: boolean;
-  section?: string;
-  pricePerMonth?: string;
-}
-
 export const ProductDetail: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [openId, setOpenId] = useState<number | null>(null);
-  const [product, setProduct] = useState<ProductData | null>(null);
+  const [product, setProduct] = useState<ProductApi | null>(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  // Функция для загрузки полных данных товара
-  const fetchFullProductData = async (productId: string) => {
-    try {
-      console.log(`Загружаю полные данные для товара: ${productId}`);
+  // Функция для загрузки товара по ID
+  const fetchProductById = async (productId: string) => {
+    console.log(`Загружаю товар с ID: ${productId}`);
 
+    // Загружаем все страницы пока не найдем товар
+    let page = 1;
+    const perPage = 100;
+
+    while (true) {
       const response = await fetch(
-        `https://admin.velo-shop.ru/api/catalog/tree/page=1/perPage=100`
+        `https://admin.velo-shop.ru/api/catalog/products?page=${page}&per-page=${perPage}`
       );
 
       if (!response.ok) {
@@ -128,125 +115,84 @@ export const ProductDetail: React.FC = () => {
 
       const data = await response.json();
 
-      if (!data.success || !data.data) {
-        throw new Error("API error");
+      if (!data.data || !Array.isArray(data.data)) {
+        throw new Error("Неверная структура ответа API");
       }
 
-      // Ищем нужный товар по product_id
-      const fullProductData = data.data.find(
-        (item: any) => item.product_id === productId
+      // Ищем товар по product_id
+      const foundProduct = data.data.find(
+        (item: ProductApi) => item.product_id === productId
       );
 
-      if (!fullProductData) {
-        throw new Error("Товар не найден");
+      if (foundProduct) {
+        console.log("Товар найден:", foundProduct);
+        return foundProduct;
       }
 
-      console.log("Найден товар с API:", fullProductData);
+      // Если дошли до последней страницы и не нашли
+      if (page >= (data.meta?.last_page || 1)) {
+        break;
+      }
 
-      // Убедимся, что offers есть
-      const productWithOffers = {
-        ...fullProductData,
-        offers: fullProductData.offers || [],
-        title: fullProductData.name,
-        name: fullProductData.name,
-      };
-
-      return productWithOffers;
-    } catch (error) {
-      console.error("Ошибка загрузки полных данных:", error);
-      return null;
+      page++;
     }
+
+    throw new Error("Товар не найден");
   };
 
   useEffect(() => {
     const loadProduct = async () => {
-      // Пробуем получить продукт из state (при переходе из каталога)
-      const productFromState = location.state?.product;
+      setLoading(true);
+      setError(null);
 
-      if (productFromState) {
-        console.log("Product из state:", productFromState);
+      try {
+        // Пробуем получить product_id из state (при переходе из каталога)
+        const productFromState = location.state?.product;
+        let productId: string | null = null;
 
-        // Проверяем, есть ли уже полные данные с offers
-        if (productFromState.offers && productFromState.offers.length > 0) {
-          // Если есть offers - используем как есть
-          setProduct(productFromState);
-          setLoading(false);
-          localStorage.setItem(
-            "currentProduct",
-            JSON.stringify(productFromState)
-          );
+        if (productFromState) {
+          // Если есть в state, берем ID оттуда
+          productId = productFromState.product_id;
+          console.log("Product ID из state:", productId);
         } else {
-          // Если нет offers - загружаем полные данные
-          const fullProduct = await fetchFullProductData(
-            productFromState.product_id
-          );
-
-          if (fullProduct) {
-            setProduct(fullProduct);
-            localStorage.setItem("currentProduct", JSON.stringify(fullProduct));
-          } else {
-            // Если не удалось загрузить - используем то что есть
-            const productWithEmptyOffers = {
-              ...productFromState,
-              offers: [],
-              name: productFromState.title || productFromState.name || "",
-              id: productFromState.id || 0,
-              title: productFromState.title || productFromState.name || "",
-            };
-            setProduct(productWithEmptyOffers);
-            localStorage.setItem(
-              "currentProduct",
-              JSON.stringify(productWithEmptyOffers)
-            );
+          // Если нет в state, пробуем получить из localStorage
+          const savedProduct = localStorage.getItem("currentProduct");
+          if (savedProduct) {
+            const parsed = JSON.parse(savedProduct);
+            productId = parsed.product_id;
+            console.log("Product ID из localStorage:", productId);
           }
-          setLoading(false);
         }
-      } else {
-        // Если нет в state (при обновлении страницы), пробуем получить из localStorage
-        const savedProduct = localStorage.getItem("currentProduct");
-        if (savedProduct) {
-          const parsedProduct = JSON.parse(savedProduct);
-          console.log("Product из localStorage:", parsedProduct);
 
-          // Проверяем, есть ли offers в сохраненных данных
-          if (!parsedProduct.offers || parsedProduct.offers.length === 0) {
-            // Если нет offers - пробуем загрузить заново
-            if (parsedProduct.product_id) {
-              const fullProduct = await fetchFullProductData(
-                parsedProduct.product_id
-              );
-
-              if (fullProduct) {
-                setProduct(fullProduct);
-                localStorage.setItem(
-                  "currentProduct",
-                  JSON.stringify(fullProduct)
-                );
-              } else {
-                setProduct(parsedProduct);
-              }
-            } else {
-              setProduct(parsedProduct);
-            }
-          } else {
-            // Если offers есть - используем сохраненные данные
-            setProduct(parsedProduct);
-          }
-          setLoading(false);
+        if (productId) {
+          // Загружаем полные данные товара
+          const fullProduct = await fetchProductById(productId);
+          setProduct(fullProduct);
+          localStorage.setItem("currentProduct", JSON.stringify(fullProduct));
         } else {
-          // Если нет нигде - редирект на каталог через 1 секунду
-          console.log("Нет данных о товаре, редирект на каталог");
-          const timer = setTimeout(() => {
-            navigate("/catalog");
-          }, 1000);
-
-          return () => clearTimeout(timer);
+          setError("Не удалось определить ID товара");
         }
+      } catch (err) {
+        console.error("Ошибка загрузки товара:", err);
+        setError(err instanceof Error ? err.message : "Ошибка загрузки товара");
+      } finally {
+        setLoading(false);
       }
     };
 
     loadProduct();
-  }, [location.state, navigate]);
+  }, [location.state]);
+
+  // Если ошибка или нет товара - редирект на каталог
+  useEffect(() => {
+    if (error || (!loading && !product)) {
+      const timer = setTimeout(() => {
+        navigate("/catalog");
+      }, 3000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [error, loading, product, navigate]);
 
   const toggle = (id: number) => {
     setOpenId(openId === id ? null : id);
@@ -319,6 +265,7 @@ export const ProductDetail: React.FC = () => {
       offer_id: "temp_offer_5",
     },
   ];
+
   const accessories = [
     {
       image: img2_1,
@@ -376,6 +323,7 @@ export const ProductDetail: React.FC = () => {
       pricePerMonth: "от 300 руб. в месяц ",
     },
   ];
+
   const minicard = [
     {
       image: imgMini,
@@ -428,7 +376,6 @@ export const ProductDetail: React.FC = () => {
     };
   }, []);
 
-  // Показываем загрузку
   if (loading) {
     return (
       <div className={styles.loadingContainer}>
@@ -438,17 +385,19 @@ export const ProductDetail: React.FC = () => {
     );
   }
 
-  // Если нет продукта (будет редирект)
+  if (error) {
+    return (
+      <div className={styles.errorContainer}>
+        <h2>Ошибка</h2>
+        <p>{error}</p>
+        <p>Перенаправление в каталог через 3 секунды...</p>
+      </div>
+    );
+  }
+
   if (!product) {
     return null;
   }
-
-  // Для совместимости с остальным кодом
-  const displayProduct = {
-    ...product,
-    title: product.title || product.name || "",
-    section: product.section || "Каталог",
-  };
 
   return (
     <>
@@ -471,16 +420,16 @@ export const ProductDetail: React.FC = () => {
           onClick={() => navigate("/catalog")}
           className={styles.breadcrumbLink}
         >
-          {displayProduct.section.toLowerCase()}
+          {product.brand.toLowerCase()}
         </button>{" "}
-        /<span className={styles.currentPage}> {displayProduct.title}</span>
+        /<span className={styles.currentPage}> {product.name}</span>
       </span>
 
-      <h1>{displayProduct.title}</h1>
+      <h1>{product.name}</h1>
 
       <DetailHead product={product} />
       <DetailTabs />
-      <Сharacteristics />
+      <Сharacteristics attributes={product.attributes?.data || []} />
 
       <section className={styles.cardsLineCont}>
         <div className={styles.cardsHead}>

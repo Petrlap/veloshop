@@ -4,6 +4,7 @@ import {
   fetchAllInStockProducts,
   fetchCatalog,
   toggleInStockFilter,
+  setCurrentPage,
 } from "../../store/catalogSlice";
 import { RootState } from "../../store";
 import { Card } from "../../components/Card/Card";
@@ -16,10 +17,10 @@ export const FullCatalog = () => {
     loading,
     error,
     totalProducts,
-    totalPages: totalPagesFromStore,
-    currentPage: currentPageFromStore,
+    totalPages,
+    currentPage,
+    perPage,
 
-    // Добавляем новые состояния
     inStockProducts,
     inStockLoading,
     showOnlyInStock,
@@ -31,51 +32,42 @@ export const FullCatalog = () => {
   const [withVideo, setWithVideo] = useState(false);
   const [sortBy, setSortBy] = useState("cheap");
   const [showMobileFilters, setShowMobileFilters] = useState(false);
-  const [currentPage, setCurrentPage] = useState(1);
 
-  // Эффект для загрузки обычного каталога
+  // Эффект для загрузки каталога с пагинацией
   useEffect(() => {
     if (!showOnlyInStock) {
-      dispatch(fetchCatalog({ page: currentPage, perPage: 100 }) as any);
+      dispatch(fetchCatalog({ page: currentPage, perPage: 20 }) as any);
     }
   }, [dispatch, currentPage, showOnlyInStock]);
 
-  // Эффект для загрузки ВСЕХ товаров в наличии при включении фильтра
+  // Эффект для загрузки ВСЕХ товаров в наличии
   useEffect(() => {
     if (inStockOnly && !showOnlyInStock && inStockProducts.length === 0) {
       console.log("Загружаю все товары в наличии...");
       dispatch(fetchAllInStockProducts() as any);
       dispatch(toggleInStockFilter(true));
     } else if (!inStockOnly && showOnlyInStock) {
-      // При выключении фильтра - сбрасываем состояние
       dispatch(toggleInStockFilter(false));
-      setCurrentPage(1);
+      dispatch(setCurrentPage(1));
     }
   }, [inStockOnly, showOnlyInStock, inStockProducts.length, dispatch]);
 
-  // Определяем какие товары показывать
   const productsToDisplay = showOnlyInStock ? inStockProducts : apiProducts;
   const isLoading = showOnlyInStock ? inStockLoading : loading;
-  const totalPages = showOnlyInStock ? 1 : totalPagesFromStore;
-  const totalDisplayProducts = showOnlyInStock
-    ? inStockProducts.length
-    : totalProducts;
+  const displayTotalPages = showOnlyInStock ? 1 : totalPages;
+  const displayCurrentPage = showOnlyInStock ? 1 : currentPage;
 
   const filteredAndSortedProducts = useMemo(() => {
     let filtered = [...productsToDisplay];
 
-    // Фильтр по скидке
     if (withDiscount) {
       filtered = filtered.filter((product) => product.sale);
     }
 
-    // Фильтр по видео (заглушка)
     if (withVideo) {
-      // Здесь можно добавить реальную логику фильтрации по видео
       filtered = filtered.filter(() => Math.random() > 0.5);
     }
 
-    // Сортировка
     switch (sortBy) {
       case "cheap":
         filtered.sort(
@@ -130,31 +122,32 @@ export const FullCatalog = () => {
   };
 
   const handlePageChange = (page: number) => {
-    // При фильтре "в наличии" пагинация не нужна
     if (!showOnlyInStock) {
-      setCurrentPage(page);
+      dispatch(setCurrentPage(page));
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
   };
 
   const renderPagination = () => {
-    // Если включен фильтр "в наличии", не показываем пагинацию
-    if (showOnlyInStock) return null;
+    if (showOnlyInStock || displayTotalPages <= 1) return null;
 
     const pages = [];
     const maxVisiblePages = 5;
-    let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
-    let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
+    let startPage = Math.max(
+      1,
+      displayCurrentPage - Math.floor(maxVisiblePages / 2)
+    );
+    let endPage = Math.min(displayTotalPages, startPage + maxVisiblePages - 1);
 
     if (endPage - startPage + 1 < maxVisiblePages) {
       startPage = Math.max(1, endPage - maxVisiblePages + 1);
     }
 
-    if (currentPage > 1) {
+    if (displayCurrentPage > 1) {
       pages.push(
         <button
           key="prev"
-          onClick={() => handlePageChange(currentPage - 1)}
+          onClick={() => handlePageChange(displayCurrentPage - 1)}
           className={styles.pageButton}
         >
           ←
@@ -187,7 +180,7 @@ export const FullCatalog = () => {
           key={i}
           onClick={() => handlePageChange(i)}
           className={`${styles.pageButton} ${
-            currentPage === i ? styles.active : ""
+            displayCurrentPage === i ? styles.active : ""
           }`}
         >
           {i}
@@ -195,8 +188,8 @@ export const FullCatalog = () => {
       );
     }
 
-    if (endPage < totalPages) {
-      if (endPage < totalPages - 1) {
+    if (endPage < displayTotalPages) {
+      if (endPage < displayTotalPages - 1) {
         pages.push(
           <span key="ellipsis2" className={styles.ellipsis}>
             ...
@@ -205,20 +198,20 @@ export const FullCatalog = () => {
       }
       pages.push(
         <button
-          key={totalPages}
-          onClick={() => handlePageChange(totalPages)}
+          key={displayTotalPages}
+          onClick={() => handlePageChange(displayTotalPages)}
           className={styles.pageButton}
         >
-          {totalPages}
+          {displayTotalPages}
         </button>
       );
     }
 
-    if (currentPage < totalPages) {
+    if (displayCurrentPage < displayTotalPages) {
       pages.push(
         <button
           key="next"
-          onClick={() => handlePageChange(currentPage + 1)}
+          onClick={() => handlePageChange(displayCurrentPage + 1)}
           className={styles.pageButton}
         >
           →
@@ -231,7 +224,7 @@ export const FullCatalog = () => {
 
   return (
     <div className={styles.catalog}>
-      {loading && (
+      {isLoading && (
         <div className={styles.loading}>
           <div className={styles.spinner}></div>
           <p>Загрузка страницы...</p>
@@ -244,12 +237,7 @@ export const FullCatalog = () => {
           <p>{error}</p>
           <button
             onClick={() =>
-              dispatch(
-                fetchCatalog({
-                  page: currentPage,
-                  perPage: 100,
-                }) as any
-              )
+              dispatch(fetchCatalog({ page: currentPage, perPage: 20 }) as any)
             }
           >
             Попробовать снова
@@ -257,7 +245,7 @@ export const FullCatalog = () => {
         </div>
       )}
 
-      {!loading && !error && (
+      {!isLoading && !error && (
         <>
           <button
             className={styles.mobileFilterToggle}
@@ -391,9 +379,8 @@ export const FullCatalog = () => {
                         onChange={(e) => {
                           const checked = e.target.checked;
                           setInStockOnly(checked);
-                          // При включении фильтра сбрасываем на первую страницу
                           if (!checked) {
-                            setCurrentPage(1);
+                            dispatch(setCurrentPage(1));
                           }
                         }}
                         disabled={inStockLoading}
@@ -413,7 +400,7 @@ export const FullCatalog = () => {
                         checked={withDiscount}
                         onChange={(e) => {
                           setWithDiscount(e.target.checked);
-                          setCurrentPage(1);
+                          dispatch(setCurrentPage(1));
                         }}
                       />
                       <span>Со скидкой</span>
@@ -424,7 +411,7 @@ export const FullCatalog = () => {
                         checked={withVideo}
                         onChange={(e) => {
                           setWithVideo(e.target.checked);
-                          setCurrentPage(1);
+                          dispatch(setCurrentPage(1));
                         }}
                       />
                       <span>Видеообзор</span>
@@ -441,7 +428,7 @@ export const FullCatalog = () => {
                     value={sortBy}
                     onChange={(e) => {
                       setSortBy(e.target.value);
-                      setCurrentPage(1);
+                      dispatch(setCurrentPage(1));
                     }}
                     className={styles.sortSelect}
                   >
@@ -467,16 +454,16 @@ export const FullCatalog = () => {
                     price={product.price}
                     oldprice={product.oldprice}
                     pricePerMonth={product.pricePerMonth}
-                    product_id={product.product_id} // Добавляем
-                    offer_id={product.offer_id} // Добавляем
+                    product_id={product.product_id}
+                    offer_id={product.offer_id}
                   />
                 ))}
               </div>
 
-              {totalPagesFromStore > 1 && (
+              {!showOnlyInStock && totalPages > 1 && (
                 <div className={styles.pagination}>
                   <div className={styles.paginationStats}>
-                    Страница {currentPage} из {totalPagesFromStore}
+                    Страница {currentPage} из {totalPages}
                   </div>
                   <div className={styles.paginationButtons}>
                     {renderPagination()}

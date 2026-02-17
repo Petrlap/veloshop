@@ -30,39 +30,53 @@ const images = [detail1, detail2, detail3, detail4, detail5, detail6];
 
 // Типы согласно JSON структуре
 interface Price {
-  type_price_id: number;
-  type: string;
-  title: string;
+  id: number;
+  offer_id: number;
+  price_type: string | null;
   price: number;
-  currency: string;
 }
 
-interface Warehouse {
-  warehouse_id: number;
-  title: string;
-  count: number;
+interface OfferAttribute {
+  id: number;
+  value: string;
 }
 
 interface Offer {
   id: number;
-  offer_id: string;
   name: string;
-  size: string | null;
-  color: string | null;
-  prices: Price[];
-  warehouses: Warehouse[];
+  product_id: number;
+  offer_id: string;
+  vcode: string | null;
+  articul_supplier: string;
+  is_active: boolean;
+  sort_order: number;
+  meta_title: string | null;
+  meta_description: string | null;
+  meta_keywords: string | null;
+  attributes: {
+    data: OfferAttribute[];
+  };
+  prices: {
+    data: Price[];
+  };
+  stock: {
+    data: any[];
+  };
 }
 
 interface ProductData {
   id: number;
-  product_id: string;
   name: string;
+  product_id: string;
+  category_id: number;
   brand: string;
-  model: string;
-  offers: Offer[];
+  "model ": string;
+  seazon: string;
+  offers: {
+    data: Offer[];
+  };
 }
 
-// Пропсы компонента
 interface DetailHeadProps {
   product: ProductData;
 }
@@ -75,87 +89,113 @@ export const DetailHead: React.FC<DetailHeadProps> = ({ product }) => {
   const increase = () => setHeight((prev) => prev + 1);
   const decrease = () => setHeight((prev) => prev - 1);
   const [qty, setQty] = useState(1);
+
+  // Состояния для выбора SKU
+  const [offers, setOffers] = useState<Offer[]>([]);
+  const [selectedOffer, setSelectedOffer] = useState<Offer | null>(null);
+
+  // Для цветов и размеров
+  const [colorOptions, setColorOptions] = useState<string[]>([]);
+  const [sizeOptions, setSizeOptions] = useState<string[]>([]);
+  const [selectedColor, setSelectedColor] = useState<string>("");
+  const [selectedSize, setSelectedSize] = useState<string>("");
+
+  // Маппинг цвет-размер к офферу для быстрого поиска
+  const [offerMap, setOfferMap] = useState<Map<string, Offer>>(new Map());
+
+  // Для UI
   const [colorOpen, setColorOpen] = useState(false);
   const [sizeOpen, setSizeOpen] = useState(false);
 
-  // Для заглушки
-  const [color, setColor] = useState({
-    name: "Бордовый",
-    value: "#7b001c",
-  });
-  const [size, setSize] = useState('16"');
-
-  // Состояния для SKU
-  const [selectedColor, setSelectedColor] = useState<string>("");
-  const [selectedSize, setSelectedSize] = useState<string>("");
-  const [currentOffer, setCurrentOffer] = useState<Offer | null>(null);
-  const [availableColors, setAvailableColors] = useState<string[]>([]);
-  const [availableSizes, setAvailableSizes] = useState<string[]>([]);
+  // Константы для ID атрибутов
+  const COLOR_ATTRIBUTE_ID = 157; // ID для цвета
+  const SIZE_ATTRIBUTE_ID = 156; // ID для размера
 
   // Инициализация при получении product
   useEffect(() => {
-    if (product && product.offers && product.offers.length > 0) {
-      const offers = product.offers;
+    if (product && product.offers?.data && product.offers.data.length > 0) {
+      const offersList = product.offers.data;
+      setOffers(offersList);
 
-      // Получаем уникальные цвета
-      const colors: string[] = [];
-      offers.forEach((offer) => {
-        if (offer.color && !colors.includes(offer.color)) {
-          colors.push(offer.color);
+      // Собираем уникальные цвета и размеры
+      const colors = new Set<string>();
+      const sizes = new Set<string>();
+      const map = new Map<string, Offer>();
+
+      offersList.forEach((offer) => {
+        // Получаем цвет и размер из атрибутов
+        const colorAttr = offer.attributes?.data?.find(
+          (attr) => attr.id === COLOR_ATTRIBUTE_ID
+        );
+        const sizeAttr = offer.attributes?.data?.find(
+          (attr) => attr.id === SIZE_ATTRIBUTE_ID
+        );
+
+        const color = colorAttr?.value || "";
+        const size = sizeAttr?.value || "";
+
+        if (color) colors.add(color);
+        if (size) sizes.add(size);
+
+        // Создаем ключ для маппинга
+        if (color && size) {
+          map.set(`${color}_${size}`, offer);
         }
       });
 
-      // Получаем уникальные размеры
-      const sizes: string[] = [];
-      offers.forEach((offer) => {
-        if (offer.size && !sizes.includes(offer.size)) {
-          sizes.push(offer.size);
-        }
-      });
+      setColorOptions(Array.from(colors));
+      setSizeOptions(Array.from(sizes));
+      setOfferMap(map);
 
-      setAvailableColors(colors);
-      setAvailableSizes(sizes);
+      // Выбираем первый доступный offer по умолчанию
+      if (offersList.length > 0) {
+        const firstOffer = offersList[0];
+        setSelectedOffer(firstOffer);
 
-      // Выбираем первый offer по умолчанию
-      const defaultOffer = offers[0];
-      setCurrentOffer(defaultOffer);
+        // Устанавливаем выбранные цвет и размер из первого offer
+        const firstColor =
+          firstOffer.attributes?.data?.find(
+            (attr) => attr.id === COLOR_ATTRIBUTE_ID
+          )?.value || "";
+        const firstSize =
+          firstOffer.attributes?.data?.find(
+            (attr) => attr.id === SIZE_ATTRIBUTE_ID
+          )?.value || "";
 
-      if (defaultOffer.color) {
-        setSelectedColor(defaultOffer.color);
+        setSelectedColor(firstColor);
+        setSelectedSize(firstSize);
       }
 
-      if (defaultOffer.size) {
-        setSelectedSize(defaultOffer.size);
-      }
-
-      console.log("Доступные цвета:", colors);
-      console.log("Доступные размеры:", sizes);
-      console.log("Текущий offer:", defaultOffer);
+      console.log("Доступные цвета:", Array.from(colors));
+      console.log("Доступные размеры:", Array.from(sizes));
     }
   }, [product]);
 
+  // Обновление выбранного offer при изменении цвета или размера
+  useEffect(() => {
+    if (selectedColor && selectedSize) {
+      const key = `${selectedColor}_${selectedSize}`;
+      const offer = offerMap.get(key);
+      if (offer) {
+        setSelectedOffer(offer);
+        // Сбрасываем количество при смене оффера
+        setQty(1);
+      }
+    }
+  }, [selectedColor, selectedSize, offerMap]);
+
   // Функция для получения основной цены
   const getMainPrice = (offer: Offer | null): number => {
-    if (!offer || !offer.prices || offer.prices.length === 0) return 0;
-    const mainPrice = offer.prices.find(
-      (p) => p.type_price_id === 1 || p.type === "price"
-    );
-    return mainPrice?.price || offer.prices[0]?.price || 0;
-  };
-
-  // Функция для получения старой цены
-  const getOldPrice = (offer: Offer | null): number | null => {
-    if (!offer || !offer.prices || offer.prices.length === 0) return null;
-    const oldPrice = offer.prices.find(
-      (p) => p.type === "price2" || p.type === "price1c"
-    );
-    return oldPrice?.price || null;
+    if (!offer || !offer.prices?.data || offer.prices.data.length === 0)
+      return 0;
+    // Берем первую цену
+    return offer.prices.data[0]?.price || 0;
   };
 
   // Проверка наличия товара
   const isInStock = (offer: Offer | null): boolean => {
-    if (!offer || !offer.warehouses) return false;
-    return offer.warehouses.some((warehouse) => warehouse.count > 0);
+    if (!offer || !offer.stock?.data) return false;
+    return offer.stock.data.length > 0;
   };
 
   // Форматирование цены
@@ -163,13 +203,10 @@ export const DetailHead: React.FC<DetailHeadProps> = ({ product }) => {
     return price.toLocaleString("ru-RU") + " ₽";
   };
 
-  // Получение общего количества на всех складах для текущего offer
+  // Получение общего количества на всех складах
   const getTotalStock = (offer: Offer | null): number => {
-    if (!offer || !offer.warehouses) return 0;
-    return offer.warehouses.reduce(
-      (sum, warehouse) => sum + warehouse.count,
-      0
-    );
+    if (!offer || !offer.stock?.data) return 0;
+    return offer.stock.data.length;
   };
 
   // Обработчики изменения количества
@@ -178,22 +215,43 @@ export const DetailHead: React.FC<DetailHeadProps> = ({ product }) => {
   };
 
   const handleIncreaseQty = () => {
-    if (currentOffer) {
-      const maxStock = getTotalStock(currentOffer);
+    if (selectedOffer) {
+      const maxStock = getTotalStock(selectedOffer);
+      if (maxStock === 0) return;
       if (qty < maxStock) {
         setQty((prev) => prev + 1);
       }
-    } else {
-      setQty((prev) => prev + 1);
     }
+  };
+
+  // Проверка доступности цвета для выбранного размера
+  const isColorAvailable = (color: string): boolean => {
+    if (!selectedSize) return true;
+    return offerMap.has(`${color}_${selectedSize}`);
+  };
+
+  // Проверка доступности размера для выбранного цвета
+  const isSizeAvailable = (size: string): boolean => {
+    if (!selectedColor) return true;
+    return offerMap.has(`${selectedColor}_${size}`);
+  };
+
+  // Получение всех доступных цветов
+  const getAvailableColors = (): string[] => {
+    return colorOptions;
+  };
+
+  // Получение всех доступных размеров
+  const getAvailableSizes = (): string[] => {
+    return sizeOptions;
   };
 
   // Если нет продукта или offers
   if (
     !product ||
-    !product.offers ||
-    product.offers.length === 0 ||
-    !currentOffer
+    !product.offers?.data ||
+    product.offers.data.length === 0 ||
+    !selectedOffer
   ) {
     return (
       <div className={styles.wrapper}>
@@ -204,18 +262,18 @@ export const DetailHead: React.FC<DetailHeadProps> = ({ product }) => {
     );
   }
 
-  const mainPrice = getMainPrice(currentOffer);
-  const oldPrice = getOldPrice(currentOffer);
-  const inStock = isInStock(currentOffer);
-  const totalStock = getTotalStock(currentOffer);
+  const mainPrice = getMainPrice(selectedOffer);
+  const inStock = isInStock(selectedOffer);
+  const totalStock = getTotalStock(selectedOffer);
+  const model = (product as any)["model "] || "";
 
   return (
     <section className={styles.wrapper}>
-      {/* LEFT */}
+      {/* LEFT - Галерея */}
       <div className={styles.gallery}>
         <div className={styles.meta}>
           <span>
-            Арт: {product.offers[0].offer_id}{" "}
+            Арт: {selectedOffer.offer_id}{" "}
             <IconWrapper Icon={BiCopy} style={{ color: "#545454" }} />
           </span>
           <span className={styles.inStock}>
@@ -263,7 +321,7 @@ export const DetailHead: React.FC<DetailHeadProps> = ({ product }) => {
           </button>
           <button className={styles.videoBtn}>
             <IconWrapper Icon={FaYoutube} style={{ color: "#1D93D2" }} />
-            Видеобзор
+            Видеообзор
           </button>
         </div>
 
@@ -282,7 +340,7 @@ export const DetailHead: React.FC<DetailHeadProps> = ({ product }) => {
         </div>
       </div>
 
-      {/* CENTER */}
+      {/* CENTER - Информация о товаре */}
       <div className={styles.info}>
         <div className={styles.brandRow}>
           <div className={styles.brand}>
@@ -299,15 +357,14 @@ export const DetailHead: React.FC<DetailHeadProps> = ({ product }) => {
         </div>
 
         {/* Название товара */}
-        <h1 className={styles.productTitle}>{product.name}</h1>
-        <p className={styles.productModel}>Модель: {product.model}</p>
+        <h1 className={styles.productTitle}>
+          {selectedOffer.name || product.name}
+        </h1>
+        <p className={styles.productModel}>Модель: {model}</p>
 
-        {/* Цены с учетом выбранного offer */}
+        {/* Цены */}
         <div className={styles.priceRow}>
           <span className={styles.price}>{formatPrice(mainPrice)}</span>
-          {oldPrice && oldPrice > mainPrice && (
-            <span className={styles.oldPrice}>{formatPrice(oldPrice)}</span>
-          )}
         </div>
 
         <p className={styles.viewers}>Эту модель смотрят сейчас 15 человек</p>
@@ -340,106 +397,113 @@ export const DetailHead: React.FC<DetailHeadProps> = ({ product }) => {
           Подходит для вашего роста
         </div>
 
-        {/* ЗАГЛУШКА - оригинальный вариант */}
+        {/* Выбор цвета и размера */}
         <div className={styles.options}>
-          <div className={styles.colorBox}>
-            <label>Цвет</label>
-
-            <div className={styles.selectWrapper}>
-              <div
-                className={styles.select}
-                onClick={() => {
-                  setColorOpen(!colorOpen);
-                  setSizeOpen(false);
-                }}
-              >
-                <span
-                  className={styles.colorDot}
-                  style={{ background: color.value }}
-                />
-                <span>{color.name}</span>
-                <span
-                  className={`${styles.arrow} ${colorOpen ? styles.open : ""}`}
+          {/* Цвет */}
+          {colorOptions.length > 0 && (
+            <div className={styles.colorBox}>
+              <label>Цвет</label>
+              <div className={styles.selectWrapper}>
+                <div
+                  className={styles.select}
+                  onClick={() => {
+                    setColorOpen(!colorOpen);
+                    setSizeOpen(false);
+                  }}
                 >
-                  <IconWrapper
-                    Icon={IoIosArrowDown}
-                    size={14}
-                    style={{ color: "#606060" }}
-                  />
-                </span>
-              </div>
-
-              {colorOpen && (
-                <div className={styles.dropdown}>
-                  {[
-                    { name: "Бордовый", value: "#7b001c" },
-                    { name: "Чёрный", value: "#000000" },
-                    { name: "Синий", value: "#0033aa" },
-                  ].map((item) => (
-                    <div
-                      key={item.name}
-                      className={styles.option}
-                      onClick={() => {
-                        setColor(item);
-                        setColorOpen(false);
-                      }}
-                    >
-                      <div className={styles.optionContent}>
-                        <span
-                          className={styles.colorDot}
-                          style={{ background: item.value }}
-                        />
-                        <span>{item.name}</span>
-                      </div>
-                    </div>
-                  ))}
+                  <span>{selectedColor || "Выберите цвет"}</span>
+                  <span
+                    className={`${styles.arrow} ${
+                      colorOpen ? styles.open : ""
+                    }`}
+                  >
+                    <IconWrapper
+                      Icon={IoIosArrowDown}
+                      size={14}
+                      style={{ color: "#606060" }}
+                    />
+                  </span>
                 </div>
-              )}
+
+                {colorOpen && (
+                  <div className={styles.dropdown}>
+                    {getAvailableColors().map((color) => {
+                      const available = isColorAvailable(color);
+                      return (
+                        <div
+                          key={color}
+                          className={`${styles.option} ${
+                            !available ? styles.disabledOption : ""
+                          }`}
+                          onClick={() => {
+                            if (available) {
+                              setSelectedColor(color);
+                              setColorOpen(false);
+                            }
+                          }}
+                        >
+                          {color}
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
             </div>
-          </div>
+          )}
 
-          <div>
-            <label>Размер</label>
-
-            <div className={styles.selectWrapper}>
-              <div
-                className={styles.select}
-                onClick={() => {
-                  setSizeOpen(!sizeOpen);
-                  setColorOpen(false);
-                }}
-              >
-                <span>{size}</span>
-                <span
-                  className={`${styles.arrow} ${sizeOpen ? styles.open : ""}`}
+          {/* Размер */}
+          {sizeOptions.length > 0 && (
+            <div>
+              <label>Размер</label>
+              <div className={styles.selectWrapper}>
+                <div
+                  className={styles.select}
+                  onClick={() => {
+                    setSizeOpen(!sizeOpen);
+                    setColorOpen(false);
+                  }}
                 >
-                  <IconWrapper
-                    Icon={IoIosArrowDown}
-                    size={14}
-                    style={{ color: "#606060" }}
-                  />
-                </span>
-              </div>
-
-              {sizeOpen && (
-                <div className={styles.dropdown}>
-                  {['14"', '16"', '18"'].map((item) => (
-                    <div
-                      key={item}
-                      className={styles.option}
-                      onClick={() => {
-                        setSize(item);
-                        setSizeOpen(false);
-                      }}
-                    >
-                      {item}
-                    </div>
-                  ))}
+                  <span>{selectedSize || "Выберите размер"}</span>
+                  <span
+                    className={`${styles.arrow} ${sizeOpen ? styles.open : ""}`}
+                  >
+                    <IconWrapper
+                      Icon={IoIosArrowDown}
+                      size={14}
+                      style={{ color: "#606060" }}
+                    />
+                  </span>
                 </div>
-              )}
-            </div>
-          </div>
 
+                {sizeOpen && (
+                  <div className={styles.dropdown}>
+                    {getAvailableSizes().map((size) => {
+                      const available = isSizeAvailable(size);
+                      return (
+                        <div
+                          key={size}
+                          className={`${styles.option} ${
+                            !available ? styles.disabledOption : ""
+                          }`}
+                          onClick={() => {
+                            if (available) {
+                              setSelectedSize(size);
+                              setSizeOpen(false);
+                            }
+                          }}
+                        >
+                          {size}
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+
+          {/* Количество */}
           <div>
             <label>Количество</label>
             <div className={styles.counter}>
@@ -450,14 +514,12 @@ export const DetailHead: React.FC<DetailHeadProps> = ({ product }) => {
               >
                 -
               </button>
-              <span>{qty}</span>
+              <span>{inStock ? qty : 0}</span>
               <button
                 onClick={handleIncreaseQty}
-                disabled={
-                  currentOffer ? qty >= getTotalStock(currentOffer) : false
-                }
+                disabled={!inStock || (totalStock > 0 && qty >= totalStock)}
                 className={
-                  currentOffer && qty >= getTotalStock(currentOffer)
+                  !inStock || (totalStock > 0 && qty >= totalStock)
                     ? styles.disabled
                     : ""
                 }
@@ -465,10 +527,8 @@ export const DetailHead: React.FC<DetailHeadProps> = ({ product }) => {
                 +
               </button>
             </div>
-            {currentOffer && getTotalStock(currentOffer) > 0 && (
-              <div className={styles.stockInfo}>
-                Доступно: {getTotalStock(currentOffer)} шт.
-              </div>
+            {inStock && totalStock > 0 && (
+              <div className={styles.stockInfo}>Доступно: {totalStock} шт.</div>
             )}
           </div>
         </div>
@@ -502,138 +562,68 @@ export const DetailHead: React.FC<DetailHeadProps> = ({ product }) => {
           )}
         </div>
 
-        {/* Информация о доступных SKU */}
-        {product.offers && product.offers.length > 0 && (
+        {/* Таблица всех доступных SKU */}
+        {offers.length > 0 && (
           <div className={styles.skuSection}>
-            <h3 className={styles.skuTitle}>Доступные варианты:</h3>
+            <h3 className={styles.skuTitle}>Все варианты:</h3>
+            <div className={styles.skuTable}>
+              <div className={styles.skuHeader}>
+                <span>Артикул</span>
+                <span>Цвет</span>
+                <span>Размер</span>
+                <span>Цена</span>
+                <span>Наличие</span>
+              </div>
+              {offers.map((offer) => {
+                const offerPrice = getMainPrice(offer);
+                const offerStock = getTotalStock(offer);
+                const offerColor =
+                  offer.attributes?.data?.find(
+                    (attr) => attr.id === COLOR_ATTRIBUTE_ID
+                  )?.value || "-";
+                const offerSize =
+                  offer.attributes?.data?.find(
+                    (attr) => attr.id === SIZE_ATTRIBUTE_ID
+                  )?.value || "-";
+                const isCurrent = offer.id === selectedOffer?.id;
 
-            {/* Если только один вариант без цвета и размера */}
-            {product.offers.length === 1 &&
-            !product.offers[0].color &&
-            !product.offers[0].size ? (
-              <div className={styles.singleSku}>
-                <div className={styles.skuRowSimple}>
-                  <span className={styles.skuLabel}>Артикул:</span>
-                  <span className={styles.skuValue}>
-                    {product.offers[0].offer_id}
-                  </span>
-                </div>
-                <div className={styles.skuRowSimple}>
-                  <span className={styles.skuLabel}>Цена:</span>
-                  <span className={styles.skuPrice}>
-                    {formatPrice(getMainPrice(product.offers[0]))}
-                  </span>
-                </div>
-                <div className={styles.skuRowSimple}>
-                  <span className={styles.skuLabel}>Наличие:</span>
-                  <span
-                    className={
-                      getTotalStock(product.offers[0]) > 0
-                        ? styles.inStockSku
-                        : styles.outOfStockSku
-                    }
+                return (
+                  <div
+                    key={offer.id}
+                    className={`${styles.skuRow} ${
+                      isCurrent ? styles.currentSku : ""
+                    }`}
+                    onClick={() => {
+                      setSelectedOffer(offer);
+                      if (offerColor !== "-") setSelectedColor(offerColor);
+                      if (offerSize !== "-") setSelectedSize(offerSize);
+                      setQty(1);
+                    }}
                   >
-                    {getTotalStock(product.offers[0]) > 0
-                      ? `${getTotalStock(product.offers[0])} шт.`
-                      : "Нет в наличии"}
-                  </span>
-                </div>
-              </div>
-            ) : (
-              /* Если несколько вариантов или есть цвет/размер */
-              <div className={styles.skuTable}>
-                <div className={styles.skuHeader}>
-                  <span>№</span>
-                  <span>Артикул</span>
-                  <span>Цвет</span>
-                  <span>Размер</span>
-                  <span>Цена</span>
-                  <span>Наличие</span>
-                </div>
-                {product.offers.map((offer, index) => {
-                  const offerPrice =
-                    offer.prices?.find(
-                      (p) => p.type === "price" || p.type_price_id === 1
-                    )?.price || 0;
-                  const offerStock = getTotalStock(offer);
-                  const isCurrent = offer.id === currentOffer?.id;
-
-                  return (
-                    <div
-                      key={offer.id}
-                      className={`${styles.skuRow} ${
-                        isCurrent ? styles.currentSku : ""
-                      }`}
+                    <span className={styles.skuId}>{offer.offer_id}</span>
+                    <span>{offerColor}</span>
+                    <span>{offerSize}</span>
+                    <span className={styles.skuPrice}>
+                      {formatPrice(offerPrice)}
+                    </span>
+                    <span
+                      className={
+                        offerStock > 0
+                          ? styles.inStockSku
+                          : styles.outOfStockSku
+                      }
                     >
-                      <span className={styles.skuIndex}>{index + 1}</span>
-                      <span className={styles.skuId}>{offer.offer_id}</span>
-                      <span>{offer.color || "-"}</span>
-                      <span>{offer.size || "-"}</span>
-                      <span className={styles.skuPrice}>
-                        {formatPrice(offerPrice)}
-                      </span>
-                      <span
-                        className={
-                          offerStock > 0
-                            ? styles.inStockSku
-                            : styles.outOfStockSku
-                        }
-                      >
-                        {offerStock > 0 ? `${offerStock} шт.` : "Нет в наличии"}
-                      </span>
-                    </div>
-                  );
-                })}
-              </div>
-            )}
-
-            {/* Информация о складах для текущего SKU */}
-            {currentOffer &&
-              currentOffer.warehouses &&
-              currentOffer.warehouses.length > 0 && (
-                <div className={styles.warehouseInfo}>
-                  <h4>Наличие на складах:</h4>
-                  <div className={styles.warehouseList}>
-                    {currentOffer.warehouses.map((warehouse) => (
-                      <div
-                        key={warehouse.warehouse_id}
-                        className={styles.warehouseItem}
-                      >
-                        <span className={styles.warehouseName}>
-                          {warehouse.title}:
-                        </span>
-                        <span
-                          className={
-                            warehouse.count > 0
-                              ? styles.warehouseInStock
-                              : styles.warehouseOutOfStock
-                          }
-                        >
-                          {warehouse.count > 0
-                            ? `${warehouse.count} шт.`
-                            : "Нет в наличии"}
-                        </span>
-                      </div>
-                    ))}
-                    {/* Общее количество */}
-                    {getTotalStock(currentOffer) > 0 && (
-                      <div className={styles.warehouseTotal}>
-                        <span className={styles.warehouseName}>
-                          <strong>Итого доступно:</strong>
-                        </span>
-                        <span className={styles.warehouseInStock}>
-                          <strong>{getTotalStock(currentOffer)} шт.</strong>
-                        </span>
-                      </div>
-                    )}
+                      {offerStock > 0 ? `${offerStock} шт.` : "Нет в наличии"}
+                    </span>
                   </div>
-                </div>
-              )}
+                );
+              })}
+            </div>
           </div>
         )}
       </div>
 
-      {/* RIGHT */}
+      {/* RIGHT - Сайдбар с доставкой */}
       <div className={styles.sidebar}>
         <div className={styles.sidebarItem}>
           <IconWrapper

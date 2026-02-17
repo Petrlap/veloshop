@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
-import { CardProduct } from "../types/catalog";
+import { CardProduct, ProductApi, OfferApi, PriceApi, CatalogApiResponse } from "../types/catalog";
 
 interface CatalogState {
   products: CardProduct[];
@@ -10,13 +10,12 @@ interface CatalogState {
   totalProducts: number;
   totalPages: number;
   currentPage: number;
+  perPage: number;
 
-  // Для деталей товара
-  productDetails: any | null;
+  productDetails: ProductApi | null;
   productDetailsLoading: boolean;
   productDetailsError: string | null;
 
-  // Для фильтра "в наличии"
   inStockProducts: CardProduct[];
   inStockLoading: boolean;
   inStockError: string | null;
@@ -32,6 +31,7 @@ const initialState: CatalogState = {
   totalProducts: 0,
   totalPages: 0,
   currentPage: 1,
+  perPage: 20, // Значение по умолчанию
 
   productDetails: null,
   productDetailsLoading: false,
@@ -50,31 +50,47 @@ const calculatePricePerMonth = (price: number) => {
   return `от ${monthly.toLocaleString("ru-RU")} руб. в месяц`;
 };
 
-const getPrices = (prices: any[]) => {
-  const main = prices.find((p) => p.type === "price");
-  const old = prices.find((p) => p.type === "price1c");
-
-  const price = main?.price ?? 0;
-  const oldprice = old && old.price > price ? old.price : 0;
+const getPrices = (prices: PriceApi[]) => {
+  if (!prices.length) return { price: 0, oldprice: 0, priceFormatted: "", oldpriceFormatted: "" };
+  
+  const priceValues = prices.map(p => p.price);
+  const minPrice = Math.min(...priceValues);
+  const maxPrice = Math.max(...priceValues);
+  
+  const oldprice = minPrice !== maxPrice ? maxPrice : 0;
 
   return {
-    price,
+    price: minPrice,
     oldprice,
-    priceFormatted: formatPrice(price),
+    priceFormatted: formatPrice(minPrice),
     oldpriceFormatted: oldprice ? formatPrice(oldprice) : "",
   };
 };
 
-const transformApiToCardProduct = (product: any): CardProduct | null => {
-  if (!product.offers?.length) return null;
+const isOfferInStock = (offer: OfferApi): boolean => {
+  return offer.stock?.data && offer.stock.data.length > 0;
+};
 
-  const mainOffer = product.offers[0];
+const transformApiToCardProduct = (product: ProductApi): CardProduct | null => {
+  if (!product.offers?.data || !product.offers.data.length) {
+    return null;
+  }
 
-  const { price, oldprice, priceFormatted, oldpriceFormatted } = getPrices(
-    mainOffer.prices || []
-  );
+  const allPrices: PriceApi[] = [];
+  product.offers.data.forEach(offer => {
+    if (offer.prices?.data) {
+      allPrices.push(...offer.prices.data);
+    }
+  });
+
+  if (allPrices.length === 0) return null;
+
+  const { price, oldprice, priceFormatted, oldpriceFormatted } = getPrices(allPrices);
 
   if (price === 0) return null;
+
+  const hasStock = product.offers.data.some(isOfferInStock);
+  const model = (product as any)["model "] || "";
 
   return {
     image: `https://via.placeholder.com/300x200/4A6FA5/FFFFFF?text=${encodeURIComponent(
@@ -83,43 +99,45 @@ const transformApiToCardProduct = (product: any): CardProduct | null => {
     hit: Math.random() > 0.8,
     sale: oldprice > 0,
     section: "Каталог",
-    status: mainOffer.warehouses?.some((w: any) => w.count > 0)
-      ? "В наличии"
-      : "Нет в наличии",
+    status: hasStock ? "В наличии" : "Нет в наличии",
     title: product.name,
     price: priceFormatted,
     oldprice: oldpriceFormatted,
     pricePerMonth: calculatePricePerMonth(price),
     brand: product.brand,
-    model: product.model,
-    offer_id: mainOffer.offer_id,
+    model: model,
+    offer_id: product.offers.data[0]?.offer_id || "",
     product_id: product.product_id,
-    articul_supplier: mainOffer.offer_id,
+    articul_supplier: product.offers.data[0]?.articul_supplier || "",
     created_at: "",
+    total_offers: product.offers.data.length,
   };
 };
 
 export const fetchCatalog = createAsyncThunk(
   "catalog/fetchCatalog",
-  async (
-    { page, perPage }: { page: number; perPage: number },
-    { rejectWithValue }
-  ) => {
+  async ({ page, perPage }: { page: number; perPage: number }, { rejectWithValue }) => {
     try {
+      console.log(`Загружаю каталог: страница ${page}, по ${perPage} товаров`);
+      
       const response = await fetch(
-        `https://admin.velo-shop.ru/api/catalog/tree/page=${page}/perPage=${perPage}`
+        `https://admin.velo-shop.ru/api/catalog/products?page=${page}&per-page=${perPage}`
       );
-
+      
       if (!response.ok) throw new Error(`HTTP ${response.status}`);
-
+      
       const data = await response.json();
+      
+      console.log("Ответ API с пагинацией:", data);
 
-      if (!data.success) throw new Error("API error");
+      if (!data.data || !Array.isArray(data.data)) {
+        throw new Error("Неверная структура ответа API");
+      }
 
       const products: CardProduct[] = [];
       const brands = new Set<string>();
 
-      data.data.forEach((product: any) => {
+      data.data.forEach((product: ProductApi) => {
         const cardProduct = transformApiToCardProduct(product);
         if (cardProduct) {
           products.push(cardProduct);
@@ -131,11 +149,13 @@ export const fetchCatalog = createAsyncThunk(
         products,
         categories: [],
         brands: Array.from(brands),
-        totalProducts: data.meta.total,
-        totalPages: data.meta.total_pages,
-        currentPage: page,
+        totalProducts: data.meta?.total || products.length,
+        totalPages: data.meta?.last_page || 1,
+        currentPage: data.meta?.current_page || page,
+        perPage: data.meta?.per_page || perPage,
       };
     } catch (e) {
+      console.error("Ошибка в fetchCatalog:", e);
       return rejectWithValue(e instanceof Error ? e.message : "Unknown error");
     }
   }
@@ -145,24 +165,34 @@ export const fetchProductById = createAsyncThunk(
   "catalog/fetchProductById",
   async (productId: string, { rejectWithValue }) => {
     try {
-      const response = await fetch(
-        `https://admin.velo-shop.ru/api/catalog/tree/page=1/perPage=100`
-      );
+      // Загружаем все страницы пока не найдем товар
+      let page = 1;
+      const perPage = 100;
+      
+      while (true) {
+        const response = await fetch(
+          `https://admin.velo-shop.ru/api/catalog/products?page=${page}&per-page=${perPage}`
+        );
+        
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        
+        const data = await response.json();
+        
+        if (!data.data || !Array.isArray(data.data)) {
+          throw new Error("Неверная структура ответа API");
+        }
 
-      if (!response.ok) throw new Error(`HTTP ${response.status}`);
-
-      const data = await response.json();
-
-      if (!data.success) throw new Error("API error");
-
-      // Ищем нужный товар по product_id
-      const product = data.data.find(
-        (item: any) => item.product_id === productId
-      );
-
-      if (!product) throw new Error("Товар не найден");
-
-      return product; // Возвращаем полные данные товара
+        const product = data.data.find((item: ProductApi) => item.product_id === productId);
+        
+        if (product) return product;
+        
+        // Если дошли до последней страницы и не нашли
+        if (page >= (data.meta?.last_page || 1)) break;
+        
+        page++;
+      }
+      
+      throw new Error("Товар не найден");
     } catch (e) {
       return rejectWithValue(e instanceof Error ? e.message : "Unknown error");
     }
@@ -173,64 +203,59 @@ export const fetchAllInStockProducts = createAsyncThunk(
   "catalog/fetchAllInStockProducts",
   async (_, { rejectWithValue }) => {
     try {
-      console.log("Загружаю ВСЕ товары в наличии...");
-
-      // Загружаем все страницы товаров
-      const allProducts: any[] = [];
+      console.log("Загружаю все товары в наличии...");
+      
+      let allProducts: ProductApi[] = [];
       let page = 1;
-      const perPage = 100; // Максимум за один запрос
-
-      // Сначала загружаем первую страницу чтобы узнать общее количество
+      const perPage = 100;
+      let totalPages = 1;
+      
+      // Загружаем первую страницу чтобы узнать количество страниц
       const firstResponse = await fetch(
-        `https://admin.velo-shop.ru/api/catalog/tree/page=1/perPage=1`
+        `https://admin.velo-shop.ru/api/catalog/products?page=1&per-page=${perPage}`
       );
-
+      
       if (!firstResponse.ok) throw new Error(`HTTP ${firstResponse.status}`);
-
+      
       const firstData = await firstResponse.json();
-
-      if (!firstData.success) throw new Error("API error");
-
-      const totalProducts = firstData.meta.total;
-      const totalPages = Math.ceil(totalProducts / perPage);
-
-      console.log(`Всего товаров: ${totalProducts}, страниц: ${totalPages}`);
-
-      // Загружаем все страницы параллельно
+      
+      if (!firstData.data || !Array.isArray(firstData.data)) {
+        throw new Error("Неверная структура ответа API");
+      }
+      
+      totalPages = firstData.meta?.last_page || 1;
+      allProducts = [...firstData.data];
+      
+      console.log(`Всего страниц: ${totalPages}`);
+      
+      // Загружаем остальные страницы
       const pagePromises = [];
-
-      for (let page = 1; page <= totalPages; page++) {
+      for (page = 2; page <= totalPages; page++) {
         pagePromises.push(
-          fetch(
-            `https://admin.velo-shop.ru/api/catalog/tree/page=${page}/perPage=${perPage}`
-          ).then((response) => response.json())
+          fetch(`https://admin.velo-shop.ru/api/catalog/products?page=${page}&per-page=${perPage}`)
+            .then(res => res.json())
         );
       }
-
-      // Ждем загрузки всех страниц
-      const allPagesData = await Promise.all(pagePromises);
-
-      // Собираем все товары
-      allPagesData.forEach((pageData) => {
-        if (pageData.success && pageData.data) {
+      
+      const remainingPagesData = await Promise.all(pagePromises);
+      
+      remainingPagesData.forEach(pageData => {
+        if (pageData.data && Array.isArray(pageData.data)) {
           allProducts.push(...pageData.data);
         }
       });
-
+      
       console.log(`Загружено ${allProducts.length} товаров`);
 
-      // Фильтруем только товары в наличии
       const inStockProductsRaw = allProducts.filter(isProductInStock);
       console.log(`Товаров в наличии (сырых): ${inStockProductsRaw.length}`);
 
-      // Преобразуем в CardProduct
       const inStockProducts: CardProduct[] = [];
       const brands = new Set<string>();
 
-      inStockProductsRaw.forEach((product: any) => {
+      inStockProductsRaw.forEach((product: ProductApi) => {
         const cardProduct = transformApiToCardProduct(product);
         if (cardProduct) {
-          // Принудительно устанавливаем статус "В наличии"
           cardProduct.status = "В наличии";
           inStockProducts.push(cardProduct);
           if (product.brand) brands.add(product.brand);
@@ -254,14 +279,10 @@ export const fetchAllInStockProducts = createAsyncThunk(
   }
 );
 
-const isProductInStock = (product: any): boolean => {
-  // Проверяем наличие товара по его offers
-  if (!product.offers || product.offers.length === 0) return false;
-
-  // Проверяем все offers товара
-  return product.offers.some((offer: any) => {
-    if (!offer.warehouses || offer.warehouses.length === 0) return false;
-    return offer.warehouses.some((warehouse: any) => warehouse.count > 0);
+const isProductInStock = (product: ProductApi): boolean => {
+  if (!product.offers?.data?.length) return false;
+  return product.offers.data.some((offer: OfferApi) => {
+    return offer.stock?.data && offer.stock.data.length > 0;
   });
 };
 
@@ -289,6 +310,9 @@ const catalogSlice = createSlice({
       state.productDetails = null;
       state.productDetailsError = null;
     },
+    setCurrentPage: (state, action: PayloadAction<number>) => {
+      state.currentPage = action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -307,6 +331,7 @@ const catalogSlice = createSlice({
             totalProducts: number;
             totalPages: number;
             currentPage: number;
+            perPage: number;
           }>
         ) => {
           state.loading = false;
@@ -316,6 +341,13 @@ const catalogSlice = createSlice({
           state.totalProducts = action.payload.totalProducts;
           state.totalPages = action.payload.totalPages;
           state.currentPage = action.payload.currentPage;
+          state.perPage = action.payload.perPage;
+          console.log("Состояние обновлено:", {
+            товаров: state.products.length,
+            страница: state.currentPage,
+            всего_страниц: state.totalPages,
+            всего_товаров: state.totalProducts
+          });
         }
       )
       .addCase(fetchCatalog.rejected, (state, action) => {
@@ -364,12 +396,12 @@ const catalogSlice = createSlice({
   },
 });
 
-// ОДИН экспорт со всеми экшенами
 export const {
   clearError,
   toggleInStockFilter,
   clearInStockProducts,
   clearProductDetails,
+  setCurrentPage,
 } = catalogSlice.actions;
 
 export default catalogSlice.reducer;
