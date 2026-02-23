@@ -56,9 +56,11 @@
 }
 .characteristicsItem {
   display: flex;
+  align-items: end;
 }
 .characteristicsItem span {
-  width: 100%;
+  min-width: 50px;
+  flex: 1 1 auto;
   margin: 0 5px;
   border-bottom: 1px dashed #c6c6c6;
 }
@@ -73,7 +75,7 @@
   font-weight: 500;
   color: #000000;
   text-wrap: wrap;
-  min-width: fit-content;
+  max-width: max-content;
 }
 .miniCard {
   position: absolute;
