@@ -8,23 +8,41 @@ export const useMenu = () => {
 
   // Получаем состояние меню из Redux store
   const {
-    topMenu, // Топ меню (header_top)
-    mainMenu, // Основное меню
+    menus, // Все меню
+    topMenu, // Пункты верхнего меню (с сохранением вложенности)
+    footerMenus, // Все меню для футера
     loading,
     error,
   } = useSelector((state: RootState) => state.menu);
 
-  // Загружаем меню при первом рендере
+  // Загружаем меню при первом рендере, если нет данных
   useEffect(() => {
-    if (mainMenu.length === 0 && !loading) {
+    // Проверяем, есть ли уже загруженные данные
+    if (menus.length === 0 && !loading) {
       dispatch(fetchMenu());
     }
-  }, [dispatch, mainMenu.length, loading]);
+  }, [dispatch, menus.length, loading]);
 
   return {
-    topMenu, // Массив пунктов топ меню
-    mainMenu, // Массив пунктов основного меню
+    menus, // Все меню (массив объектов Menu)
+    topMenu, // Пункты верхнего меню (массив MenuItem с возможными children)
+    footerMenus, // Все меню для футера (массив объектов Menu)
     loading, // boolean - идет ли загрузка
     error, // string | null - ошибка загрузки
+
+    // Вспомогательные функции для удобства
+    getMenuByType: (typeName: string) => {
+      return menus.find((menu) => menu.menu_type?.name === typeName);
+    },
+
+    getMenuById: (id: number) => {
+      return menus.find((menu) => menu.id === id);
+    },
+
+    // Функция для получения плоского списка всех пунктов меню определенного типа
+    getFlatMenuItems: (typeName: string) => {
+      const menu = menus.find((m) => m.menu_type?.name === typeName);
+      return menu?.items?.filter((item) => item.is_active) ?? [];
+    },
   };
 };

@@ -1,5 +1,4 @@
 import { useEffect, useRef } from "react";
-import { HeadHeader } from "../HeadHeader/HeadHeader";
 import styles from "./Footer.module.css";
 import mastercard from "../../assets/payments/mastercard.webp";
 import visa from "../../assets/payments/visa.webp";
@@ -12,10 +11,19 @@ import { FaOdnoklassniki } from "react-icons/fa6";
 import { FaYoutube } from "react-icons/fa";
 import { FaTelegramPlane } from "react-icons/fa";
 import { FaWhatsapp } from "react-icons/fa";
-import { HeadHeaderMobile } from "../HeadHeaderMobile/HeadHeaderMobile";
 import { Link } from "react-router-dom";
+import { useMenu } from "../../hooks/useMenu";
+
+// Маппинг названий меню для футера
+const MENU_TITLES: Record<string, string> = {
+  "Нижнее меню Каталог": "Каталог",
+  "Нижнее меню Информация": "Информация",
+  "Нижнее меню Компания": "Компания",
+  "Нижнее меню Помощь": "Помощь",
+};
 
 export const Footer: React.FC = () => {
+  const { footerMenus, loading } = useMenu();
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -38,63 +46,64 @@ export const Footer: React.FC = () => {
       containerRef.current.appendChild(el);
     }
   }, []);
+
+  // Функция для рендеринга пункта меню (поддерживает вложенность, если нужно)
+  const renderMenuItem = (item: any) => {
+    if (item.children && item.children.length > 0) {
+      // Если есть дочерние элементы, можно обработать их отдельно
+      // Но для футера обычно не нужна вложенность
+      return (
+        <Link key={item.id} to={item.url}>
+          {item.title}
+        </Link>
+      );
+    }
+
+    return (
+      <Link key={item.id} to={item.url}>
+        {item.title}
+      </Link>
+    );
+  };
+
+  // Если данные загружаются, показываем скелетон или ничего
+  if (loading && footerMenus.length === 0) {
+    return (
+      <footer>
+        <div className={styles.footer}>
+          <div className="container">
+            <div className={styles.loading}>Загрузка меню...</div>
+          </div>
+        </div>
+      </footer>
+    );
+  }
+
   return (
     <footer>
-      <HeadHeader />
-      <HeadHeaderMobile />
       <section className={styles.footer}>
         <div className="container">
           <div className={styles.middleBlock}>
-            <div className={styles.menuColumn}>
-              <a href="#" className={styles.firstLink}>
-                Каталог
-              </a>
-              <a href="#">Горные велосипеды</a>
-              <a href="#">Детские велосипеды</a>
-              <a href="#">Городские велосипеды</a>
-              <a href="#">Двухподвесные велосипеды</a>
-              <a href="#">Женские велосипеды</a>
-              <a href="#">Складные велосипеды</a>
-              <a href="#">Гоночные велосипеды</a>
-              <a href="#">BMX велосипеды</a>
-              <a href="#">Самокаты</a>
-              <a href="#">Электровелосипеды</a>
-            </div>
-            <div className={styles.menuColumn}>
-              <a href="#" className={styles.firstLink}>
-                Информация
-              </a>
-              <a href="#">Информация</a>
-              <a href="#">Условия рассрочки</a>
-              <a href="#">Условия доставки</a>
-              <a href="#">Возврат / Обмен</a>
-              <a href="#">Гарантия на товар</a>
-              <a href="#">Расширенная гарантия</a>
-              <a href="#">Акции</a>
-            </div>
-            <div className={styles.menuColumn}>
-              <a href="#" className={styles.firstLink}>
-                Компания
-              </a>
-              <a href="#">О компании</a>
-              <a href="#">Реквизиты</a>
-              <Link to="/offerta">Оферта</Link>
-              <a href="#">Новости</a>
-              <a href="#">Вакансии</a>
-              <a href="#">Магазины</a>
-              <Link to="/agreement">Соглашение</Link>
-              <a href="#">Велосипеды</a>
-            </div>
-            <div className={styles.menuColumn}>
-              <a href="#" className={styles.firstLink}>
-                Помощь
-              </a>
-              <a href="#">Статьи</a>
-              <a href="#">Вопрос-ответ</a>
-              <a href="#">Производители</a>
-              <a href="#">Видео обзоры</a>
-              <a href="#">Карта сайта</a>
-            </div>
+            {/* Рендерим меню из API */}
+            {footerMenus.map((menu) => {
+              // Фильтруем только активные пункты и сортируем по order
+              const activeItems = menu.items
+                .filter((item) => item.is_active)
+                .sort((a, b) => (a.order || 0) - (b.order || 0));
+
+              if (activeItems.length === 0) return null;
+
+              return (
+                <div key={menu.id} className={styles.menuColumn}>
+                  <span className={styles.firstLink}>
+                    {MENU_TITLES[menu.name] || menu.name}
+                  </span>
+                  {activeItems.map((item) => renderMenuItem(item))}
+                </div>
+              );
+            })}
+
+            {/* Блок с соцсетями */}
             <div className={styles.rightBlock}>
               <p>Мы в социальных сетях, присоединяйтесь:</p>
               <div className={styles.socialTop}>

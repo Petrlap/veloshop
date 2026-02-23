@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { HeadHeader } from "../HeadHeader/HeadHeader";
 import { TbGridDots } from "react-icons/tb";
 import { IoStatsChart } from "react-icons/io5";
@@ -8,10 +9,22 @@ import { FaTelegram } from "react-icons/fa";
 import { IoLogoWhatsapp } from "react-icons/io";
 import { IconWrapper } from "../IconWrapper/IconWrapper";
 import { HeadHeaderMobile } from "../HeadHeaderMobile/HeadHeaderMobile";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import styles from "./Header.module.css";
 
 export const Header: React.FC = () => {
+  const navigate = useNavigate();
+  const [searchInput, setSearchInput] = useState("");
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (searchInput.trim()) {
+      navigate("/fullcatalog", {
+        state: { searchQuery: searchInput.trim() },
+      });
+    }
+  };
+
   return (
     <header>
       <HeadHeader />
@@ -44,15 +57,28 @@ export const Header: React.FC = () => {
                 type="text"
                 placeholder="Поиск..."
                 className={styles.searchInput}
-              />
-              <IconWrapper
-                Icon={FiSearch}
-                className={styles.icon}
-                size={20}
-                style={{
-                  color: "#D2D2D2",
+                value={searchInput}
+                onChange={(e) => setSearchInput(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    handleSearch(e);
+                  }
                 }}
               />
+              <div
+                className={styles.searchIconWrapper}
+                onClick={handleSearch}
+                style={{ cursor: "pointer" }}
+              >
+                <IconWrapper
+                  Icon={FiSearch}
+                  className={styles.icon}
+                  size={20}
+                  style={{
+                    color: "#D2D2D2",
+                  }}
+                />
+              </div>
             </div>
             <div className={styles.socialhWrapper}>
               <span>На связи</span>

@@ -19,35 +19,37 @@ interface СharacteristicsProps {
   }>;
 }
 
-// Маппинг ID атрибутов к названиям
+// Правильный маппинг на основе ваших реальных ID
 const ATTRIBUTE_NAMES: Record<number, string> = {
-  156: "Размер",
-  157: "Цвет",
-  158: "Основной цвет",
-  159: "Название атрибута 159",
-  160: "Название атрибута 160",
-  161: "Название атрибута 161",
-  162: "Материал рамы",
-  163: "Количество скоростей",
-  164: "Педали",
-  165: "Рулевая колонка",
-  166: "Втулки",
-  167: "Покрышки",
-  168: "Вынос руля",
-  169: "Вилка",
-  170: "Седло",
-  171: "Каретка",
-  172: "Обода",
-  173: "Седло (доп)",
-  174: "Тормоза",
-  175: "Цепь",
-  176: "Подседельный штырь",
+  4: "Тормоза",
+  5: "Цепь",
+  6: "Каретка",
+  8: "Шатуны",
+  9: "Педали",
+  10: "Вилка",
+  11: "Обода",
+  12: "Подседельный штырь",
+  13: "Рулевая колонка",
+  14: "Седло",
+  15: "Втулки",
+  16: "Покрышки",
+  17: "Руль",
+  18: "Трещотка",
+  19: "Вынос руля",
+  20: "Материал рамы",
+  21: "Руль (размер)",
+  22: "Защита пера",
+  23: "Защита цепи",
+  24: "Защита диска",
+  25: "Крылья",
 };
 
 export const Сharacteristics: React.FC<СharacteristicsProps> = ({
   attributes = [],
   documents = [],
 }) => {
+  console.log("Характеристики получены:", attributes);
+
   const minicard = [
     {
       image: imgMini,
@@ -56,6 +58,9 @@ export const Сharacteristics: React.FC<СharacteristicsProps> = ({
       title: "Женский велосипед Welt Edelweiss 2.0 HD27...",
     },
   ];
+
+  // Сортируем атрибуты по ID для консистентного отображения
+  const sortedAttributes = [...attributes].sort((a, b) => a.id - b.id);
 
   const hasAttributes = attributes && attributes.length > 0;
 
@@ -66,11 +71,8 @@ export const Сharacteristics: React.FC<СharacteristicsProps> = ({
           <h2>Характеристики</h2>
           <div>
             {hasAttributes ? (
-              attributes.map((attr, index) => (
-                <div
-                  key={attr.id || index}
-                  className={styles.characteristicsItem}
-                >
+              sortedAttributes.map((attr) => (
+                <div key={attr.id} className={styles.characteristicsItem}>
                   <p className={styles.name}>
                     {ATTRIBUTE_NAMES[attr.id] || `Характеристика ${attr.id}`}
                   </p>
@@ -79,6 +81,7 @@ export const Сharacteristics: React.FC<СharacteristicsProps> = ({
                 </div>
               ))
             ) : (
+              // Статическая заглушка если нет атрибутов
               <>
                 <div className={styles.characteristicsItem}>
                   <p className={styles.name}>Бренд</p>
@@ -168,6 +171,7 @@ export const Сharacteristics: React.FC<СharacteristicsProps> = ({
                 </div>
               ))
             ) : (
+              // Статические документы
               <>
                 <div>
                   <IconWrapper

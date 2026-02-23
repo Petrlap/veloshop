@@ -1,10 +1,10 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { MenuState, MenuApiResponse } from "../types/menu";
+import { MenuState, MenuApiResponse, MenuItem } from "../types/menu";
 
 const initialState: MenuState = {
   menus: [],
-  topMenu: [],
-  mainMenu: [],
+  topMenu: [], // Верхнее меню (тип top_header)
+  footerMenus: [], // Все меню для футера (тип footer)
   loading: false,
   error: null,
 };
@@ -52,14 +52,18 @@ const menuSlice = createSlice({
         state.loading = false;
         state.menus = action.payload;
 
+        // Находим верхнее меню (top_header)
         const headerMenu = action.payload.find(
           (menu) => menu.menu_type?.name === "top_header"
         );
+        
+        // Сохраняем все пункты верхнего меню (с сохранением вложенности)
+        state.topMenu = headerMenu?.items?.filter(item => item.is_active) ?? [];
 
-        const items = headerMenu?.items ?? [];
-
-        state.topMenu = items;
-        state.mainMenu = items;
+        // Находим все меню для футера (footer)
+        state.footerMenus = action.payload.filter(
+          (menu) => menu.menu_type?.name === "footer"
+        );
       })
       .addCase(fetchMenu.rejected, (state, action) => {
         state.loading = false;

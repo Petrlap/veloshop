@@ -10,6 +10,7 @@ export interface MenuItem {
   class: string | null;
   created_at: string;
   updated_at: string;
+  children?: MenuItem[]; // Добавляем поддержку вложенных элементов
 }
 
 export interface MenuType {
@@ -27,19 +28,27 @@ export interface Menu {
   menu_type: MenuType;
   is_active: boolean;
   items: MenuItem[];
+  items_count?: number;
+  created_at?: string;
+  updated_at?: string;
 }
 
 export interface MenuApiResponse {
   success: boolean;
   data: {
     menus: Menu[];
+    meta?: {
+      total_menus: number;
+      total_items: number;
+      timestamp: string;
+    };
   };
 }
 
 export interface MenuState {
   menus: Menu[];
-  topMenu: MenuItem[]; // Топ меню (header_top)
-  mainMenu: MenuItem[]; // Основное меню
+  topMenu: MenuItem[]; // Топ меню (header_top) с сохранением вложенности
+  footerMenus: Menu[]; // Все меню для футера (тип footer)
   loading: boolean;
   error: string | null;
 }

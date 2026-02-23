@@ -6,20 +6,22 @@ import { useMenu } from "../../hooks/useMenu";
 import logo from "../../assets/logo.webp";
 import styles from "./HeadHeader.module.css";
 
-interface MenuItem {
+// Определяем интерфейс для пункта меню
+interface MenuItemType {
   to: string;
   text: string;
   id: number;
-  target?: string;
+  target?: "_self" | "_blank";
   seoTitle?: string;
   className?: string | null;
+  children?: any[];
 }
 
 export const HeadHeader: React.FC = () => {
-  const { mainMenu, loading, error } = useMenu();
+  const { topMenu, loading } = useMenu();
   const [isPopupOpen, setIsPopupOpen] = useState(false);
-  const [hiddenItems, setHiddenItems] = useState<MenuItem[]>([]);
-  const [visibleItems, setVisibleItems] = useState<MenuItem[]>([]);
+  const [hiddenItems, setHiddenItems] = useState<MenuItemType[]>([]);
+  const [visibleItems, setVisibleItems] = useState<MenuItemType[]>([]);
   const [popupPosition, setPopupPosition] = useState({ top: 0, left: 0 });
   const navRef = useRef<HTMLElement>(null);
   const moreButtonRef = useRef<HTMLButtonElement>(null);
@@ -27,10 +29,10 @@ export const HeadHeader: React.FC = () => {
   const itemRefs = useRef<(HTMLAnchorElement | null)[]>([]);
 
   // Преобразуем данные из API в нужный формат
-  const transformMenuData = () => {
-    if (!mainMenu || mainMenu.length === 0) return [];
+  const transformMenuData = (): MenuItemType[] => {
+    if (!topMenu || topMenu.length === 0) return [];
 
-    return mainMenu
+    return topMenu
       .filter((item) => item.is_active)
       .sort((a, b) => (a.order ?? 0) - (b.order ?? 0))
       .map((item) => ({
@@ -40,27 +42,31 @@ export const HeadHeader: React.FC = () => {
         target: item.target,
         seoTitle: item.seo_title,
         className: item.class,
+        children: item.children,
       }));
   };
 
+  // Fallback меню с правильной типизацией
+  const fallbackMenuItems: MenuItemType[] = [
+    { to: "/sale/", text: "Акции", id: 1 },
+    { to: "/catalog/rasprodazha/", text: "Распродажа", id: 2 },
+    { to: "/info/", text: "Покупателям", id: 3 },
+    { to: "/contacts/stores/", text: "Магазины", id: 6 },
+    { to: "/services/", text: "Мастерская", id: 7 },
+    { to: "/company/news/", text: "Новости", id: 8 },
+  ];
+
   // Получаем все пункты меню (из API или fallback)
-  const allMenuItems = React.useMemo(() => {
-    if (!loading && !error && mainMenu.length > 0) {
+  const allMenuItems: MenuItemType[] = React.useMemo(() => {
+    // Если данные загружены, используем их
+    if (topMenu.length > 0) {
       return transformMenuData();
     }
 
-    // Fallback меню если API недоступно или грузится
-    return [
-      { to: "/stock", text: "Акции", id: 1 },
-      { to: "/sale", text: "Распродажа", id: 2 },
-      { to: "/forbuyers", text: "Покупателям", id: 3 },
-      { to: "/payment", text: "Оплата", id: 4 },
-      { to: "/delivery", text: "Доставка", id: 5 },
-      { to: "/stores", text: "Магазины", id: 6 },
-      { to: "/workshop", text: "Мастерская", id: 7 },
-      { to: "/news", text: "Новости", id: 8 },
-    ];
-  }, [mainMenu, loading, error]);
+    // Fallback меню если API недоступно или нет данных
+    console.log("Using fallback menu data");
+    return fallbackMenuItems;
+  }, [topMenu]);
 
   // Закрытие попапа при клике вне его
   useEffect(() => {
@@ -135,8 +141,8 @@ export const HeadHeader: React.FC = () => {
 
     // Определяем, сколько пунктов помещается
     let totalWidth = 0;
-    const newVisibleItems: MenuItem[] = [];
-    const newHiddenItems: MenuItem[] = [];
+    const newVisibleItems: MenuItemType[] = [];
+    const newHiddenItems: MenuItemType[] = [];
 
     for (let i = 0; i < allMenuItems.length; i++) {
       const itemWidth = itemWidths[i] || 80;
@@ -159,6 +165,7 @@ export const HeadHeader: React.FC = () => {
   };
 
   useEffect(() => {
+    // Даем время для рендера элементов перед измерением
     const timer = setTimeout(() => {
       calculateItems();
     }, 100);
@@ -174,7 +181,7 @@ export const HeadHeader: React.FC = () => {
       clearTimeout(timer);
       window.removeEventListener("resize", handleResize);
     };
-  }, [allMenuItems]); // Зависимость от allMenuItems
+  }, [allMenuItems]);
 
   // Обновляем ссылки на элементы меню
   const updateItemRef = (index: number, element: HTMLAnchorElement | null) => {
@@ -192,7 +199,7 @@ export const HeadHeader: React.FC = () => {
   };
 
   // Показываем loading пока меню грузится
-  if (loading) {
+  if (loading && allMenuItems.length === 0) {
     return (
       <header className={styles.header}>
         <div className={styles.loadingContainer}>Загрузка меню...</div>
@@ -209,15 +216,17 @@ export const HeadHeader: React.FC = () => {
           </NavLink>
 
           {allMenuItems.map((item, index) => {
-            if (visibleItems.some((visible) => visible.to === item.to)) {
+            if (visibleItems.some((visible) => visible.id === item.id)) {
               return (
                 <NavLink
-                  key={item.to}
+                  key={item.id}
                   to={item.to}
                   className={({ isActive }) =>
                     isActive ? `${styles.link} ${styles.active}` : styles.link
                   }
                   ref={(el) => updateItemRef(index, el)}
+                  target={item.target}
+                  title={item.seoTitle}
                 >
                   {item.text}
                 </NavLink>
@@ -256,7 +265,7 @@ export const HeadHeader: React.FC = () => {
         </div>
       </div>
 
-      {/* Попап со скрытыми пунктами (рендерится на уровне всего хедера) */}
+      {/* Попап со скрытыми пунктами */}
       {isPopupOpen && hiddenItems.length > 0 && (
         <div
           ref={popupRef}
@@ -265,21 +274,22 @@ export const HeadHeader: React.FC = () => {
             position: "absolute",
             top: `${popupPosition.top}px`,
             left: `${popupPosition.left}px`,
-            transform: "translateX(-50%)",
           }}
         >
-          {hiddenItems.map(({ to, text }) => (
+          {hiddenItems.map((item) => (
             <NavLink
-              key={to}
-              to={to}
+              key={item.id}
+              to={item.to}
               className={({ isActive }) =>
                 isActive
                   ? `${styles.popupLink} ${styles.popupActive}`
                   : styles.popupLink
               }
               onClick={handlePopupItemClick}
+              target={item.target}
+              title={item.seoTitle}
             >
-              {text}
+              {item.text}
             </NavLink>
           ))}
         </div>
