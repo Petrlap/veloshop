@@ -21,7 +21,7 @@
 }
 .cardW,
 .cardB {
-  width: 25%;
+  width: calc(25% - 15px);
 }
 .cardW > div {
   padding: 20px;

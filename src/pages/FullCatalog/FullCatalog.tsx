@@ -1,6 +1,6 @@
 import { useState, useMemo, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useLocation } from "react-router-dom";
+import { useLocation, useSearchParams } from "react-router-dom";
 import {
   fetchAllInStockProducts,
   fetchCatalog,
@@ -74,6 +74,8 @@ interface Product {
 export const FullCatalog = () => {
   const dispatch = useDispatch();
   const location = useLocation();
+  const [searchParams] = useSearchParams();
+
   const {
     products: apiProducts,
     loading,
@@ -141,15 +143,6 @@ export const FullCatalog = () => {
   const [withDiscount, setWithDiscount] = useState(false);
   const [withVideo, setWithVideo] = useState(false);
   const [sortBy, setSortBy] = useState("cheap");
-
-  // Эффект для получения поискового запроса из state
-  useEffect(() => {
-    if (location.state?.searchQuery) {
-      setSearchQuery(location.state.searchQuery);
-      // Очищаем state чтобы при обновлении страницы не повторялся поиск
-      window.history.replaceState({}, document.title);
-    }
-  }, [location.state]);
 
   // Функция для безопасного парсинга JSON
   const safeJsonParse = async (response: Response) => {
@@ -482,6 +475,148 @@ export const FullCatalog = () => {
     }
   }, [filterOptions]);
 
+  // Эффект для получения поискового запроса из state
+  useEffect(() => {
+    if (location.state?.searchQuery) {
+      setSearchQuery(location.state.searchQuery);
+      // Очищаем state чтобы при обновлении страницы не повторялся поиск
+      window.history.replaceState({}, document.title);
+    }
+  }, [location.state]);
+
+  // Эффект для применения фильтров из URL при загрузке - ПЕРЕНЕСЕН НИЖЕ
+  useEffect(() => {
+    if (!allProductsLoaded || filterOptions.priceRange.max === 0) return;
+
+    console.log(
+      "Применяю фильтры из URL:",
+      Object.fromEntries(searchParams.entries())
+    );
+
+    const params = Object.fromEntries(searchParams.entries());
+
+    // Обновляем selectedFilters из URL
+    setSelectedFilters((prev) => {
+      const newFilters = { ...prev };
+
+      // Цена
+      if (params.price_from || params.price_to) {
+        newFilters.price = {
+          min: prev.price.min,
+          max: prev.price.max,
+          current: [
+            params.price_from ? Number(params.price_from) : prev.price.min,
+            params.price_to ? Number(params.price_to) : prev.price.max,
+          ],
+        };
+      }
+
+      // Бренды
+      if (params.brands) {
+        newFilters.brands = params.brands.split(",");
+      }
+
+      // Типы
+      if (params.types) {
+        newFilters.types = params.types.split(",");
+      }
+
+      // Диаметр колес
+      if (params.wheel_diameter) {
+        newFilters.wheelDiameter = params.wheel_diameter.split(",");
+      }
+
+      // Тип обода
+      if (params.rim_type) {
+        newFilters.rimType = params.rim_type.split(",");
+      }
+
+      // Годы
+      if (params.years) {
+        newFilters.years = params.years.split(",");
+      }
+
+      // Рост
+      if (params.height_from || params.height_to) {
+        newFilters.height = {
+          from: params.height_from || "",
+          to: params.height_to || "",
+        };
+      }
+
+      // Пол
+      if (params.gender) {
+        newFilters.gender = params.gender.split(",");
+      }
+
+      // Цвета
+      if (params.colors) {
+        newFilters.colors = params.colors.split(",");
+      }
+
+      // Вилка
+      if (params.fork) {
+        newFilters.fork = params.fork.split(",");
+      }
+
+      // Тормоза
+      if (params.brakes) {
+        newFilters.brakes = params.brakes.split(",");
+      }
+
+      // Материал
+      if (params.material) {
+        newFilters.material = params.material.split(",");
+      }
+
+      console.log("Selected filters after URL update:", newFilters);
+      return newFilters;
+    });
+
+    // Применяем фильтры
+    setAppliedFilters((prev) => {
+      const newFilters = { ...prev };
+
+      if (params.price_from || params.price_to) {
+        newFilters.price = {
+          min: prev.price.min,
+          max: prev.price.max,
+          current: [
+            params.price_from ? Number(params.price_from) : prev.price.min,
+            params.price_to ? Number(params.price_to) : prev.price.max,
+          ],
+        };
+      }
+
+      if (params.brands) newFilters.brands = params.brands.split(",");
+      if (params.types) newFilters.types = params.types.split(",");
+      if (params.wheel_diameter)
+        newFilters.wheelDiameter = params.wheel_diameter.split(",");
+      if (params.rim_type) newFilters.rimType = params.rim_type.split(",");
+      if (params.years) newFilters.years = params.years.split(",");
+      if (params.height_from || params.height_to) {
+        newFilters.height = {
+          from: params.height_from || "",
+          to: params.height_to || "",
+        };
+      }
+      if (params.gender) newFilters.gender = params.gender.split(",");
+      if (params.colors) newFilters.colors = params.colors.split(",");
+      if (params.fork) newFilters.fork = params.fork.split(",");
+      if (params.brakes) newFilters.brakes = params.brakes.split(",");
+      if (params.material) newFilters.material = params.material.split(",");
+
+      console.log("Applied filters after URL update:", newFilters);
+      return newFilters;
+    });
+
+    // Чекбоксы
+    if (params.in_stock === "true") setInStockOnly(true);
+    if (params.with_discount === "true") setWithDiscount(true);
+    if (params.with_video === "true") setWithVideo(true);
+    if (params.sort_by) setSortBy(params.sort_by);
+  }, [searchParams, allProductsLoaded, filterOptions]);
+
   // Функция применения фильтров (по кнопке)
   const applyFilters = () => {
     setAppliedFilters(selectedFilters);
@@ -493,59 +628,147 @@ export const FullCatalog = () => {
   const filteredProducts = useMemo(() => {
     let filtered = [...allProducts];
 
+    console.log("Фильтрация товаров. Всего товаров:", filtered.length);
+    console.log("Примененные фильтры:", appliedFilters);
+    console.log("In stock only:", inStockOnly);
+    console.log("With discount:", withDiscount);
+    console.log("With video:", withVideo);
+    console.log("Search query:", searchQuery);
+
     // Поиск по названию
     if (searchQuery.trim()) {
       const query = searchQuery.toLowerCase().trim();
       filtered = filtered.filter((product: Product) =>
         product.name?.toLowerCase().includes(query)
       );
+      console.log(`После поиска "${searchQuery}": ${filtered.length} товаров`);
     }
 
     // Фильтр по цене
     filtered = filtered.filter((product: Product) => {
       const price = product.offers?.data?.[0]?.prices?.data?.[0]?.price || 0;
-      return (
+      const isInRange =
         price >= appliedFilters.price.current[0] &&
-        price <= appliedFilters.price.current[1]
-      );
+        price <= appliedFilters.price.current[1];
+      return isInRange;
     });
+    console.log(
+      `После фильтра по цене [${appliedFilters.price.current[0]}-${appliedFilters.price.current[1]}]: ${filtered.length} товаров`
+    );
 
-    // Фильтр по брендам
+    // Фильтр по брендам - регистронезависимый
     if (appliedFilters.brands.length > 0) {
-      filtered = filtered.filter(
-        (product: Product) =>
-          product.brand && appliedFilters.brands.includes(product.brand)
+      // Приводим выбранные бренды к нижнему регистру для сравнения
+      const selectedBrandsLower = appliedFilters.brands.map((b) =>
+        b.toLowerCase()
       );
-    }
 
-    // Фильтр по типам
-    if (appliedFilters.types.length > 0) {
       filtered = filtered.filter((product: Product) => {
-        const name = product.name?.toLowerCase() || "";
-        return appliedFilters.types.some((type: string) => {
-          if (type === "Горный") return name.includes("горный");
-          if (type === "Городской") return name.includes("городской");
-          if (type === "Детский") return name.includes("детский");
-          if (type === "BMX") return name.includes("bmx");
-          if (type === "Шоссейный") return name.includes("шоссейный");
-          if (type === "Дорожный") return name.includes("дорожный");
-          if (type === "Подростковый") return name.includes("подростковый");
-          if (type === "Трюковый") return name.includes("трюковый");
-          return false;
-        });
-      });
-    }
+        if (!product.brand) return false;
 
-    // Фильтр по диаметру колес
-    if (appliedFilters.wheelDiameter.length > 0) {
-      filtered = filtered.filter((product: Product) => {
-        const wheelMatch = product.name?.match(/(\d+(?:\.\d+)?)"/);
-        return (
-          wheelMatch &&
-          appliedFilters.wheelDiameter.includes(wheelMatch[1] + '"')
+        // Приводим бренд товара к нижнему регистру
+        const productBrandLower = product.brand.toLowerCase();
+
+        // Проверяем, есть ли совпадение
+        return selectedBrandsLower.some(
+          (selectedBrand) =>
+            productBrandLower === selectedBrand || // точное совпадение
+            productBrandLower.includes(selectedBrand) || // бренд товара содержит выбранный
+            selectedBrand.includes(productBrandLower) // выбранный содержит бренд товара
         );
       });
+
+      console.log(
+        `После фильтра по брендам ${appliedFilters.brands.join(",")}: ${
+          filtered.length
+        } товаров`
+      );
+
+      // Для отладки покажем первые несколько товаров, которые прошли фильтр
+      if (filtered.length > 0) {
+        console.log(
+          "Примеры отфильтрованных товаров:",
+          filtered.slice(0, 3).map((p) => ({ brand: p.brand, name: p.name }))
+        );
+      } else {
+        // Если ничего не найдено, покажем все доступные бренды
+        const brandsList: string[] = [];
+        allProducts.forEach((product) => {
+          if (product.brand) {
+            brandsList.push(product.brand);
+          }
+        });
+        // Убираем дубликаты
+        const uniqueBrands: string[] = [];
+        brandsList.forEach((brand) => {
+          if (!uniqueBrands.includes(brand)) {
+            uniqueBrands.push(brand);
+          }
+        });
+        console.log("Доступные бренды в данных:", uniqueBrands.sort());
+      }
     }
+
+// Фильтр по типам - регистронезависимый
+if (appliedFilters.types.length > 0) {
+  const selectedTypesLower = appliedFilters.types.map(t => t.toLowerCase());
+  
+  filtered = filtered.filter((product: Product) => {
+    const name = product.name?.toLowerCase() || "";
+    
+    return selectedTypesLower.some(type => {
+      if (type === "горный") return name.includes("горный");
+      if (type === "городской") return name.includes("городской");
+      if (type === "детский") return name.includes("детский");
+      if (type === "bmx") return name.includes("bmx") || name.includes("bmx");
+      if (type === "шоссейный") return name.includes("шоссейный");
+      if (type === "дорожный") return name.includes("дорожный");
+      if (type === "подростковый") return name.includes("подростковый");
+      if (type === "трюковый") return name.includes("трюковый");
+      
+      // Общий случай
+      return name.includes(type);
+    });
+  });
+  
+  console.log(`После фильтра по типам ${appliedFilters.types.join(',')}: ${filtered.length} товаров`);
+}
+
+// Фильтр по диаметру колес - улучшенная версия
+if (appliedFilters.wheelDiameter.length > 0) {
+  // Приводим выбранные диаметры к нижнему регистру для сравнения
+  const selectedDiametersLower = appliedFilters.wheelDiameter.map(d => d.toLowerCase().replace('"', ''));
+  
+  filtered = filtered.filter((product: Product) => {
+    if (!product.name) return false;
+    
+    const name = product.name.toLowerCase();
+    
+    // Ищем диаметр в разных форматах
+    return selectedDiametersLower.some(diameter => {
+      // Проверяем разные паттерны: 18", 18, 18-дюймов и т.д.
+      if (name.includes(`${diameter}"`)) return true;
+      if (name.includes(`${diameter} дюйм`)) return true;
+      if (name.includes(`-${diameter}`)) return true;
+      if (name.includes(` ${diameter} `)) return true;
+      
+      // Ищем через регулярное выражение
+      const wheelMatch = name.match(/(\d+(?:\.\d+)?)["\s]?/);
+      if (wheelMatch && wheelMatch[1] === diameter) return true;
+      
+      return false;
+    });
+  });
+  
+  console.log(`После фильтра по диаметру колес ${appliedFilters.wheelDiameter.join(',')}: ${filtered.length} товаров`);
+  
+  // Для отладки покажем примеры товаров, если ничего не найдено
+  if (filtered.length === 0) {
+    console.log("Примеры названий товаров (первые 10):", 
+      allProducts.slice(0, 10).map(p => p.name)
+    );
+  }
+}
 
     // Фильтр по году
     if (appliedFilters.years.length > 0) {
@@ -553,6 +776,7 @@ export const FullCatalog = () => {
         const yearMatch = product.name?.match(/\((\d{4})\)/);
         return yearMatch && appliedFilters.years.includes(yearMatch[1]);
       });
+      console.log(`После фильтра по году: ${filtered.length} товаров`);
     }
 
     // Фильтр по материалу рамы (id:20 в product.attributes)
@@ -567,6 +791,7 @@ export const FullCatalog = () => {
           productMaterials.includes(m)
         );
       });
+      console.log(`После фильтра по материалу: ${filtered.length} товаров`);
     }
 
     // Фильтр по тормозам (id:4 в product.attributes)
@@ -579,6 +804,7 @@ export const FullCatalog = () => {
 
         return appliedFilters.brakes.some((b) => productBrakes.includes(b));
       });
+      console.log(`После фильтра по тормозам: ${filtered.length} товаров`);
     }
 
     // Фильтр по вилке (id:10 в product.attributes)
@@ -591,6 +817,7 @@ export const FullCatalog = () => {
 
         return appliedFilters.fork.some((f) => productForks.includes(f));
       });
+      console.log(`После фильтра по вилке: ${filtered.length} товаров`);
     }
 
     // Фильтр по цвету (id:2 в offers.data.attributes)
@@ -612,6 +839,7 @@ export const FullCatalog = () => {
 
         return appliedFilters.colors.some((c) => productColors.includes(c));
       });
+      console.log(`После фильтра по цвету: ${filtered.length} товаров`);
     }
 
     // Фильтр по типу обода (id:11 в product.attributes)
@@ -624,6 +852,7 @@ export const FullCatalog = () => {
 
         return appliedFilters.rimType.some((r) => productRimTypes.includes(r));
       });
+      console.log(`После фильтра по типу обода: ${filtered.length} товаров`);
     }
 
     // Фильтр по полу
@@ -645,6 +874,16 @@ export const FullCatalog = () => {
           return false;
         });
       });
+      console.log(`После фильтра по полу: ${filtered.length} товаров`);
+    }
+
+    // Фильтр по росту
+    if (appliedFilters.height.from || appliedFilters.height.to) {
+      filtered = filtered.filter((product: Product) => {
+        // Здесь нужно добавить логику фильтрации по росту
+        // Пока оставляем заглушку
+        return true;
+      });
     }
 
     // Фильтр "в наличии"
@@ -655,6 +894,7 @@ export const FullCatalog = () => {
             offer.stock?.data && offer.stock.data.length > 0
         );
       });
+      console.log(`После фильтра "в наличии": ${filtered.length} товаров`);
     }
 
     // Фильтр "со скидкой"
@@ -703,6 +943,9 @@ export const FullCatalog = () => {
         break;
     }
 
+    console.log(
+      `Итоговое количество отфильтрованных товаров: ${sortedFiltered.length}`
+    );
     return sortedFiltered;
   }, [
     allProducts,

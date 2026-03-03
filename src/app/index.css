@@ -102,6 +102,9 @@ img {
 body {
   background: #f4f8fa;
 }
+main {
+  overflow: hidden;
+}
 
 @media (max-width: 1470px) {
   .container {

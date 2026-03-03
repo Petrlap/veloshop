@@ -151,7 +151,7 @@ export const Quiz: React.FC = () => {
             Мастерская <span>в твоем городе</span>
           </h2>
           <p>Поможем отремонтировать ваш велосипед быстро и не дорого.</p>
-          <button>Узнать прайс лист {" >"}</button>
+          <a  href="/services/">Узнать прайс лист {" >"}</a>
         </div>
         <div className={styles.imageBox}>
           <img src={img1} alt="Image 1" />

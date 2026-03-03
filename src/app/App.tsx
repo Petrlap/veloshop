@@ -22,9 +22,11 @@ import { Help } from "../pages/Help/Help";
 import { FAQ } from "../pages/FAQ/FAQ";
 import { Guarantee } from "../pages/Guarantee/Guarantee";
 import { Deferred } from "../pages/Deferred/Deferred";
+import { Basket } from "../pages/Basket/Basket";
 import { ExtendedWarranty } from "../pages/ExtendedWarranty/ExtendedWarranty";
 import { Provider } from "react-redux";
 import { store } from "../store";
+import { Checkout } from "../pages/Checkout/Checkout";
 const App: React.FC = () => {
   return (
     <Provider store={store}>
@@ -32,6 +34,8 @@ const App: React.FC = () => {
         <Route path="/" element={<Layout />}>
           <Route index element={<HomePage />} />
           <Route path="about/" element={<About />} />
+          <Route path="basket/" element={<Basket />} />
+          <Route path="checkout/" element={<Checkout />} />
           <Route path="requisite/" element={<Requisite />} />
           <Route path="help/" element={<Help />} />
           <Route path="faq/" element={<FAQ />} />

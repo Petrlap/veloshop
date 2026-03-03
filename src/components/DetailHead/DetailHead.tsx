@@ -108,8 +108,8 @@ export const DetailHead: React.FC<DetailHeadProps> = ({ product }) => {
   const [sizeOpen, setSizeOpen] = useState(false);
 
   // Константы для ID атрибутов
-  const COLOR_ATTRIBUTE_ID = 157; // ID для цвета
-  const SIZE_ATTRIBUTE_ID = 156; // ID для размера
+  const COLOR_ATTRIBUTE_ID = 2; // ID для цвета
+  const SIZE_ATTRIBUTE_ID = 1; // ID для размера
 
   // Инициализация при получении product
   useEffect(() => {
@@ -265,391 +265,336 @@ export const DetailHead: React.FC<DetailHeadProps> = ({ product }) => {
   const mainPrice = getMainPrice(selectedOffer);
   const inStock = isInStock(selectedOffer);
   const totalStock = getTotalStock(selectedOffer);
-  const model = (product as any)["model "] || "";
 
   return (
-    <section className={styles.wrapper}>
-      {/* LEFT - Галерея */}
-      <div className={styles.gallery}>
-        <div className={styles.meta}>
-          <span>
-            Арт: {selectedOffer.offer_id}{" "}
-            <IconWrapper Icon={BiCopy} style={{ color: "#545454" }} />
-          </span>
-          <span className={styles.inStock}>
-            <IconWrapper
-              Icon={FiCheck}
-              style={{ color: inStock ? "#2BD53C" : "#ff0000" }}
-            />
-            {inStock ? "В наличии" : "Нет в наличии"}
-            {inStock && totalStock > 0 && (
-              <span className={styles.stockCount}>({totalStock} шт.)</span>
-            )}
-          </span>
-          <button className={styles.compare}>
-            <IconWrapper
-              Icon={IoStatsChartSharp}
-              style={{ color: "#000000" }}
-            />
-            Сравнить
-          </button>
-        </div>
-
-        <div className={styles.imageBox}>
-          <div className={styles.badges}>
-            <span className={styles.hit}>HIT</span>
-            <span className={styles.sale}>SALE</span>
-          </div>
-          <img
-            src={images[active]}
-            className={styles.mainImage}
-            alt={product.name}
-          />
-          <button
-            className={styles.navLeft}
-            onClick={() =>
-              setActive((active + images.length - 1) % images.length)
-            }
-          >
-            <IconWrapper Icon={FiChevronLeft} />
-          </button>
-          <button
-            className={styles.navRight}
-            onClick={() => setActive((active + 1) % images.length)}
-          >
-            <IconWrapper Icon={FiChevronRight} />
-          </button>
-          <button className={styles.videoBtn}>
-            <IconWrapper Icon={FaYoutube} style={{ color: "#1D93D2" }} />
-            Видеообзор
-          </button>
-        </div>
-
-        <div className={styles.thumbs}>
-          {images.map((img, i) => (
-            <button
-              key={i}
-              onClick={() => setActive(i)}
-              className={`${styles.thumb} ${
-                i === active ? styles.activeThumb : ""
-              }`}
-            >
-              <img src={img} alt={`thumb-${i}`} />
-            </button>
-          ))}
-        </div>
-      </div>
-
-      {/* CENTER - Информация о товаре */}
-      <div className={styles.info}>
-        <div className={styles.brandRow}>
-          <div className={styles.brand}>
-            <img src={welt} alt={product.brand} />
-            {product.brand}
-          </div>
-          <span className={styles.warranty}>
-            <IconWrapper
-              Icon={PiShieldCheckBold}
-              style={{ color: "#2BD53C" }}
-            />
-            Гарантия 2 года
-          </span>
-        </div>
-
-        {/* Название товара */}
-        <h1 className={styles.productTitle}>
-          {selectedOffer.name || product.name}
-        </h1>
-        <p className={styles.productModel}>Модель: {model}</p>
-
-        {/* Цены */}
-        <div className={styles.priceRow}>
-          <span className={styles.price}>{formatPrice(mainPrice)}</span>
-        </div>
-
-        <p className={styles.viewers}>Эту модель смотрят сейчас 15 человек</p>
-
-        <div className={styles.selectorBox}>
-          Узнайте свой размер рамы, введя свой рост
-          <div className={styles.heightSelector}>
-            <span className={styles.heightValue}>{height}см</span>
-            <div className={styles.arrows}>
-              <span className={styles.arrowUp} onClick={increase}>
-                <IconWrapper
-                  Icon={IoIosArrowUp}
-                  size={14}
-                  style={{ color: "#606060" }}
-                />
-              </span>
-              <span className={styles.arrowDown} onClick={decrease}>
-                <IconWrapper
-                  Icon={IoIosArrowDown}
-                  size={14}
-                  style={{ color: "#606060" }}
-                />
-              </span>
-            </div>
-          </div>
-        </div>
-
-        <div className={styles.fit}>
-          <IconWrapper Icon={LuCircleCheck} style={{ color: "#2CB742" }} />{" "}
-          Подходит для вашего роста
-        </div>
-
-        {/* Выбор цвета и размера */}
-        <div className={styles.options}>
-          {/* Цвет */}
-          {colorOptions.length > 0 && (
-            <div className={styles.colorBox}>
-              <label>Цвет</label>
-              <div className={styles.selectWrapper}>
-                <div
-                  className={styles.select}
-                  onClick={() => {
-                    setColorOpen(!colorOpen);
-                    setSizeOpen(false);
-                  }}
-                >
-                  <span>{selectedColor || "Выберите цвет"}</span>
-                  <span
-                    className={`${styles.arrow} ${
-                      colorOpen ? styles.open : ""
-                    }`}
-                  >
-                    <IconWrapper
-                      Icon={IoIosArrowDown}
-                      size={14}
-                      style={{ color: "#606060" }}
-                    />
-                  </span>
-                </div>
-
-                {colorOpen && (
-                  <div className={styles.dropdown}>
-                    {getAvailableColors().map((color) => {
-                      const available = isColorAvailable(color);
-                      return (
-                        <div
-                          key={color}
-                          className={`${styles.option} ${
-                            !available ? styles.disabledOption : ""
-                          }`}
-                          onClick={() => {
-                            if (available) {
-                              setSelectedColor(color);
-                              setColorOpen(false);
-                            }
-                          }}
-                        >
-                          {color}
-                        </div>
-                      );
-                    })}
-                  </div>
-                )}
-              </div>
-            </div>
-          )}
-
-          {/* Размер */}
-          {sizeOptions.length > 0 && (
-            <div>
-              <label>Размер</label>
-              <div className={styles.selectWrapper}>
-                <div
-                  className={styles.select}
-                  onClick={() => {
-                    setSizeOpen(!sizeOpen);
-                    setColorOpen(false);
-                  }}
-                >
-                  <span>{selectedSize || "Выберите размер"}</span>
-                  <span
-                    className={`${styles.arrow} ${sizeOpen ? styles.open : ""}`}
-                  >
-                    <IconWrapper
-                      Icon={IoIosArrowDown}
-                      size={14}
-                      style={{ color: "#606060" }}
-                    />
-                  </span>
-                </div>
-
-                {sizeOpen && (
-                  <div className={styles.dropdown}>
-                    {getAvailableSizes().map((size) => {
-                      const available = isSizeAvailable(size);
-                      return (
-                        <div
-                          key={size}
-                          className={`${styles.option} ${
-                            !available ? styles.disabledOption : ""
-                          }`}
-                          onClick={() => {
-                            if (available) {
-                              setSelectedSize(size);
-                              setSizeOpen(false);
-                            }
-                          }}
-                        >
-                          {size}
-                        </div>
-                      );
-                    })}
-                  </div>
-                )}
-              </div>
-            </div>
-          )}
-
-          {/* Количество */}
-          <div>
-            <label>Количество</label>
-            <div className={styles.counter}>
-              <button
-                onClick={handleDecreaseQty}
-                disabled={qty <= 1}
-                className={qty <= 1 ? styles.disabled : ""}
-              >
-                -
-              </button>
-              <span>{inStock ? qty : 0}</span>
-              <button
-                onClick={handleIncreaseQty}
-                disabled={!inStock || (totalStock > 0 && qty >= totalStock)}
-                className={
-                  !inStock || (totalStock > 0 && qty >= totalStock)
-                    ? styles.disabled
-                    : ""
-                }
-              >
-                +
-              </button>
-            </div>
-            {inStock && totalStock > 0 && (
-              <div className={styles.stockInfo}>Доступно: {totalStock} шт.</div>
-            )}
-          </div>
-        </div>
-
-        <div className={styles.gift}>
-          <IconWrapper Icon={PiGift} size={24} style={{ color: "#F34723" }} />+
-          Подарок: держатель для бутылки
-        </div>
-
-        <div className={styles.actions}>
-          <button className={styles.cart} disabled={!inStock}>
-            {inStock ? "В корзину" : "Нет в наличии"}{" "}
-            <IconWrapper size={20} Icon={FiShoppingCart} />
-          </button>
-          <button className={styles.fav}>
-            <IconWrapper Icon={FiHeart} size={24} />
-          </button>
-          <a className={styles.installment}>Рассрочка в 1 клик</a>
-        </div>
-
-        {/* Итоговая сумма */}
-        <div className={styles.totalPrice}>
-          <span>Итого:</span>
-          <span className={styles.totalAmount}>
-            {formatPrice(mainPrice * qty)}
-          </span>
-          {qty > 1 && (
-            <span className={styles.pricePerUnit}>
-              ({formatPrice(mainPrice)} за шт.)
+    <>
+      {/* Название товара */}
+      <h1 className={styles.productTitle}>
+        {selectedOffer.name || product.name}
+      </h1>
+      <section className={styles.wrapper}>
+        {/* LEFT - Галерея */}
+        <div className={styles.gallery}>
+          <div className={styles.meta}>
+            <span>
+              Арт: {selectedOffer.offer_id}{" "}
+              <IconWrapper Icon={BiCopy} style={{ color: "#545454" }} />
             </span>
-          )}
+            <span className={styles.inStock}>
+              <IconWrapper
+                Icon={FiCheck}
+                style={{ color: inStock ? "#2BD53C" : "#ff0000" }}
+              />
+              {inStock ? "В наличии" : "Нет в наличии"}
+              {inStock && totalStock > 0 && (
+                <span className={styles.stockCount}>({totalStock} шт.)</span>
+              )}
+            </span>
+            <button className={styles.compare}>
+              <IconWrapper
+                Icon={IoStatsChartSharp}
+                style={{ color: "#000000" }}
+              />
+              Сравнить
+            </button>
+          </div>
+
+          <div className={styles.imageBox}>
+            <div className={styles.badges}>
+              <span className={styles.hit}>HIT</span>
+              <span className={styles.sale}>SALE</span>
+            </div>
+            <img
+              src={images[active]}
+              className={styles.mainImage}
+              alt={product.name}
+            />
+            <button
+              className={styles.navLeft}
+              onClick={() =>
+                setActive((active + images.length - 1) % images.length)
+              }
+            >
+              <IconWrapper Icon={FiChevronLeft} />
+            </button>
+            <button
+              className={styles.navRight}
+              onClick={() => setActive((active + 1) % images.length)}
+            >
+              <IconWrapper Icon={FiChevronRight} />
+            </button>
+            <button className={styles.videoBtn}>
+              <IconWrapper Icon={FaYoutube} style={{ color: "#1D93D2" }} />
+              Видеообзор
+            </button>
+          </div>
+
+          <div className={styles.thumbs}>
+            {images.map((img, i) => (
+              <button
+                key={i}
+                onClick={() => setActive(i)}
+                className={`${styles.thumb} ${
+                  i === active ? styles.activeThumb : ""
+                }`}
+              >
+                <img src={img} alt={`thumb-${i}`} />
+              </button>
+            ))}
+          </div>
         </div>
 
-        {/* Таблица всех доступных SKU */}
-        {offers.length > 0 && (
-          <div className={styles.skuSection}>
-            <h3 className={styles.skuTitle}>Все варианты:</h3>
-            <div className={styles.skuTable}>
-              <div className={styles.skuHeader}>
-                <span>Артикул</span>
-                <span>Цвет</span>
-                <span>Размер</span>
-                <span>Цена</span>
-                <span>Наличие</span>
-              </div>
-              {offers.map((offer) => {
-                const offerPrice = getMainPrice(offer);
-                const offerStock = getTotalStock(offer);
-                const offerColor =
-                  offer.attributes?.data?.find(
-                    (attr) => attr.id === COLOR_ATTRIBUTE_ID
-                  )?.value || "-";
-                const offerSize =
-                  offer.attributes?.data?.find(
-                    (attr) => attr.id === SIZE_ATTRIBUTE_ID
-                  )?.value || "-";
-                const isCurrent = offer.id === selectedOffer?.id;
+        {/* CENTER - Информация о товаре */}
+        <div className={styles.info}>
+          <div className={styles.brandRow}>
+            <div className={styles.brand}>
+              <img src={welt} alt={product.brand} />
+              {product.brand}
+            </div>
+            <span className={styles.warranty}>
+              <IconWrapper
+                Icon={PiShieldCheckBold}
+                style={{ color: "#2BD53C" }}
+              />
+              Гарантия 2 года
+            </span>
+          </div>
 
-                return (
+          {/* Цены */}
+          <div className={styles.priceRow}>
+            <span className={styles.price}>{formatPrice(mainPrice)}</span>
+          </div>
+
+          <p className={styles.viewers}>Эту модель смотрят сейчас 15 человек</p>
+
+          {product?.name?.toLowerCase().includes("велосипед") && (
+            <>
+              <div className={styles.selectorBox}>
+                Узнайте свой размер рамы, введя свой рост
+                <div className={styles.heightSelector}>
+                  <span className={styles.heightValue}>{height}см</span>
+                  <div className={styles.arrows}>
+                    <span className={styles.arrowUp} onClick={increase}>
+                      <IconWrapper
+                        Icon={IoIosArrowUp}
+                        size={14}
+                        style={{ color: "#606060" }}
+                      />
+                    </span>
+                    <span className={styles.arrowDown} onClick={decrease}>
+                      <IconWrapper
+                        Icon={IoIosArrowDown}
+                        size={14}
+                        style={{ color: "#606060" }}
+                      />
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              <div className={styles.fit}>
+                <IconWrapper
+                  Icon={LuCircleCheck}
+                  style={{ color: "#2CB742" }}
+                />
+                Подходит для вашего роста
+              </div>
+            </>
+          )}
+
+          {/* Выбор цвета и размера */}
+          <div className={styles.options}>
+            {/* Цвет */}
+            {colorOptions.length > 0 && (
+              <div className={styles.colorBox}>
+                <label>Цвет</label>
+                <div className={styles.selectWrapper}>
                   <div
-                    key={offer.id}
-                    className={`${styles.skuRow} ${
-                      isCurrent ? styles.currentSku : ""
-                    }`}
+                    className={styles.select}
                     onClick={() => {
-                      setSelectedOffer(offer);
-                      if (offerColor !== "-") setSelectedColor(offerColor);
-                      if (offerSize !== "-") setSelectedSize(offerSize);
-                      setQty(1);
+                      setColorOpen(!colorOpen);
+                      setSizeOpen(false);
                     }}
                   >
-                    <span className={styles.skuId}>{offer.offer_id}</span>
-                    <span>{offerColor}</span>
-                    <span>{offerSize}</span>
-                    <span className={styles.skuPrice}>
-                      {formatPrice(offerPrice)}
-                    </span>
+                    <span>{selectedColor || "Выберите цвет"}</span>
                     <span
-                      className={
-                        offerStock > 0
-                          ? styles.inStockSku
-                          : styles.outOfStockSku
-                      }
+                      className={`${styles.arrow} ${
+                        colorOpen ? styles.open : ""
+                      }`}
                     >
-                      {offerStock > 0 ? `${offerStock} шт.` : "Нет в наличии"}
+                      <IconWrapper
+                        Icon={IoIosArrowDown}
+                        size={14}
+                        style={{ color: "#606060" }}
+                      />
                     </span>
                   </div>
-                );
-              })}
+
+                  {colorOpen && (
+                    <div className={styles.dropdown}>
+                      {getAvailableColors().map((color) => {
+                        const available = isColorAvailable(color);
+                        return (
+                          <div
+                            key={color}
+                            className={`${styles.option} ${
+                              !available ? styles.disabledOption : ""
+                            }`}
+                            onClick={() => {
+                              if (available) {
+                                setSelectedColor(color);
+                                setColorOpen(false);
+                              }
+                            }}
+                          >
+                            {color}
+                          </div>
+                        );
+                      })}
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
+
+            {/* Размер */}
+            {sizeOptions.length > 0 && (
+              <div>
+                <label>Размер</label>
+                <div className={styles.selectWrapper}>
+                  <div
+                    className={styles.select}
+                    onClick={() => {
+                      setSizeOpen(!sizeOpen);
+                      setColorOpen(false);
+                    }}
+                  >
+                    <span>{selectedSize || "Выберите размер"}</span>
+                    <span
+                      className={`${styles.arrow} ${
+                        sizeOpen ? styles.open : ""
+                      }`}
+                    >
+                      <IconWrapper
+                        Icon={IoIosArrowDown}
+                        size={14}
+                        style={{ color: "#606060" }}
+                      />
+                    </span>
+                  </div>
+
+                  {sizeOpen && (
+                    <div className={styles.dropdown}>
+                      {getAvailableSizes().map((size) => {
+                        const available = isSizeAvailable(size);
+                        return (
+                          <div
+                            key={size}
+                            className={`${styles.option} ${
+                              !available ? styles.disabledOption : ""
+                            }`}
+                            onClick={() => {
+                              if (available) {
+                                setSelectedSize(size);
+                                setSizeOpen(false);
+                              }
+                            }}
+                          >
+                            {size}
+                          </div>
+                        );
+                      })}
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
+
+            {/* Количество */}
+            <div>
+              <label>Количество</label>
+              <div className={styles.counter}>
+                <button
+                  onClick={handleDecreaseQty}
+                  disabled={qty <= 1}
+                  className={qty <= 1 ? styles.disabled : ""}
+                >
+                  -
+                </button>
+                <span>{inStock ? qty : 0}</span>
+                <button
+                  onClick={handleIncreaseQty}
+                  disabled={!inStock || (totalStock > 0 && qty >= totalStock)}
+                  className={
+                    !inStock || (totalStock > 0 && qty >= totalStock)
+                      ? styles.disabled
+                      : ""
+                  }
+                >
+                  +
+                </button>
+              </div>
+              {inStock && totalStock > 0 && (
+                <div className={styles.stockInfo}>
+                  Доступно: {totalStock} шт.
+                </div>
+              )}
             </div>
           </div>
-        )}
-      </div>
 
-      {/* RIGHT - Сайдбар с доставкой */}
-      <div className={styles.sidebar}>
-        <div className={styles.sidebarItem}>
-          <IconWrapper
-            Icon={FaMapMarkerAlt}
-            size={24}
-            style={{ color: "#6a6969" }}
-          />
-          <a>Забрать из магазина</a> сегодня
+          <div className={styles.gift}>
+            <IconWrapper Icon={PiGift} size={24} style={{ color: "#F34723" }} />
+            + Подарок: держатель для бутылки
+          </div>
+
+          <div className={styles.actions}>
+            <button className={styles.cart} disabled={!inStock}>
+              {inStock ? "В корзину" : "Нет в наличии"}{" "}
+              <IconWrapper size={20} Icon={FiShoppingCart} />
+            </button>
+            <button className={styles.fav}>
+              <IconWrapper Icon={FiHeart} size={24} />
+            </button>
+            <a className={styles.installment}>Рассрочка в 1 клик</a>
+          </div>
         </div>
-        <div className={styles.sidebarItem}>
-          <IconWrapper Icon={HiTruck} size={24} style={{ color: "#6a6969" }} />{" "}
-          <a>Доставка</a> курьером завтра бесплатно
+
+        {/* RIGHT - Сайдбар с доставкой */}
+        <div className={styles.sidebar}>
+          <div className={styles.sidebarItem}>
+            <IconWrapper
+              Icon={FaMapMarkerAlt}
+              size={24}
+              style={{ color: "#6a6969" }}
+            />
+            <a>Забрать из магазина</a> сегодня
+          </div>
+          <div className={styles.sidebarItem}>
+            <IconWrapper
+              Icon={HiTruck}
+              size={24}
+              style={{ color: "#6a6969" }}
+            />{" "}
+            <a>Доставка</a> курьером завтра бесплатно
+          </div>
+          <div className={styles.sidebarItem}>
+            <IconWrapper
+              Icon={FaBoxes}
+              size={24}
+              style={{ color: "#6a6969" }}
+            />{" "}
+            <a>Где купить</a>
+          </div>
+          <div className={styles.sidebarItem}>
+            <IconWrapper
+              Icon={BsFillCreditCard2FrontFill}
+              size={24}
+              style={{ color: "#6a6969" }}
+            />
+            <a>Как оплатить</a>
+          </div>
         </div>
-        <div className={styles.sidebarItem}>
-          <IconWrapper Icon={FaBoxes} size={24} style={{ color: "#6a6969" }} />{" "}
-          <a>Где купить</a>
-        </div>
-        <div className={styles.sidebarItem}>
-          <IconWrapper
-            Icon={BsFillCreditCard2FrontFill}
-            size={24}
-            style={{ color: "#6a6969" }}
-          />
-          <a>Как оплатить</a>
-        </div>
-      </div>
-    </section>
+      </section>
+    </>
   );
 };

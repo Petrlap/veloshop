@@ -7,8 +7,6 @@ import spasibo from "../../assets/payments/spasibo.webp";
 import pokupay from "../../assets/payments/pokupay.webp";
 import { IconWrapper } from "../IconWrapper/IconWrapper";
 import { IoLogoVk } from "react-icons/io";
-import { FaOdnoklassniki } from "react-icons/fa6";
-import { FaYoutube } from "react-icons/fa";
 import { FaTelegramPlane } from "react-icons/fa";
 import { FaWhatsapp } from "react-icons/fa";
 import { Link } from "react-router-dom";
@@ -107,34 +105,60 @@ export const Footer: React.FC = () => {
             <div className={styles.rightBlock}>
               <p>Мы в социальных сетях, присоединяйтесь:</p>
               <div className={styles.socialTop}>
-                <IconWrapper
-                  Icon={IoLogoVk}
-                  size={24}
-                  style={{
-                    color: "#B9B9B9",
-                  }}
-                />
-                <IconWrapper
-                  Icon={FaOdnoklassniki}
-                  size={24}
-                  style={{
-                    color: "#B9B9B9",
-                  }}
-                />
-                <IconWrapper
-                  Icon={FaYoutube}
-                  size={24}
-                  style={{
-                    color: "#B9B9B9",
-                  }}
-                />
-                <IconWrapper
-                  Icon={FaTelegramPlane}
-                  size={24}
-                  style={{
-                    color: "#B9B9B9",
-                  }}
-                />
+                {/* VK */}
+                <a
+                  href="https://vk.com/velo_shop_new"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <IconWrapper
+                    Icon={IoLogoVk}
+                    size={24}
+                    style={{ color: "#B9B9B9" }}
+                  />
+                </a>
+
+                {/* Telegram */}
+                <a
+                  href="https://t.me/VeloShopRu"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <IconWrapper
+                    Icon={FaTelegramPlane}
+                    size={24}
+                    style={{ color: "#B9B9B9" }}
+                  />
+                </a>
+
+                {/* Rutube */}
+                <a
+                  href="https://rutube.ru/channel/67952427/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <svg
+                    width="24"
+                    height="24"
+                    viewBox="0 0 192 192"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                  >
+                    <path
+                      d="M128.689 47.57H20.396v116.843h30.141V126.4h57.756l26.352 38.013h33.75l-29.058-38.188c9.025-1.401 15.522-4.73 19.493-9.985 3.97-5.255 5.956-13.664 5.956-24.875v-8.759c0-6.657-.721-11.912-1.985-15.941-1.264-4.029-3.43-7.533-6.498-10.686-3.249-2.978-6.858-5.08-11.19-6.481-4.332-1.226-9.747-1.927-16.424-1.927zm-4.873 53.08H50.537V73.321h73.279c4.15 0 7.038.7 8.482 1.927 1.444 1.226 2.347 3.503 2.347 6.832v9.81c0 3.503-.903 5.78-2.347 7.006s-4.331 1.752-8.482 1.752z"
+                      stroke="#B9B9B9"
+                      strokeWidth="12"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      transform="translate(1.605 -1.99)"
+                    />
+                    <path
+                      d="M162.324 45.568c5.52 0 9.998-4.477 9.998-10s-4.478-10-9.998-10c-5.524 0-10.002 4.477-10.002 10s4.478 10 10.002 10z"
+                      fill="#B9B9B9"
+                      transform="translate(1.605 -1.99)"
+                    />
+                  </svg>
+                </a>
               </div>
               <div className={styles.reviews} ref={containerRef}></div>
               <span>Пишите нам</span>

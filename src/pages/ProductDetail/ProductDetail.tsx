@@ -425,8 +425,6 @@ export const ProductDetail: React.FC = () => {
         /<span className={styles.currentPage}> {product.name}</span>
       </span>
 
-      <h1>{product.name}</h1>
-
       <DetailHead product={product} />
       <DetailTabs />
       <Сharacteristics attributes={product.attributes?.data || []} />

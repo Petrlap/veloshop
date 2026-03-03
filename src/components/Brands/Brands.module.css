@@ -26,6 +26,8 @@
   gap: 16px;
   overflow-x: auto;
   scrollbar-width: none;
+  align-items: center;
+  justify-items: center;
 }
 .rowScroll::-webkit-scrollbar {
   display: none;
@@ -40,6 +42,8 @@
   display: grid;
   grid-template-columns: repeat(6, 1fr);
   gap: 16px;
+  align-items: center;
+  justify-items: center;
 }
 .grid .logo {
   width: 100%;

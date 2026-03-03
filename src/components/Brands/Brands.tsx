@@ -1,22 +1,29 @@
 import React, { useState } from "react";
 import styles from "./Brands.module.css";
-import img1 from "../../assets/bg.webp";
-import img2 from "../../assets/bg.webp";
-import img3 from "../../assets/bg.webp";
-import img4 from "../../assets/bg.webp";
-import img5 from "../../assets/bg.webp";
-import img6 from "../../assets/bg.webp";
-import img7 from "../../assets/bg.webp";
-import img8 from "../../assets/bg.webp";
-import img9 from "../../assets/bg.webp";
-import img10 from "../../assets/bg.webp";
 import { IconWrapper } from "../IconWrapper/IconWrapper";
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
+
+declare const require: {
+  context: (
+    directory: string,
+    useSubdirectories: boolean,
+    regExp: RegExp
+  ) => {
+    keys: () => string[];
+    (id: string): string;
+  };
+};
 
 export const Brands: React.FC = () => {
   const [expanded, setExpanded] = useState(false);
 
-  const images = [img1, img2, img3, img4, img5, img6, img7, img8, img9, img10];
+  const importAll = (r: any): string[] => {
+    return r.keys().map(r);
+  };
+
+  const images = importAll(
+    require.context("../../assets/brandshomepage", false, /\.webp$/)
+  );
 
   return (
     <div className={styles.wrapper}>

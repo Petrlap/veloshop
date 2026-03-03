@@ -311,7 +311,7 @@ export const CatalogHomepage: React.FC = () => {
             />
           </button>
         </div>
-        <div className={styles.cardB}>
+        {/*<div className={styles.cardB}>
           <div>
             <img src={img4} alt="" />
             <p>
@@ -335,7 +335,7 @@ export const CatalogHomepage: React.FC = () => {
               }}
             />
           </button>
-        </div>
+            </div>*/}
       </div>
     </section>
   );

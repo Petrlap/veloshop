@@ -36,7 +36,7 @@
   height: 280px;
   object-fit: cover;
 }
-.quizBottom button {
+.quizBottom a {
   width: fit-content;
   border-radius: 12px;
   padding: 16px 19px;
