@@ -42,6 +42,7 @@ const App: React.FC = () => {
           <Route path="guarantee/" element={<Guarantee />} />
           <Route path="extendedwarranty/" element={<ExtendedWarranty />} />
           <Route path="offerta/" element={<Offerta />} />
+          <Route path="testurl/offerta/" element={<Offerta />} />
           <Route path="agreement/" element={<Agreement />} />
           <Route path="privacypolicy/" element={<PrivacyPolicy />} />
           <Route path="deferred/" element={<Deferred />} />

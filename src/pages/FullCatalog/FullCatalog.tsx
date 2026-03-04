@@ -409,14 +409,6 @@ export const FullCatalog = () => {
       }
     });
 
-    console.log("=== РЕАЛЬНЫЕ ЗНАЧЕНИЯ ИЗ API ===");
-    console.log("Материалы (id:20):", Array.from(materialsSet));
-    console.log("Тормоза (id:4):", Array.from(brakesSet));
-    console.log("Вилки (id:10):", Array.from(forksSet));
-    console.log("Цвета (id:2 в offers):", Array.from(colorsSet));
-    console.log("Типы ободов (id:11):", Array.from(rimTypesSet));
-    console.log("=================================");
-
     return {
       brands: Array.from(brands).sort(),
       types: Array.from(types).sort(),
@@ -606,7 +598,6 @@ export const FullCatalog = () => {
       if (params.brakes) newFilters.brakes = params.brakes.split(",");
       if (params.material) newFilters.material = params.material.split(",");
 
-      console.log("Applied filters after URL update:", newFilters);
       return newFilters;
     });
 
@@ -628,20 +619,12 @@ export const FullCatalog = () => {
   const filteredProducts = useMemo(() => {
     let filtered = [...allProducts];
 
-    console.log("Фильтрация товаров. Всего товаров:", filtered.length);
-    console.log("Примененные фильтры:", appliedFilters);
-    console.log("In stock only:", inStockOnly);
-    console.log("With discount:", withDiscount);
-    console.log("With video:", withVideo);
-    console.log("Search query:", searchQuery);
-
     // Поиск по названию
     if (searchQuery.trim()) {
       const query = searchQuery.toLowerCase().trim();
       filtered = filtered.filter((product: Product) =>
         product.name?.toLowerCase().includes(query)
       );
-      console.log(`После поиска "${searchQuery}": ${filtered.length} товаров`);
     }
 
     // Фильтр по цене
@@ -705,7 +688,6 @@ export const FullCatalog = () => {
             uniqueBrands.push(brand);
           }
         });
-        console.log("Доступные бренды в данных:", uniqueBrands.sort());
       }
     }
 
@@ -760,8 +742,6 @@ if (appliedFilters.wheelDiameter.length > 0) {
     });
   });
   
-  console.log(`После фильтра по диаметру колес ${appliedFilters.wheelDiameter.join(',')}: ${filtered.length} товаров`);
-  
   // Для отладки покажем примеры товаров, если ничего не найдено
   if (filtered.length === 0) {
     console.log("Примеры названий товаров (первые 10):", 
@@ -776,7 +756,6 @@ if (appliedFilters.wheelDiameter.length > 0) {
         const yearMatch = product.name?.match(/\((\d{4})\)/);
         return yearMatch && appliedFilters.years.includes(yearMatch[1]);
       });
-      console.log(`После фильтра по году: ${filtered.length} товаров`);
     }
 
     // Фильтр по материалу рамы (id:20 в product.attributes)
@@ -791,7 +770,6 @@ if (appliedFilters.wheelDiameter.length > 0) {
           productMaterials.includes(m)
         );
       });
-      console.log(`После фильтра по материалу: ${filtered.length} товаров`);
     }
 
     // Фильтр по тормозам (id:4 в product.attributes)
@@ -804,7 +782,6 @@ if (appliedFilters.wheelDiameter.length > 0) {
 
         return appliedFilters.brakes.some((b) => productBrakes.includes(b));
       });
-      console.log(`После фильтра по тормозам: ${filtered.length} товаров`);
     }
 
     // Фильтр по вилке (id:10 в product.attributes)
@@ -817,7 +794,6 @@ if (appliedFilters.wheelDiameter.length > 0) {
 
         return appliedFilters.fork.some((f) => productForks.includes(f));
       });
-      console.log(`После фильтра по вилке: ${filtered.length} товаров`);
     }
 
     // Фильтр по цвету (id:2 в offers.data.attributes)
@@ -839,7 +815,6 @@ if (appliedFilters.wheelDiameter.length > 0) {
 
         return appliedFilters.colors.some((c) => productColors.includes(c));
       });
-      console.log(`После фильтра по цвету: ${filtered.length} товаров`);
     }
 
     // Фильтр по типу обода (id:11 в product.attributes)
@@ -852,7 +827,6 @@ if (appliedFilters.wheelDiameter.length > 0) {
 
         return appliedFilters.rimType.some((r) => productRimTypes.includes(r));
       });
-      console.log(`После фильтра по типу обода: ${filtered.length} товаров`);
     }
 
     // Фильтр по полу
@@ -874,7 +848,6 @@ if (appliedFilters.wheelDiameter.length > 0) {
           return false;
         });
       });
-      console.log(`После фильтра по полу: ${filtered.length} товаров`);
     }
 
     // Фильтр по росту
@@ -894,7 +867,6 @@ if (appliedFilters.wheelDiameter.length > 0) {
             offer.stock?.data && offer.stock.data.length > 0
         );
       });
-      console.log(`После фильтра "в наличии": ${filtered.length} товаров`);
     }
 
     // Фильтр "со скидкой"
@@ -943,9 +915,6 @@ if (appliedFilters.wheelDiameter.length > 0) {
         break;
     }
 
-    console.log(
-      `Итоговое количество отфильтрованных товаров: ${sortedFiltered.length}`
-    );
     return sortedFiltered;
   }, [
     allProducts,

@@ -118,8 +118,6 @@ export const fetchCatalog = createAsyncThunk(
   "catalog/fetchCatalog",
   async ({ page, perPage }: { page: number; perPage: number }, { rejectWithValue }) => {
     try {
-      console.log(`Загружаю каталог: страница ${page}, по ${perPage} товаров`);
-      
       const response = await fetch(
         `https://admin.velo-shop.ru/api/catalog/products?page=${page}&per-page=${perPage}`
       );
@@ -128,8 +126,6 @@ export const fetchCatalog = createAsyncThunk(
       
       const data = await response.json();
       
-      console.log("Ответ API с пагинацией:", data);
-
       if (!data.data || !Array.isArray(data.data)) {
         throw new Error("Неверная структура ответа API");
       }
@@ -203,8 +199,6 @@ export const fetchAllInStockProducts = createAsyncThunk(
   "catalog/fetchAllInStockProducts",
   async (_, { rejectWithValue }) => {
     try {
-      console.log("Загружаю все товары в наличии...");
-      
       let allProducts: ProductApi[] = [];
       let page = 1;
       const perPage = 100;
@@ -225,9 +219,7 @@ export const fetchAllInStockProducts = createAsyncThunk(
       
       totalPages = firstData.meta?.last_page || 1;
       allProducts = [...firstData.data];
-      
-      console.log(`Всего страниц: ${totalPages}`);
-      
+
       // Загружаем остальные страницы
       const pagePromises = [];
       for (page = 2; page <= totalPages; page++) {
@@ -245,11 +237,7 @@ export const fetchAllInStockProducts = createAsyncThunk(
         }
       });
       
-      console.log(`Загружено ${allProducts.length} товаров`);
-
       const inStockProductsRaw = allProducts.filter(isProductInStock);
-      console.log(`Товаров в наличии (сырых): ${inStockProductsRaw.length}`);
-
       const inStockProducts: CardProduct[] = [];
       const brands = new Set<string>();
 
@@ -261,8 +249,6 @@ export const fetchAllInStockProducts = createAsyncThunk(
           if (product.brand) brands.add(product.brand);
         }
       });
-
-      console.log(`Преобразовано в CardProduct: ${inStockProducts.length}`);
 
       return {
         products: inStockProducts,

@@ -98,8 +98,6 @@ export const ProductDetail: React.FC = () => {
 
   // Функция для загрузки товара по ID
   const fetchProductById = async (productId: string) => {
-    console.log(`Загружаю товар с ID: ${productId}`);
-
     // Загружаем все страницы пока не найдем товар
     let page = 1;
     const perPage = 100;
@@ -125,7 +123,6 @@ export const ProductDetail: React.FC = () => {
       );
 
       if (foundProduct) {
-        console.log("Товар найден:", foundProduct);
         return foundProduct;
       }
 
@@ -153,14 +150,12 @@ export const ProductDetail: React.FC = () => {
         if (productFromState) {
           // Если есть в state, берем ID оттуда
           productId = productFromState.product_id;
-          console.log("Product ID из state:", productId);
         } else {
           // Если нет в state, пробуем получить из localStorage
           const savedProduct = localStorage.getItem("currentProduct");
           if (savedProduct) {
             const parsed = JSON.parse(savedProduct);
             productId = parsed.product_id;
-            console.log("Product ID из localStorage:", productId);
           }
         }
 

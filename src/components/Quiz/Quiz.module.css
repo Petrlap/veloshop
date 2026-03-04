@@ -59,6 +59,7 @@
   white-space: nowrap;
 }
 .quizHead h2 {
+  white-space: wrap !important;
   font-weight: 500;
   font-size: 30px;
   line-height: 110%;

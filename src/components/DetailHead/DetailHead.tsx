@@ -82,8 +82,6 @@ interface DetailHeadProps {
 }
 
 export const DetailHead: React.FC<DetailHeadProps> = ({ product }) => {
-  console.log("DetailHead получил product:", product);
-
   const [active, setActive] = useState(0);
   const [height, setHeight] = useState(175);
   const increase = () => setHeight((prev) => prev + 1);
@@ -165,9 +163,6 @@ export const DetailHead: React.FC<DetailHeadProps> = ({ product }) => {
         setSelectedColor(firstColor);
         setSelectedSize(firstSize);
       }
-
-      console.log("Доступные цвета:", Array.from(colors));
-      console.log("Доступные размеры:", Array.from(sizes));
     }
   }, [product]);
 
